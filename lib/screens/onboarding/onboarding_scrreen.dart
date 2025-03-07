@@ -17,6 +17,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColorDark, // Altere para a cor desejada
       body: SafeArea(
         child: Column(
           children: [
@@ -57,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   );
                 },
-                child: Text("Get Started".toUpperCase()),
+                child: Text("Explorar".toUpperCase()),
               ),
             ),
             const Spacer(),
@@ -71,21 +72,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 // Demo data for our Onboarding screen
 List<Map<String, dynamic>> demoData = [
   {
-    "illustration": "assets/Illustrations/Illustrations_1.svg",
-    "title": "All your favorites",
+    "illustration": "assets/Illustrations/Illustrations_1.png",
+    "title": "Bem-Vindo ao Rota Gourmet!",
     "text":
-        "Order from the best local restaurants \nwith easy, on-demand delivery.",
+        "Somos o melhor clube Gastronômico do Brasil, conosco você ganha até 100% de desconto no segundo prato, em qualquer um do nossos parceiros. Veja como é rápido e fácil.",
   },
   {
-    "illustration": "assets/Illustrations/Illustrations_2.svg",
-    "title": "Free delivery offers",
+    "illustration": "assets/Illustrations/Illustrations_2.png",
+    "title": "Já escolheu seu restaurante?",
     "text":
-        "Free delivery for new customers via Apple Pay\nand others payment methods.",
+        "Navegue pelo aplicativo e conheça os restaurantes, seus cardápios, e os dias dos benefícios. Você vai adorar, são muitas opções!",
   },
   {
-    "illustration": "assets/Illustrations/Illustrations_3.svg",
-    "title": "Choose your food",
+    "illustration": "assets/Illustrations/Illustrations_3.png",
+    "title": "Escolha como usar o seu Desconto",
     "text":
-        "Easily find your type of food craving and\nyou’ll get delivery in wide range.",
+        "Se comer fora já era bom, imagina comer nos melhores restaurantes da cidade com descontos excelentes como esses! 100% em um prato se você for acompanhado, até 30% se for sozinho ou até 50% se pedir delivery ou balcão. Aproveite do seu jeito!",
+  },
+  {
+    "illustration": "assets/Illustrations/Illustrations_4.png",
+    "title": "Você é VIP nos Restaurantes",
+    "text":
+        "Se já escolheu o restaurante do dia, decidiu se vai sozinho ou acompanhado e confirmou os dias de aceitação, agora basta ir. Chegando lá, aproveite a noite, você merece! Na hora da conta, informe que é associado Rota Gourmet.",
+  },
+  {
+    "illustration": "assets/Illustrations/Illustrations_5.png",
+    "title": "Delivery Simples e Prático",
+    "text":
+        "Pedir o delivery é super simples. Veja o cardápio, escolha sua opção e faça o pedido no restaurante por whatsapp ou telefone. Os botões de contato estão na tela do restaurante aqui no app! Chegando o seu pedido, é só validar seu voucher com o entregador.",
+  },
+    {
+    "illustration": "assets/Illustrations/Illustrations_6.png",
+    "title": "Delivery Simples e Prático",
+    "text":
+        "Na hora da conta, seja no restaurante ou na entrega do delivery é sempre igual. Informe que é associado Rota Gourmet e clique em VALIDAR VOCHER na tela do restaurante escolhido. Escanei o código fornecido pelo restaurante, preencha os dados e PRONTO! Confira tudo navegando livremente pelo App e aproveite!",
+  },
+    {
+    "illustration": "assets/Illustrations/Illustrations_7.png",
+    "title": "Viu como é fácil?",
+    "text":
+        "Só aqui você encontra os melhores restaurantes com descontos especiais. Você não vai mais parar em casa!",
   },
 ];

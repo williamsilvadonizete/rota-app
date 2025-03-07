@@ -5,8 +5,7 @@ import 'constants.dart';
 ThemeData buildThemeData() {
   return ThemeData(
     primaryColor: accentColor,
-
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color.fromARGB(255, 54, 53, 53),
     fontFamily: "SF Pro Text",
     // textTheme: textTheme().apply(displayColor: titleColor),
     appBarTheme: const AppBarTheme(
@@ -30,7 +29,7 @@ final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
   enabledBorder: kDefaultOutlineInputBorder,
   focusedBorder: kDefaultOutlineInputBorder.copyWith(
       borderSide: BorderSide(
-    color: primaryColor.withOpacity(0.5),
+    color: const Color.fromARGB(255, 228, 145, 36).withOpacity(0.5),
   )),
   errorBorder: kDefaultOutlineInputBorder.copyWith(
     borderSide: kErrorBorderSide,

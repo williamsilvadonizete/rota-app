@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "foodly_ui",
+            "name": "app",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "foodly_ui (profile mode)",
+            "name": "app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "foodly_ui (release mode)",
+            "name": "app (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

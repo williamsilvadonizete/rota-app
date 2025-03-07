@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../constants.dart';
+
 class OnboardContent extends StatelessWidget {
   const OnboardContent({
     super.key,
@@ -18,7 +20,7 @@ class OnboardContent extends StatelessWidget {
         Expanded(
           child: AspectRatio(
             aspectRatio: 1,
-            child: SvgPicture.asset(illustration!),
+            child: Image.asset(illustration!),
           ),
         ),
         const SizedBox(height: 16),
@@ -27,13 +29,17 @@ class OnboardContent extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .titleLarge!
-              .copyWith(fontWeight: FontWeight.bold),
+              .copyWith(fontWeight: FontWeight.bold,
+              color: accentColor)
         ),
         const SizedBox(height: 8),
         Text(
           text!,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                 color: labelColor, // Altere para a cor desejada
+          ),
           textAlign: TextAlign.center,
+          
         ),
       ],
     );
