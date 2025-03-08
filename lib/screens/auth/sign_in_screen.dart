@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rota_app/components/custom_bar.dart';
+import 'package:rota_app/components/wave_bar.dart';
 
 import '../../components/buttons/socal_button.dart';
 import '../../components/welcome_text.dart';
@@ -14,10 +16,8 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: const SizedBox(),
-        title: const Text("Entrar"),
-      ),
+      backgroundColor: primaryColorDark,
+      appBar: const CustomAppBar(showBackButton: false),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -40,7 +40,7 @@ class SignInScreen extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w600),
+                        .copyWith(fontWeight: FontWeight.w600, color: labelColor),
                     text: "Nāo tem uma conta? ",
                     children: <TextSpan>[
                       TextSpan(

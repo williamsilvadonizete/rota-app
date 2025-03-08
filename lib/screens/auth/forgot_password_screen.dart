@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rota_app/components/custom_bar.dart';
 import 'reset_email_sent_screen.dart';
 
 import '../../components/welcome_text.dart';
@@ -10,18 +11,17 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Forgot Password"),
-      ),
+      backgroundColor: primaryColorDark,
+      appBar: const CustomAppBar(showBackButton: true),
       body: const SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             WelcomeText(
-                title: "Forgot password",
+                title: "Esqueceu a Senha",
                 text:
-                    "Enter your email address and we will \nsend you a reset instructions."),
+                    "Entre seu email para receber as instruçoes"),
             SizedBox(height: defaultPadding),
             ForgotPassForm(),
           ],
@@ -52,7 +52,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
             validator: emailValidator.call,
             onSaved: (value) {},
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: "Email Address"),
+            decoration: const InputDecoration(hintText: "Email"),
           ),
           const SizedBox(height: defaultPadding),
 
@@ -70,7 +70,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 );
               }
             },
-            child: const Text("Reset password"),
+            child: const Text("Recuperar Senha"),
           ),
         ],
       ),

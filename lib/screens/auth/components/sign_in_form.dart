@@ -25,9 +25,13 @@ class _SignInFormState extends State<SignInForm> {
           TextFormField(
             validator: emailValidator.call,
             onSaved: (value) {},
+            style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.w600, color: inputColor),
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: "Email Address"),
+            decoration: const InputDecoration(hintText: "Email"),
           ),
           const SizedBox(height: defaultPadding),
 
@@ -36,8 +40,12 @@ class _SignInFormState extends State<SignInForm> {
             obscureText: _obscureText,
             validator: passwordValidator.call,
             onSaved: (value) {},
+            style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.w600, color: inputColor),
             decoration: InputDecoration(
-              hintText: "Password",
+              hintText: "Senha",
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -61,11 +69,11 @@ class _SignInFormState extends State<SignInForm> {
               ),
             ),
             child: Text(
-              "Forget Password?",
+              "Esqueceu a Senha?",
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
-                  .copyWith(fontWeight: FontWeight.w500),
+                  .copyWith(fontWeight: FontWeight.w500, color: labelColor),
             ),
           ),
           const SizedBox(height: defaultPadding),
@@ -86,7 +94,7 @@ class _SignInFormState extends State<SignInForm> {
                 );
               }
             },
-            child: const Text("Sign in"),
+            child: const Text("Entrar"),
           ),
         ],
       ),

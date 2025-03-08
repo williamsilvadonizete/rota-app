@@ -5,9 +5,10 @@ import 'package:form_field_validator/form_field_validator.dart';
 const titleColor = Color.fromARGB(255, 250, 251, 251);
 const labelColor = Color.fromARGB(255, 250, 251, 251);
 const primaryColor = Color.fromARGB(255, 245, 143, 26);
+// const primaryColorDark =  Color.fromARGB(255, 80, 79, 77);
 const primaryColorDark =  Color.fromARGB(255, 33, 32, 32);
 const accentColor = Color(0xFFEF9920);
-const bodyTextColor = Color.fromARGB(255, 32, 31, 31);
+const bodyTextColor = Color.fromARGB(255, 240, 237, 237);
 const inputColor = Color.fromARGB(255, 240, 237, 237);
 
 const double defaultPadding = 16;
@@ -62,4 +63,4 @@ final phoneNumberValidator = MinLengthValidator(10,
 
 // Common Text
 final Center kOrText = Center(
-    child: Text("Or", style: TextStyle(color: titleColor.withOpacity(0.7))));
+    child: Text("Ou", style: TextStyle(color: titleColor.withOpacity(0.7))));

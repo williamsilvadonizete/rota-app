@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rota_app/components/custom_bar.dart';
 import 'sign_in_screen.dart';
 
 import '../../components/buttons/socal_button.dart';
@@ -14,9 +15,8 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign Up"),
-      ),
+      backgroundColor: primaryColorDark,
+      appBar: const CustomAppBar(showBackButton: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -24,8 +24,8 @@ class SignUpScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const WelcomeText(
-                title: "Create Account",
-                text: "Enter your Name, Email and Password \nfor sign up.",
+                title: "Criar uma conta",
+                text: "Digite seu Nome, E-mail e Senha \npara se inscrever.",
               ),
 
               // Sign Up Form
@@ -39,11 +39,11 @@ class SignUpScreen extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w500),
-                    text: "Already have account? ",
+                        .copyWith(fontWeight: FontWeight.w500,),
+                    text: "Você possui uma conta? ",
                     children: <TextSpan>[
                       TextSpan(
-                        text: "Sign In",
+                        text: "Entrar",
                         style: const TextStyle(color: primaryColor),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => Navigator.push(
@@ -60,40 +60,11 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: defaultPadding),
               Center(
                 child: Text(
-                  "By Signing up you agree to our Terms \nConditions & Privacy Policy.",
+                  "Ao se inscrever, você concorda com nossos Termos \nCondições e Política de Privacidade.",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
-              const SizedBox(height: defaultPadding),
-              kOrText,
-              const SizedBox(height: defaultPadding),
-
-              // Facebook
-              SocalButton(
-                press: () {},
-                text: "Connect with Facebook",
-                color: const Color(0xFF395998),
-                icon: SvgPicture.asset(
-                  'assets/icons/facebook.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF395998),
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-
-              // Google
-              SocalButton(
-                press: () {},
-                text: "Connect with Google",
-                color: const Color(0xFF4285F4),
-                icon: SvgPicture.asset(
-                  'assets/icons/google.svg',
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
             ],
           ),
         ),

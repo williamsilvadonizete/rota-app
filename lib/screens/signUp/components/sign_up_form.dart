@@ -26,7 +26,7 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: requiredValidator.call,
             onSaved: (value) {},
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(hintText: "Full Name"),
+            decoration: const InputDecoration(hintText: "Nome Completo"),
           ),
           const SizedBox(height: defaultPadding),
 
@@ -36,7 +36,7 @@ class _SignUpFormState extends State<SignUpForm> {
             onSaved: (value) {},
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: "Email Address"),
+            decoration: const InputDecoration(hintText: "Email"),
           ),
           const SizedBox(height: defaultPadding),
 
@@ -48,7 +48,7 @@ class _SignUpFormState extends State<SignUpForm> {
             onChanged: (value) {},
             onSaved: (value) {},
             decoration: InputDecoration(
-              hintText: "Password",
+              hintText: "Senha",
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -67,7 +67,7 @@ class _SignUpFormState extends State<SignUpForm> {
           TextFormField(
             obscureText: _obscureText,
             decoration: InputDecoration(
-              hintText: "Confirm Password",
+              hintText: "Confirmar senha",
               suffixIcon: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -91,7 +91,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
               );
             },
-            child: const Text("Sign Up"),
+            child: const Text("Cadastrar-se"),
           ),
         ],
       ),

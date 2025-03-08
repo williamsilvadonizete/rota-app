@@ -40,7 +40,7 @@ class Body extends StatelessWidget {
                     text: "Already have account? ",
                     children: <TextSpan>[
                       TextSpan(
-                        text: "Sign In",
+                        text: "Entrar",
                         style: const TextStyle(color: primaryColor),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => Navigator.push(
