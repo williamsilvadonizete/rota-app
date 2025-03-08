@@ -16,7 +16,7 @@ class SignInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
-        title: const Text("Sign In"),
+        title: const Text("Entrar"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -25,9 +25,9 @@ class SignInScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const WelcomeText(
-                title: "Welcome to",
+                title: "Bem-Vindo",
                 text:
-                    "Enter your Phone number or Email \naddress for sign in. Enjoy your food :)",
+                    "Digite seu E-mail ou Telefone para entrar. Você não vai mais parar em Casa! :)",
               ),
               const SignInForm(),
               const SizedBox(height: defaultPadding),
@@ -41,10 +41,10 @@ class SignInScreen extends StatelessWidget {
                         .textTheme
                         .bodySmall!
                         .copyWith(fontWeight: FontWeight.w600),
-                    text: "Don’t have account? ",
+                    text: "Nāo tem uma conta? ",
                     children: <TextSpan>[
                       TextSpan(
-                        text: "Create new account.",
+                        text: "Cadastre-se",
                         style: const TextStyle(color: primaryColor),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => Navigator.push(
@@ -56,32 +56,6 @@ class SignInScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-
-              // Facebook
-              SocalButton(
-                press: () {},
-                text: "Connect with Facebook",
-                color: const Color(0xFF395998),
-                icon: SvgPicture.asset(
-                  'assets/icons/facebook.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF395998),
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-
-              // Google
-              SocalButton(
-                press: () {},
-                text: "Connect with Google",
-                color: const Color(0xFF4285F4),
-                icon: SvgPicture.asset(
-                  'assets/icons/google.svg',
                 ),
               ),
               const SizedBox(height: defaultPadding),

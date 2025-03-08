@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
-import 'screens/onboarding/onboarding_scrreen.dart';
+import 'screens/splashscreen/splashscreen.dart'; // Importa a SplashScreen
 
 void main() {
   runApp(const MyApp());
@@ -8,8 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
           hintStyle: TextStyle(color: bodyTextColor),
         ),
       ),
-      home: const OnboardingScreen(),
+      home: SplashScreen(), // Define a Splash como tela inicial
     );
   }
 }
