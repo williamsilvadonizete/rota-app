@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rota_app/screens/onboarding/onboarding_scrreen.dart';
 
 import 'constants.dart';
 import 'screens/home/home_screen.dart';
@@ -31,7 +32,7 @@ class _EntryPointState extends State<EntryPoint> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
-    const OrderDetailsScreen(),
+    const OnboardingScreen(navigateToSignIn: false),
     const ProfileScreen(),
   ];
 

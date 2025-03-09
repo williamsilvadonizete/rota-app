@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rota_app/components/custom_bar.dart';
+import 'package:rota_app/components/custom_status_bar.dart';
 import 'package:rota_app/components/wave_bar.dart';
 
 import '../../components/buttons/socal_button.dart';
@@ -17,7 +18,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColorDark,
-      appBar: const CustomAppBar(showBackButton: false),
+      appBar: CustomAppBar(showBackButton: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),

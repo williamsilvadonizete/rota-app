@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton; // Novo parâmetro para ativar/desativar o botão de voltar
 
   // Atualize o construtor para aceitar o parâmetro showBackButton
-  const CustomAppBar({super.key, this.showBackButton = true}) : preferredSize = const Size.fromHeight(280);
+  const CustomAppBar({super.key, this.showBackButton = true}) : preferredSize = const Size.fromHeight(250);
 
   @override
   Widget build(BuildContext context) {

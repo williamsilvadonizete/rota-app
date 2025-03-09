@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:rota_app/components/custom_status_bar.dart';
 
 import '../../components/cards/big/big_card_image_slide.dart';
 import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demo_data.dart';
-import '../../screens/filter/filter_screen.dart';
 import '../details/details_screen.dart';
 import '../featured/featurred_screen.dart';
 import 'components/medium_card_list.dart';
-import 'components/promotion_banner.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,40 +17,41 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColorDark,
-      appBar: AppBar(
-        leading: const SizedBox(),
-        title: Column(
-          children: [
-            Text(
-              "Delivery to".toUpperCase(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: primaryColor),
-            ),
-            const Text(
-              "San Francisco",
-              style: TextStyle(color: Colors.black),
-            )
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FilterScreen(),
-                ),
-              );
-            },
-            child: Text(
-              "Filter",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   leading: const SizedBox(),
+      //   title: Column(
+      //     children: [
+      //       Text(
+      //         "Delivery to".toUpperCase(),
+      //         style: Theme.of(context)
+      //             .textTheme
+      //             .bodySmall!
+      //             .copyWith(color: primaryColor),
+      //       ),
+      //       const Text(
+      //         "San Francisco",
+      //         style: TextStyle(color: Colors.black),
+      //       )
+      //     ],
+      //   ),
+      //   actions: [
+      //     TextButton(
+      //       onPressed: () {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //             builder: (context) => const FilterScreen(),
+      //           ),
+      //         );
+      //       },
+      //       child: Text(
+      //         "Filter",
+      //         style: Theme.of(context).textTheme.bodyLarge,
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      appBar: CustomStatusAppBar(showBackButton: true),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

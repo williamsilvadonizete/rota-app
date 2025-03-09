@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           // Após a animação terminar, navega para a próxima tela
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+            MaterialPageRoute(builder: (context) => const OnboardingScreen( navigateToSignIn: true,)),
           );
         }
       });

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:rota_app/screens/home/home_screen.dart';
 import '../../constants.dart';
-
 import '../../components/dot_indicators.dart';
 import '../auth/sign_in_screen.dart';
 import 'components/onboard_content.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  final bool? navigateToSignIn; // Parâmetro opcional
+
+  const OnboardingScreen({super.key, this.navigateToSignIn});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -14,10 +16,12 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int currentPage = 0;
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColorDark, // Altere para a cor desejada
+      backgroundColor: primaryColorDark,
       body: SafeArea(
         child: Column(
           children: [
@@ -25,11 +29,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               flex: 14,
               child: PageView.builder(
+                controller: _pageController,
                 itemCount: demoData.length,
                 onPageChanged: (value) {
                   setState(() {
                     currentPage = value;
                   });
+
+                  // Se for a última página e navigateToSignIn for true, navega automaticamente
+                  if (widget.navigateToSignIn == true && value == demoData.length - 1) {
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      _navigateToSignIn();
+                    });
+                  }
                 },
                 itemBuilder: (context, index) => OnboardContent(
                   illustration: demoData[index]["illustration"],
@@ -47,27 +59,43 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             const Spacer(flex: 2),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignInScreen(),
-                    ),
-                  );
-                },
-                child: Text("Explorar".toUpperCase()),
+            if (widget.navigateToSignIn == true) // Exibe o botão apenas se NÃO estiver navegando automaticamente
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: ElevatedButton(
+                  onPressed: _navigateToSignIn,
+                  child: Text("Explorar".toUpperCase()),
+                ),
               ),
-            ),
             const Spacer(),
           ],
         ),
       ),
     );
   }
+
+  void _navigateToSignIn() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const SignInScreen()),
+    );
+  }
+
+  void _navigateToHome() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 }
+
+
 
 // Demo data for our Onboarding screen
 List<Map<String, dynamic>> demoData = [

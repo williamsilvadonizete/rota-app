@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rota_app/components/custom_status_bar.dart';
 import '../../../constants.dart';
 
 class Body extends StatelessWidget {
@@ -7,57 +8,22 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 33, 32, 32), // Cor de fundo escura
+      appBar: CustomStatusAppBar(showBackButton: true),
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: defaultPadding),
-              Text("Account Settings",
-                  style: Theme.of(context).textTheme.headlineMedium),
-              Text(
-                "Update your settings like notifications, payments, profile edit etc.",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/profile.svg",
-                title: "Profile Information",
-                subTitle: "Change your account information",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/lock.svg",
-                title: "Change Password",
-                subTitle: "Change your password",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/card.svg",
-                title: "Payment Methods",
-                subTitle: "Add your credit & debit cards",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/marker.svg",
-                title: "Locations",
-                subTitle: "Add or remove your delivery locations",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/fb.svg",
-                title: "Add Social Account",
-                subTitle: "Add Facebook, Twitter etc ",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/share.svg",
-                title: "Refer to Friends",
-                subTitle: "Get \$10 for reffering friends",
-                press: () {},
-              ),
+              const SizedBox(height: 24),
+              ...menuItems.map((item) => ProfileMenuCard(
+                    svgSrc: item["icon"]!,
+                    title: item["title"]!,
+                    subTitle: item["subTitle"]!,
+                    press: item["action"],
+                  )),
             ],
           ),
         ),
@@ -69,61 +35,81 @@ class Body extends StatelessWidget {
 class ProfileMenuCard extends StatelessWidget {
   const ProfileMenuCard({
     super.key,
-    this.title,
-    this.subTitle,
-    this.svgSrc,
+    required this.title,
+    required this.subTitle,
+    required this.svgSrc,
     this.press,
   });
 
-  final String? title, subTitle, svgSrc;
+  final String title, subTitle, svgSrc;
   final VoidCallback? press;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
         onTap: press,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
+        borderRadius: BorderRadius.circular(12),
+        splashColor: Colors.white12,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black54, // Fundo dos cards escuro
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
           child: Row(
             children: [
-              SvgPicture.asset(
-                svgSrc!,
-                height: 24,
-                width: 24,
-                colorFilter: ColorFilter.mode(
-                  titleColor.withOpacity(0.64),
-                  BlendMode.srcIn,
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white12, // Fundo do ícone sutilmente diferente
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: SvgPicture.asset(
+                  svgSrc,
+                  height: 24,
+                  width: 24,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white70,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title!,
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.labelLarge,
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Text(
-                      subTitle!,
-                      maxLines: 1,
+                      subTitle,
                       style: TextStyle(
                         fontSize: 14,
-                        color: titleColor.withOpacity(0.54),
+                        color: Colors.white60,
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
               const Icon(
-                Icons.arrow_forward_ios_outlined,
+                Icons.arrow_forward_ios_rounded,
                 size: 20,
+                color: Colors.white38,
               )
             ],
           ),
@@ -132,3 +118,37 @@ class ProfileMenuCard extends StatelessWidget {
     );
   }
 }
+
+// Lista de itens do menu
+final List<Map<String, dynamic>> menuItems = [
+  {
+    "icon": "assets/icons/profile.svg",
+    "title": "Informações do Perfil",
+    "subTitle": "Altere as informações da sua conta",
+    "action": () {},
+  },
+  {
+    "icon": "assets/icons/lock.svg",
+    "title": "Alterar Senha",
+    "subTitle": "Atualize suas configurações de segurança",
+    "action": () {},
+  },
+  {
+    "icon": "assets/icons/card.svg",
+    "title": "Métodos de Pagamento",
+    "subTitle": "Gerencie seus cartões de crédito e débito",
+    "action": () {},
+  },
+  {
+    "icon": "assets/icons/marker.svg",
+    "title": "Endereços",
+    "subTitle": "Adicione ou remova seus endereços de entrega",
+    "action": () {},
+  },
+  {
+    "icon": "assets/icons/share.svg",
+    "title": "Indicar um Amigo",
+    "subTitle": "Ganhe R\$10 por cada amigo indicado",
+    "action": () {},
+  },
+];
