@@ -25,13 +25,19 @@ class SectionTitle extends StatelessWidget {
           Text(
             isMainSection ? title : title.toUpperCase(),
             style: isMainSection
-                ? Theme.of(context).textTheme.titleLarge
-                : Theme.of(context).textTheme.titleMedium,
+                ? Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(228, 245, 143, 26),
+                )
+                : Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(228, 245, 143, 26),
+                ),    
           ),
           GestureDetector(
             onTap: press,
             child: Text(
-              isMainSection ? "See all" : "Clear all".toUpperCase(),
+              isMainSection ? "Mostrar Todos" : "Limpar".toUpperCase(),
               style: isMainSection
                   ? Theme.of(context)
                       .textTheme

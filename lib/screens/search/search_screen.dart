@@ -68,6 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             images: demoBigImages..shuffle(),
                             name: "McDonald's",
                             rating: 4.3,
+                            range: "80-100",
                             numOfRating: 200,
                             deliveryTime: 25,
                             foodType: const [

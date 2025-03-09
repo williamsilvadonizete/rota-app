@@ -22,9 +22,9 @@ class _EntryPointState extends State<EntryPoint> {
   // List of nav items
   final List<Map<String, dynamic>> _navitems = [
     {"icon": "assets/icons/home.svg", "title": "Home"},
-    {"icon": "assets/icons/search.svg", "title": "Search"},
-    {"icon": "assets/icons/order.svg", "title": "Orders"},
-    {"icon": "assets/icons/profile.svg", "title": "Profile"},
+    {"icon": "assets/icons/search.svg", "title": "Busca"},
+    {"icon": "assets/icons/order.svg", "title": "Como Usar"},
+    {"icon": "assets/icons/profile.svg", "title": "Perfil"},
   ];
 
 // Screens
@@ -40,6 +40,7 @@ class _EntryPointState extends State<EntryPoint> {
     /// If you set your home screen as first screen make sure call [SizeConfig().init(context)]
 
     return Scaffold(
+      backgroundColor: primaryColorDark,
       body: _screens[_selectedIndex],
       bottomNavigationBar: CupertinoTabBar(
         onTap: (value) {
@@ -50,6 +51,7 @@ class _EntryPointState extends State<EntryPoint> {
         currentIndex: _selectedIndex,
         activeColor: primaryColor,
         inactiveColor: bodyTextColor,
+        backgroundColor: primaryColorDark,
         items: List.generate(
           _navitems.length,
           (index) => BottomNavigationBarItem(

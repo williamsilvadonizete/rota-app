@@ -35,7 +35,7 @@ class RatingWithCounter extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text("$numOfRating+ Ratings",
+        Text("$numOfRating+ Avaliações",
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!

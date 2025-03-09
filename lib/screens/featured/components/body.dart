@@ -46,6 +46,7 @@ class _BodyState extends State<Body> {
                     name: "McDonald's",
                     rating: 4.3,
                     numOfRating: 200,
+                    range: "100-120",
                     deliveryTime: 25,
                     foodType: const ["Chinese", "American", "Deshi food"],
                     press: () {},

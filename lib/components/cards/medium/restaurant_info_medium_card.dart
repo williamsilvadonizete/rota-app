@@ -41,7 +41,8 @@ class RestaurantInfoMediumCard extends StatelessWidget {
               name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: titleColor),
             ),
             const SizedBox(height: defaultPadding / 4),
             Text(
@@ -50,7 +51,7 @@ class RestaurantInfoMediumCard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: defaultPadding / 2),
-            Row(
+            rating != 0.0 ? Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -64,15 +65,16 @@ class RestaurantInfoMediumCard extends StatelessWidget {
                 ),
                 const SmallDot(),
                 Text(
-                  "Free delivery",
+                  "Entrega Gratis",
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium!
                       .copyWith(color: titleColor.withOpacity(0.74)),
                 )
               ],
-            )
+            ) : SizedBox(),
           ],
+
         ),
       ),
     );

@@ -68,6 +68,7 @@ class _BodyState extends State<Body> {
                           // Images are List<String>
                           images: demoBigImages..shuffle(),
                           name: "McDonald's",
+                          range: "34-58",
                           rating: 4.3,
                           numOfRating: 200,
                           deliveryTime: 25,

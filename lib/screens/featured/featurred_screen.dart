@@ -9,7 +9,7 @@ class FeaturedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Featured Partners"),
+        title: const Text("Parceiros em Destaque"),
       ),
       body: const Body(),
     );

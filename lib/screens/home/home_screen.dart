@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColorDark,
       appBar: AppBar(
         leading: const SizedBox(),
         title: Column(
@@ -63,7 +64,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: defaultPadding * 2),
               SectionTitle(
-                title: "Featured Partners",
+                title: "Parceiros em Destaque",
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -72,13 +73,69 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const MediumCardList(),
+              const MediumCardList(
+                title: "Categorias",
+                restaurants: [
+                  {
+                    "image": "assets/images/pizza.png",
+                    "name": "Pizza",
+                  },
+                  {
+                    "image": "assets/images/stack.png",
+                    "name": "Steakhouse",
+                  },
+                  {
+                    "image": "assets/images/internacional.png",
+                    "name": "Internacional",
+                  },
+                  {
+                    "image": "assets/images/hamburguer.png",
+                    "name": "Hamburguer",
+                  },
+                ]),
               const SizedBox(height: 20),
+              const MediumCardList(
+                title: "Para comer agora",
+                restaurants: [
+                  {
+                    "image": "assets/images/medium_3.png",
+                    "name": "Pizza do Chef",
+                    "location": "Av. Paulista, 123",
+                    "deliveryTime": 30,
+                    "rating": 4.8,
+                  },
+                  {
+                    "image": "assets/images/medium_4.png",
+                    "name": "Sushi House",
+                    "location": "Rua das Flores, 456",
+                    "deliveryTime": 20,
+                    "rating": 4.5,
+                  },
+                ]),
+                const SizedBox(height: 20),
+              const MediumCardList(
+                title: "Para comer a noite",
+                restaurants: [
+                  {
+                    "image": "assets/images/medium_1.png",
+                    "name": "Pizza do Chef",
+                    "location": "Av. Paulista, 123",
+                    "deliveryTime": 30,
+                    "rating": 4.8,
+                  },
+                  {
+                    "image": "assets/images/medium_2.png",
+                    "name": "Sushi House",
+                    "location": "Rua das Flores, 456",
+                    "deliveryTime": 20,
+                    "rating": 4.5,
+                  },
+                ]),
               // Banner
-              const PromotionBanner(),
+              // const PromotionBanner(),
               const SizedBox(height: 20),
               SectionTitle(
-                title: "Best Pick",
+                title: "Restaurantes",
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -87,10 +144,10 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              const MediumCardList(),
-              const SizedBox(height: 20),
-              SectionTitle(title: "All Restaurants", press: () {}),
-              const SizedBox(height: 16),
+              // const MediumCardList(),
+              // const SizedBox(height: 20),
+              // SectionTitle(title: "All Restaurants", press: () {}),
+              // const SizedBox(height: 16),
 
               // Demo list of Big Cards
               ...List.generate(
@@ -106,6 +163,7 @@ class HomeScreen extends StatelessWidget {
                     rating: 4.3,
                     numOfRating: 200,
                     deliveryTime: 25,
+                    range: "30-80",
                     foodType: const ["Chinese", "American", "Deshi food"],
                     press: () => Navigator.push(
                       context,

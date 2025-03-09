@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rota_app/components/week_days_and_delivery.dart';
 
 import '../../../constants.dart';
 import '../../price_range_and_food_type.dart';
@@ -14,6 +15,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
   final int numOfRating, deliveryTime;
   final bool isFreeDelivery;
   final VoidCallback press;
+  final String range;
 
   const RestaurantInfoBigCard({
     super.key,
@@ -25,6 +27,7 @@ class RestaurantInfoBigCard extends StatelessWidget {
     required this.images,
     required this.foodType,
     required this.press,
+    required this.range,
   });
   @override
   Widget build(BuildContext context) {
@@ -36,9 +39,11 @@ class RestaurantInfoBigCard extends StatelessWidget {
           // pass list of images here
           BigCardImageSlide(images: images),
           const SizedBox(height: defaultPadding / 2),
-          Text(name, style: Theme.of(context).textTheme.titleLarge),
+          Text(name, style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: labelColor,
+                ),    ),
           const SizedBox(height: defaultPadding / 4),
-          PriceRangeAndFoodtype(foodType: foodType),
+          PriceRangeAndFoodtype(foodType: foodType, priceRange: "\$ ${range.toString()}"),
           const SizedBox(height: defaultPadding / 4),
           Row(
             children: [
@@ -49,40 +54,35 @@ class RestaurantInfoBigCard extends StatelessWidget {
                 height: 20,
                 width: 20,
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .color!
-                      .withOpacity(0.5),
+                  primaryColor,// Cor branca com opacidade de 50%
                   BlendMode.srcIn,
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 "$deliveryTime Min",
-                style: Theme.of(context).textTheme.labelSmall,
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(color: titleColor.withOpacity(0.74)),
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
                 child: SmallDot(),
               ),
               SvgPicture.asset(
-                "assets/icons/delivery.svg",
+                "assets/icons/delivery_m.svg",
                 height: 20,
                 width: 20,
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .color!
-                      .withOpacity(0.5),
+                  primaryColor, // Cor branca com opacidade de 50%
                   BlendMode.srcIn,
                 ),
               ),
               const SizedBox(width: 8),
-              Text(isFreeDelivery ? "Free" : "Paid",
-                  style: Theme.of(context).textTheme.labelSmall),
+              Text(isFreeDelivery ? "Entrega Grátis" : "Entrega será cobrada",
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(color: titleColor.withOpacity(0.74))),
             ],
+          ),
+          WeekDaysAndDelivery(
+            weekDays: ["Seg", "Qui", "Sex"],
           ),
         ],
       ),

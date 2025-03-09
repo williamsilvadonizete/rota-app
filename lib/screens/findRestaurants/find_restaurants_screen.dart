@@ -12,6 +12,7 @@ class FindRestaurantsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColorDark,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -32,9 +33,9 @@ class FindRestaurantsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const WelcomeText(
-                title: "Find restaurants near you ",
+                title: "Encontre restaurantes perto de você",
                 text:
-                    "Please enter your location or allow access to \nyour location to find restaurants near you.",
+                    "Por favor, insira sua localização ou permita o acesso à \nsua localização para encontrar restaurantes próximos.",
               ),
 
               // Getting Current Location
@@ -53,7 +54,7 @@ class FindRestaurantsScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "Use current location",
+                      "Sua localizaçāo atual",
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
@@ -84,11 +85,17 @@ class FindRestaurantsScreen extends StatelessWidget {
                                 bodyTextColor, BlendMode.srcIn),
                           ),
                         ),
-                        hintText: "Enter a new address",
+                        hintText: "Entre o endereço",
                         contentPadding: kTextFieldPadding,
                       ),
                     ),
                     const SizedBox(height: defaultPadding),
+                    Image.asset(
+                      "assets/images/location.png", // Substitua pelo caminho correto da sua imagem
+                      height: 150, // Ajuste a altura conforme necessário
+                      width: double.infinity, // Para ocupar toda a largura disponível
+                      fit: BoxFit.contain, // Ajuste para manter a proporção da imagem
+                    ),
                     ElevatedButton(
                       onPressed: () {
                         // Use your onw way how you combine both New Address and Current Location
