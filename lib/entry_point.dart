@@ -5,7 +5,6 @@ import 'package:rota_app/screens/onboarding/onboarding_scrreen.dart';
 
 import 'constants.dart';
 import 'screens/home/home_screen.dart';
-import 'screens/orderDetails/order_details_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/search/search_screen.dart';
 

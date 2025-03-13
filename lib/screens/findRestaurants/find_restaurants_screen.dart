@@ -14,8 +14,9 @@ class FindRestaurantsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryColorDark,
       appBar: AppBar(
+        backgroundColor: primaryColorDark,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close, color: primaryColor,),
           onPressed: () {
             Navigator.push(
               context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rota_app/components/notification_permission.dart';
 import 'package:rota_app/constants.dart';
 
 class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -7,9 +8,15 @@ class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget 
   final Size preferredSize;
 
   final bool showBackButton;
+  final VoidCallback? onChartPressed; // Callback para o clique no ícone de gráfico
+  final bool isChartVisible; // Estado para controlar a cor do ícone
 
-  const CustomStatusAppBar({super.key, this.showBackButton = false})
-      : preferredSize = const Size.fromHeight(140.0); // Tamanho total do AppBar
+  const CustomStatusAppBar({
+    super.key,
+    this.showBackButton = false,
+    this.onChartPressed,
+    this.isChartVisible = false, // Valor padrão
+  }) : preferredSize = const Size.fromHeight(120.0); // Tamanho reduzido do AppBar
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +38,20 @@ class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget 
       actions: [
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.notifications, size: 20),
+          icon: NotificationPermissionWidget(),
+        ),
+        IconButton(
+          onPressed: onChartPressed, // Usa o callback aqui
+          icon: Icon(
+            Icons.bar_chart,
+            color: isChartVisible ? Colors.amber : primaryColorDark, // Muda a cor do ícone
+          ),
         ),
       ],
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(110.0),
+        preferredSize: const Size.fromHeight(80.0), // Tamanho reduzido do bottom
         child: Padding(
-          padding: const EdgeInsets.only(left: 30, bottom: 20),
+          padding: const EdgeInsets.only(left: 25, bottom: 15), // Padding ajustado
           child: _buildUserInfo(),
         ),
       ),
@@ -47,39 +61,34 @@ class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget 
   Widget _buildUserInfo() {
     return Row(
       children: [
-        Stack(
-          children: [
-           Container(
-              width: 80, 
-              height: 80,
-              decoration: const BoxDecoration(
-                color: primaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: SvgPicture.asset(
-                "assets/icons/logo.svg",
-                fit: BoxFit.contain, 
-              ),
-            ),
-          ],
+        Container(
+          width: 70, // Tamanho reduzido do container
+          height: 70,
+          decoration: const BoxDecoration(
+            color: primaryColor,
+            shape: BoxShape.circle,
+          ),
+          child: SvgPicture.asset(
+            "assets/icons/logo.svg",
+            fit: BoxFit.contain,
+          ),
         ),
-        const SizedBox(width: 20),
+        const SizedBox(width: 10), // Espaço reduzido entre os elementos
         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'William Silva',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 18, // Tamanho da fonte reduzido
                 fontWeight: FontWeight.w700,
                 color: primaryColorDark,
               ),
             ),
             Text(
               'Uberlândia',
-              style: TextStyle(fontSize: 18, color: primaryColorDark),
+              style: TextStyle(fontSize: 14, color: primaryColorDark), // Tamanho da fonte reduzido
             ),
-            
           ],
         ),
       ],

@@ -25,7 +25,7 @@ class WeekDaysAndDelivery extends StatelessWidget {
                 children: [
                   Text(
                     day,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: isOpen ? Colors.green : titleColor.withOpacity(0.5),
                           fontWeight: isOpen ? FontWeight.bold : FontWeight.normal,
                         ),

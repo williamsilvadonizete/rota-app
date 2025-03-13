@@ -1,11 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rota_app/components/custom_bar.dart';
-import 'package:rota_app/components/custom_status_bar.dart';
-import 'package:rota_app/components/wave_bar.dart';
-
-import '../../components/buttons/socal_button.dart';
 import '../../components/welcome_text.dart';
 import '../../constants.dart';
 import 'sign_up_screen.dart';

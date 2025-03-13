@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/screens/home/home_screen.dart';
 import '../../constants.dart';
 import '../../components/dot_indicators.dart';
 import '../auth/sign_in_screen.dart';
@@ -78,13 +77,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const SignInScreen()),
-    );
-  }
-
-  void _navigateToHome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
 
