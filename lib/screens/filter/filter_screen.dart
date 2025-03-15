@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import 'components/categories.dart';
-import 'components/dietaries.dart';
-import 'components/price_range.dart';
+import 'components/query_order.dart';
 
 class FilterScreen extends StatelessWidget {
   const FilterScreen({super.key});
@@ -11,20 +10,28 @@ class FilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColorDark,
       appBar: AppBar(
-        title: const Text("Filters"),
+        backgroundColor: primaryColorDark,
+        title:  const Text(
+          "Filtros",
+          style: TextStyle(
+            color: primaryColor, // Cor do texto
+          ),
+        ),
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, 
+            crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
+              SizedBox(height: defaultPadding),
+              QueryOrder(),
               SizedBox(height: defaultPadding),
               Categories(),
               SizedBox(height: defaultPadding),
-              Dietaries(),
-              SizedBox(height: defaultPadding),
-              PriceRange(),
+              
               SizedBox(height: defaultPadding),
             ],
           ),

@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rota_app/components/city_selection_modal.dart';
 import 'package:rota_app/components/notification_permission.dart';
 import 'package:rota_app/constants.dart';
+import 'package:rota_app/components/chart_modal.dart';  // Importa o ChartModal
 
-class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomStatusAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
   final bool showBackButton;
-  final VoidCallback? onChartPressed; // Callback para o clique no ícone de gráfico
-  final bool isChartVisible; // Estado para controlar a cor do ícone
 
   const CustomStatusAppBar({
     super.key,
     this.showBackButton = false,
-    this.onChartPressed,
-    this.isChartVisible = false, // Valor padrão
-  }) : preferredSize = const Size.fromHeight(120.0); // Tamanho reduzido do AppBar
+  }) : preferredSize = const Size.fromHeight(120.0);
+
+  @override
+  _CustomStatusAppBarState createState() => _CustomStatusAppBarState();
+}
+
+class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
+  String selectedCity = 'Uberlândia';  // Cidade inicial
+
+  // Função para abrir o modal do gráfico utilizando o ChartModal
+  void _openChartModal() {
+    ChartModal.show(context);  // Chama o método estático do ChartModal
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@ class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget 
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
-      leading: showBackButton
+      leading: widget.showBackButton
           ? IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.arrow_back, color: primaryColorDark),
@@ -41,29 +51,29 @@ class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget 
           icon: NotificationPermissionWidget(),
         ),
         IconButton(
-          onPressed: onChartPressed, // Usa o callback aqui
-          icon: Icon(
+          onPressed: _openChartModal, // Chama o método para abrir o modal
+          icon: const Icon(
             Icons.bar_chart,
-            color: isChartVisible ? Colors.amber : primaryColorDark, // Muda a cor do ícone
+            color: primaryColorDark,
           ),
         ),
       ],
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(80.0), // Tamanho reduzido do bottom
+        preferredSize: const Size.fromHeight(80.0),
         child: Padding(
-          padding: const EdgeInsets.only(left: 25, bottom: 15), // Padding ajustado
-          child: _buildUserInfo(),
+          padding: const EdgeInsets.only(left: 25, bottom: 15),
+          child: _buildUserInfo(context),
         ),
       ),
     );
   }
 
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(BuildContext context) {
     return Row(
       children: [
         Container(
-          width: 70, // Tamanho reduzido do container
-          height: 70,
+          width: 50,
+          height: 50,
           decoration: const BoxDecoration(
             color: primaryColor,
             shape: BoxShape.circle,
@@ -73,21 +83,43 @@ class CustomStatusAppBar extends StatelessWidget implements PreferredSizeWidget 
             fit: BoxFit.contain,
           ),
         ),
-        const SizedBox(width: 10), // Espaço reduzido entre os elementos
-        const Column(
+        const SizedBox(width: 10),
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'William Silva',
               style: TextStyle(
-                fontSize: 18, // Tamanho da fonte reduzido
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: primaryColorDark,
               ),
             ),
-            Text(
-              'Uberlândia',
-              style: TextStyle(fontSize: 14, color: primaryColorDark), // Tamanho da fonte reduzido
+            GestureDetector(
+              onTap: () => CitySelectionModal.show(
+                context,
+                onCitySelected: (city) {
+                  setState(() {
+                    selectedCity = city;  // Atualiza a cidade selecionada
+                  });
+                  print("Cidade selecionada: $city");
+                },
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: primaryColorDark,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 4),  // Espaço entre o ícone e o texto
+                  Text(
+                    selectedCity,
+                    style: const TextStyle(
+                        fontSize: 14, color: primaryColorDark, decoration: TextDecoration.underline),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

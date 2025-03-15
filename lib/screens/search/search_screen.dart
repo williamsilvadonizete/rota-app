@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/custom_status_bar.dart';
-
+import 'package:rota_app/screens/filter/filter_screen.dart';
 import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
@@ -44,7 +43,23 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColorDark,
-      appBar: CustomStatusAppBar(showBackButton: true),
+      appBar: AppBar(
+        backgroundColor: primaryColorDark, // Cor do fundo da AppBar
+        title: const Text(
+          "Encontre restaurantes",
+          style: TextStyle(
+            color: primaryColor, // Cor do texto
+          ),
+        ),
+        actions: [
+          // Ícone de filtro
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            color: primaryColor,
+            onPressed: _showFilterModal, // Exibe o filtro como um BottomSheet
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -59,12 +74,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: titleColor,
                     ),
-              ),
-              const SizedBox(height: defaultPadding),
-              ElevatedButton(
-                onPressed: _showFilterDialog, // Função para abrir o pop-up de filtros
-                
-                child: const Text("Filtros"),
               ),
               const SizedBox(height: defaultPadding),
               Expanded(
@@ -98,37 +107,19 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Função que abre o diálogo para filtros
-  void _showFilterDialog() {
-    showDialog(
+  // Função que abre o modal de filtros usando showModalBottomSheet
+  void _showFilterModal() {
+    showModalBottomSheet(
       context: context,
+      backgroundColor: primaryColorDark,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Filtros'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Exemplo de filtros
-              CheckboxListTile(
-                title: const Text('Filtro 1'),
-                value: true, // Controle do estado do filtro
-                onChanged: (bool? value) {},
-              ),
-              CheckboxListTile(
-                title: const Text('Filtro 2'),
-                value: false, // Controle do estado do filtro
-                onChanged: (bool? value) {},
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Fecha o pop-up
-              },
-              child: const Text('Fechar'),
-            ),
-          ],
+        return FractionallySizedBox(
+          heightFactor: 0.8, // Faz com que o modal ocupe 80% da altura da tela
+          child: const FilterScreen(), // Utiliza a tela FilterScreen no BottomSheet
         );
       },
     );
@@ -165,7 +156,7 @@ class _SearchFormState extends State<SearchForm> {
         style: Theme.of(context).textTheme.labelLarge,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          hintText: "Buscar",
+          hintText: "Buscar Restaurantes",
           contentPadding: kTextFieldPadding,
           prefixIcon: Padding(
             padding: const EdgeInsets.all(8.0),

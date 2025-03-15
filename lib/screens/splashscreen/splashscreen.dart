@@ -3,6 +3,8 @@ import 'package:rota_app/constants.dart';
 import '../onboarding/onboarding_scrreen.dart'; // Importa a tela de Onboarding
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
