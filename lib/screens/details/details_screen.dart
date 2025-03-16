@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:rota_app/components/restaurant_bar.dart';
 
 import '../../constants.dart';
-import '../search/search_screen.dart';
 import 'components/featured_items.dart';
 import 'components/iteams.dart';
 import 'components/restaurrant_info.dart';
@@ -13,23 +12,8 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset("assets/icons/share.svg"),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: SvgPicture.asset("assets/icons/search.svg"),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SearchScreen(),
-              ),
-            ),
-          ),
-        ],
-      ),
+      backgroundColor: primaryColorDark,
+      appBar: RestaurantBar(showBackButton: true),
       body: const SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -38,7 +22,6 @@ class DetailsScreen extends StatelessWidget {
               SizedBox(height: defaultPadding / 2),
               RestaurantInfo(),
               SizedBox(height: defaultPadding),
-              FeaturedItems(),
               Items(),
             ],
           ),

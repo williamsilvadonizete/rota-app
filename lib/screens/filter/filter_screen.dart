@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rota_app/screens/filter/components/activities.dart';
+import 'package:rota_app/screens/filter/components/days.dart';
 
 import '../../constants.dart';
-import 'components/categories.dart';
+import 'components/hour.dart';
 import 'components/query_order.dart';
 
 class FilterScreen extends StatelessWidget {
@@ -29,9 +31,11 @@ class FilterScreen extends StatelessWidget {
               SizedBox(height: defaultPadding),
               QueryOrder(),
               SizedBox(height: defaultPadding),
-              Categories(),
+              DaysSelect(),
               SizedBox(height: defaultPadding),
-              
+              TimeSelect(),
+              SizedBox(height: defaultPadding),
+              ActivitiesSelect(),
               SizedBox(height: defaultPadding),
             ],
           ),

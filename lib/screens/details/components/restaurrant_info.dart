@@ -13,47 +13,48 @@ class RestaurantInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Mayfield Bakery & Cafe",
-            style: Theme.of(context).textTheme.headlineMedium,
-            maxLines: 1,
-          ),
-          const SizedBox(height: defaultPadding / 2),
-          const PriceRangeAndFoodtype(
-            foodType: ["Chinese", "American", "Deshi food"],
-          ),
-          const SizedBox(height: defaultPadding / 2),
-          const RatingWithCounter(rating: 4.3, numOfRating: 200),
-          const SizedBox(height: defaultPadding),
-          Row(
+      child: Container(
+        decoration: BoxDecoration(
+          color: primaryColorDark, // Cor de fundo alterada para azul
+          borderRadius: BorderRadius.circular(12), // Adicionando borda arredondada
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const DeliveryInfo(
-                iconSrc: "assets/icons/delivery.svg",
-                text: "Free",
-                subText: "Delivery",
+              Text(
+                "Mac Feliz",
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: labelColor),
+                maxLines: 1,
               ),
-              const SizedBox(width: defaultPadding),
-              const DeliveryInfo(
-                iconSrc: "assets/icons/clock.svg",
-                text: "25",
-                subText: "Minutes",
+              const SizedBox(height: defaultPadding / 2),
+              const PriceRangeAndFoodtype(
+                foodType: ["Hamburguer", "Sanduba", "Batata"],
+                priceRange: "\$ 12-50",
               ),
-              const Spacer(),
-              OutlinedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              const SizedBox(height: defaultPadding / 2),
+              const RatingWithCounter(rating: 4.3, numOfRating: 200),
+              const SizedBox(height: defaultPadding),
+              Row(
+                children: [
+                  const DeliveryInfo(
+                    iconSrc: "assets/icons/delivery.svg",
+                    text: "Free",
+                    subText: "Delivery",
                   ),
-                ),
-                child: const Text("Take away"),
+                  const SizedBox(width: defaultPadding),
+                  const DeliveryInfo(
+                    iconSrc: "assets/icons/clock.svg",
+                    text: "25",
+                    subText: "Minutes",
+                  ),
+                  const Spacer(),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -87,14 +88,14 @@ class DeliveryInfo extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: "$text\n",
-            style: Theme.of(context).textTheme.labelLarge,
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: labelColor),
             children: [
               TextSpan(
                 text: subText,
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!
-                    .copyWith(fontWeight: FontWeight.normal),
+                    .copyWith(fontWeight: FontWeight.normal, color: labelColor),
               )
             ],
           ),

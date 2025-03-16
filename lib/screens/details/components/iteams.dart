@@ -22,7 +22,7 @@ class _ItemsState extends State<Items> {
           child: TabBar(
             isScrollable: true,
             unselectedLabelColor: titleColor,
-            labelStyle: Theme.of(context).textTheme.titleLarge,
+            labelStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: primaryColor),
             onTap: (value) {
               // you will get selected tab index
             },
@@ -58,19 +58,13 @@ class _ItemsState extends State<Items> {
 
 final List<Tab> demoTabs = <Tab>[
   const Tab(
-    child: Text('Most Populars'),
+    child: Text('Cardápio'),
   ),
   const Tab(
-    child: Text('Beef & Lamb'),
+    child: Text('Benefícios'),
   ),
   const Tab(
-    child: Text('Seafood'),
-  ),
-  const Tab(
-    child: Text('Appetizers'),
-  ),
-  const Tab(
-    child: Text('Dim Sum'),
+    child: Text('Informações'),
   ),
 ];
 

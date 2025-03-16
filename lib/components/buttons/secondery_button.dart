@@ -7,10 +7,12 @@ class SeconderyButton extends StatelessWidget {
     super.key,
     required this.child,
     required this.press,
+    this.backgroundColor,
   });
 
   final Widget child;
   final VoidCallback press;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +21,15 @@ class SeconderyButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: press,
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-              horizontal: defaultPadding, vertical: 12),
+          backgroundColor: backgroundColor ?? primaryColorDark,
+          padding: const EdgeInsets.symmetric(horizontal: defaultPadding, vertical: 12),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            side: BorderSide(color: primaryColor, width: 0.8),
+          ),
+          
+          side: BorderSide(
+          color: backgroundColor == primaryColor ? primaryColor : (backgroundColor == primaryColorDark ? labelColor : primaryColor),
+          width: 0.8,
           ),
         ),
         child: child,
