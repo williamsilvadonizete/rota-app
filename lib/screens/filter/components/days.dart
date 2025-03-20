@@ -39,7 +39,8 @@ class _DaysSelectState extends State<DaysSelect> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(
               demoCategories.length,
-              (index) => Expanded( // Utilizando Expanded para garantir que todos os botões tenham o mesmo tamanho
+              (index) => SizedBox( // Usando SizedBox para definir largura fixa
+                width: 40, // Largura fixa para todos os botões
                 child: SeconderyButton(
                   press: () {
                     setState(() {

@@ -11,7 +11,7 @@ const accentColor = Color(0xFFEF9920);
 const bodyTextColor = Color.fromARGB(255, 240, 237, 237);
 const inputColor = Color.fromARGB(255, 240, 237, 237);
 
-const double defaultPadding = 16;
+const double defaultPadding = 7;
 const Duration kDefaultDuration = Duration(milliseconds: 250);
 
 const TextStyle kButtonTextStyle = TextStyle(

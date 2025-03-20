@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rota_app/screens/details/details_screen.dart';
 import 'package:rota_app/screens/filter/filter_screen.dart';
 import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/scalton/big_card_scalton.dart';
@@ -95,7 +96,12 @@ class _SearchScreenState extends State<SearchScreen> {
                               "American",
                               "Deshi food"
                             ],
-                            press: () {},
+                             press: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DetailsScreen(),
+                      ),
+                    ),
                           ),
                   ),
                 ),
