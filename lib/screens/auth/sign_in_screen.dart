@@ -14,16 +14,16 @@ class SignInScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryColorDark,
       appBar: CustomAppBar(showBackButton: true),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Center( // Garante que o conteúdo fique alinhado no centro
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
             children: [
               const WelcomeText(
                 title: "Bem-Vindo",
-                text:
-                    "Digite seu E-mail ou Telefone para entrar. Você não vai mais parar em Casa! :)",
+                text: "Digite seu E-mail ou Telefone para entrar. Você não vai mais parar em Casa! :)",
               ),
               const SignInForm(),
               const SizedBox(height: defaultPadding),

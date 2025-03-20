@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rota_app/components/restaurant_bar.dart';
 
 import '../../constants.dart';
-import 'components/featured_items.dart';
 import 'components/iteams.dart';
 import 'components/restaurrant_info.dart';
 
