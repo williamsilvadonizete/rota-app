@@ -34,8 +34,10 @@ class Info extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
-              const PriceRangeAndFoodtype(
-                foodType: ["Chinese", "American", "Deshi food"],
+              const PriceRangeAndType(
+                priceRange: "\$ 12-50",
+                types: ["Hamburguer", "Pizza", "Sushi"],
+                icons: [Icons.fastfood, Icons.local_pizza, Icons.rice_bowl],
               ),
             ],
           ),

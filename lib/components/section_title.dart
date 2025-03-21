@@ -34,22 +34,22 @@ class SectionTitle extends StatelessWidget {
                   color: const Color.fromARGB(228, 245, 143, 26),
                 ),    
           ),
-          GestureDetector(
-            onTap: press,
-            child: Text(
-              isMainSection ? "Mostrar Todos" : "Limpar".toUpperCase(),
-              style: isMainSection
-                  ? Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: primaryColor)
-                  : TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: titleColor.withOpacity(0.64),
-                    ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: press,
+          //   child: Text(
+          //     isMainSection ? "Mostrar Todos" : "Limpar".toUpperCase(),
+          //     style: isMainSection
+          //         ? Theme.of(context)
+          //             .textTheme
+          //             .bodyMedium!
+          //             .copyWith(color: primaryColor)
+          //         : TextStyle(
+          //             fontSize: 12,
+          //             fontWeight: FontWeight.w500,
+          //             color: titleColor.withOpacity(0.64),
+          //           ),
+          //   ),
+          // ),
         ],
       ),
     );

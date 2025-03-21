@@ -30,7 +30,7 @@ class _EntryPointState extends State<EntryPoint> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
-    const SearchScreen(),
+    const OnboardingScreen(navigateToSignIn: false),
     const OnboardingScreen(navigateToSignIn: false),
     const ProfileScreen(),
   ];
@@ -50,7 +50,7 @@ class _EntryPointState extends State<EntryPoint> {
             ),
             child: CupertinoTabBar(
               onTap: (value) {
-                if (value != 3) { // Ignora o clique no espaço do botão
+                if (value != 2) { // Ignora o clique no espaço do botão
                   setState(() {
                     _selectedIndex = value;
                   });

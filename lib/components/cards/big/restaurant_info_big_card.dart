@@ -43,7 +43,11 @@ class RestaurantInfoBigCard extends StatelessWidget {
                   color: labelColor,
                 ),    ),
           const SizedBox(height: defaultPadding / 4),
-          PriceRangeAndFoodtype(foodType: foodType, priceRange: "\$ ${range.toString()}"),
+          const PriceRangeAndType(
+                priceRange: "\$ 12-50",
+                types: ["Hamburguer", "Pizza", "Sushi"],
+                icons: [Icons.fastfood, Icons.local_pizza, Icons.rice_bowl],
+              ),
           const SizedBox(height: defaultPadding / 4),
           Row(
             children: [
