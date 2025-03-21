@@ -150,6 +150,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.0.0"
+  flutter_credit_card:
+    dependency: "direct main"
+    description:
+      name: flutter_credit_card
+      sha256: a31154e62667e6e1f089ea357941e9285e4b42b9cb699392e55c978e19f864a0
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -166,6 +174,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_masked_text2:
+    dependency: "direct main"
+    description:
+      name: flutter_masked_text2
+      sha256: "5ccf6f1f8b7b7a8025e3fbaea48bff0aa7e7e9512c723e26138a0b24f31ca4d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.1"
   flutter_svg:
     dependency: "direct main"
     description:

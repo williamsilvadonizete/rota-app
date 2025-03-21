@@ -11,54 +11,51 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryColorDark,
-      appBar: CustomAppBar(showBackButton: true),
-      body: Center( // Garante que o conteúdo fique alinhado no centro
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
-            children: [
-              const WelcomeText(
-                title: "Bem-Vindo",
-                text: "Digite seu E-mail ou Telefone para entrar. Você não vai mais parar em Casa! :)",
-              ),
-              const SignInForm(),
-              const SizedBox(height: defaultPadding),
-              kOrText,
-              const SizedBox(height: defaultPadding * 1.5),
-
-              Center(
-                child: Text.rich(
-                  TextSpan(
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w600, color: labelColor),
-                    text: "Nāo tem uma conta? ",
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Cadastre-se",
-                        style: const TextStyle(color: primaryColor),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen(),
-                                ),
-                              ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-            ],
+  return Scaffold(
+    backgroundColor: primaryColorDark,
+    appBar: CustomAppBar(showBackButton: true),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: defaultPadding).copyWith(top: defaultPadding * 3), // Ajuste o valor do top padding
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const WelcomeText(
+            title: "Bem-Vindo",
+            text: "Digite seu E-mail ou Telefone para entrar. Você não vai mais parar em Casa! :)",
           ),
-        ),
+          const SignInForm(),
+          const SizedBox(height: defaultPadding),
+          kOrText,
+          const SizedBox(height: defaultPadding * 1.5),
+          Center(
+            child: Text.rich(
+              TextSpan(
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(fontWeight: FontWeight.w600, color: labelColor),
+                text: "Nāo tem uma conta? ",
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "Cadastre-se",
+                    style: const TextStyle(color: primaryColor),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignUpScreen(),
+                            ),
+                          ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: defaultPadding),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

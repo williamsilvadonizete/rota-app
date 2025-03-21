@@ -69,10 +69,10 @@ class _SignInFormState extends State<SignInForm> {
         children: [
           TextFormField(
             controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.emailAddress,            
             validator: (value) =>
                 value!.isEmpty ? "Digite seu e-mail" : null,
-            decoration: const InputDecoration(labelText: "Email"),
+            decoration: const InputDecoration(labelText: "Email", labelStyle: TextStyle(color: primaryColor)),
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
@@ -84,7 +84,7 @@ class _SignInFormState extends State<SignInForm> {
             obscureText: true,
             validator: (value) =>
                 value!.isEmpty ? "Digite sua senha" : null,
-            decoration: const InputDecoration(labelText: "Senha"),
+            decoration: const InputDecoration(labelText: "Senha", labelStyle: TextStyle(color: primaryColor)),
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!

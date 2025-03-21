@@ -43,6 +43,9 @@ dependencies:
   fluttertoast: ^8.2.2
   qr_code_scanner: ^1.0.1
   url_launcher: ^6.0.9
+  flutter_masked_text2: ^0.9.1
+  flutter_credit_card: ^4.1.0
+
 
 
 

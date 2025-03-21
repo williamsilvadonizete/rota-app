@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'screens/splashscreen/splashscreen.dart';
 
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   runApp(const MyApp());
 }

@@ -9,6 +9,8 @@ PODS:
   - flutter_appauth (0.0.1):
     - AppAuth (= 1.7.6)
     - Flutter
+  - flutter_credit_card (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - MTBBarcodeScanner (5.0.11)
@@ -20,14 +22,18 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - url_launcher_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_appauth (from `.symlinks/plugins/flutter_appauth/ios`)
+  - flutter_credit_card (from `.symlinks/plugins/flutter_credit_card/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -39,6 +45,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_appauth:
     :path: ".symlinks/plugins/flutter_appauth/ios"
+  flutter_credit_card:
+    :path: ".symlinks/plugins/flutter_credit_card/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   permission_handler_apple:
@@ -47,16 +55,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_appauth: 240be31017bab05dc0ad10a863886d49eba477aa
+  flutter_credit_card: 75489579678755891ccb1ddcc13415defcea4f01
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   qr_code_scanner: d77f94ecc9abf96d9b9b8fc04ef13f611e5a147a
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
 PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
 

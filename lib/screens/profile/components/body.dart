@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rota_app/components/custom_status_bar.dart';
-import '../../../constants.dart';
+import 'package:rota_app/screens/profile/profile_detail.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
@@ -9,21 +9,33 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 33, 32, 32), // Cor de fundo escura
+      backgroundColor: const Color.fromARGB(255, 33, 32, 32),
       appBar: CustomStatusAppBar(showBackButton: true),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
-              ...menuItems.map((item) => ProfileMenuCard(
-                    svgSrc: item["icon"]!,
-                    title: item["title"]!,
-                    subTitle: item["subTitle"]!,
-                    press: item["action"],
-                  )),
+              ProfileMenuCard(
+                svgSrc: "assets/icons/profile.svg",
+                title: "Informações do Usuário",
+                subTitle: "Altere suas informações",
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfileDetailScreen()),
+                  );
+                },
+              ),
+              ProfileMenuCard(
+                svgSrc: "assets/icons/share.svg",
+                title: "Compartilhar",
+                subTitle: "Convide seus amigos",
+                press: () {
+                  // Aqui pode ser implementado o compartilhamento
+                  print("Compartilhar acionado");
+                },
+              ),
             ],
           ),
         ),
@@ -38,11 +50,11 @@ class ProfileMenuCard extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.svgSrc,
-    this.press,
+    required this.press,
   });
 
   final String title, subTitle, svgSrc;
-  final VoidCallback? press;
+  final VoidCallback press;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +67,7 @@ class ProfileMenuCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.black54, // Fundo dos cards escuro
+            color: Colors.black54,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -70,7 +82,7 @@ class ProfileMenuCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white12, // Fundo do ícone sutilmente diferente
+                  color: Colors.white12,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: SvgPicture.asset(
@@ -98,7 +110,7 @@ class ProfileMenuCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subTitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white60,
                       ),
@@ -118,37 +130,3 @@ class ProfileMenuCard extends StatelessWidget {
     );
   }
 }
-
-// Lista de itens do menu
-final List<Map<String, dynamic>> menuItems = [
-  {
-    "icon": "assets/icons/profile.svg",
-    "title": "Informações do Perfil",
-    "subTitle": "Altere as informações da sua conta",
-    "action": () {},
-  },
-  {
-    "icon": "assets/icons/lock.svg",
-    "title": "Alterar Senha",
-    "subTitle": "Atualize suas configurações de segurança",
-    "action": () {},
-  },
-  {
-    "icon": "assets/icons/card.svg",
-    "title": "Métodos de Pagamento",
-    "subTitle": "Gerencie seus cartões de crédito e débito",
-    "action": () {},
-  },
-  {
-    "icon": "assets/icons/marker.svg",
-    "title": "Endereços",
-    "subTitle": "Adicione ou remova seus endereços de entrega",
-    "action": () {},
-  },
-  {
-    "icon": "assets/icons/share.svg",
-    "title": "Indicar um Amigo",
-    "subTitle": "Ganhe R\$10 por cada amigo indicado",
-    "action": () {},
-  },
-];
