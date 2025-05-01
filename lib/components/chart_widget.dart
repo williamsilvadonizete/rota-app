@@ -3,7 +3,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:rota_app/constants.dart'; // Certifique-se de que o seu arquivo constants.dart está importado aqui.
 
 class ChartWidget extends StatelessWidget {
-  const ChartWidget({super.key});
+  final double totalSavings;
+
+  const ChartWidget({
+    super.key,
+    required this.totalSavings,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,43 +54,67 @@ class ChartWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: SizedBox(
-        height: 250,
-        child: BarChart(
-          BarChartData(
-            alignment: BarChartAlignment.spaceAround,
-            maxY: 100,
-            barGroups: mockBarData,
-            borderData: FlBorderData(show: false),
-            titlesData: FlTitlesData(
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: (double value, TitleMeta meta) {
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    return Text(
-                      months[value.toInt() % months.length],
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-              ),
-              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Label para mostrar o total economizado de forma destacada
+          Text(
+            "Você economizou: R\$ ${totalSavings.toStringAsFixed(2)}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-            gridData: FlGridData(show: false),
-            barTouchData: BarTouchData(
-              touchTooltipData: BarTouchTooltipData(
-                getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                  return BarTooltipItem(
-                    rod.toY.toString(),
-                    const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  );
-                },
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 250,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: 100,
+                barGroups: mockBarData,
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (double value, TitleMeta meta) {
+                        const months = [
+                          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                        ];
+                        return Text(
+                          months[value.toInt() % months.length],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                gridData: FlGridData(show: false),
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        rod.toY.toString(),
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

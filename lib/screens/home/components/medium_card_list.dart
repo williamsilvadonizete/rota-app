@@ -43,7 +43,7 @@ class _MediumCardListState extends State<MediumCardList> {
             widget.title, // Usa o título passado como parâmetro
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(228, 245, 143, 26),
+                  color: primaryColor,
                 ),
           ),
         ),

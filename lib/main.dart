@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 240, 139, 23),
+            backgroundColor: primaryColor,
             foregroundColor: const Color.fromARGB(255, 32, 31, 31),
             minimumSize: const Size(double.infinity, 40),
             shape: RoundedRectangleBorder(

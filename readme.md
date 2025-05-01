@@ -1,9 +1,25 @@
-# Restaurant/Food Delivery App UI kit in Flutter
+Passos para resetar todos os simuladores:
+Abra o Terminal.
 
-We build Flutter Restaurant/Food delivery app UI Kit to help you build a nice clean app for restaurent using flutter which runs both Android and iOS. This kit comes packed with 25 beautifully designed screens and a hearty portion of deliciously responsive components. Also, we have skeleton loading and have separate components for both Android and iOS so that you feel the native experience.
+Execute o seguinte comando:
 
-## Screenshots
+bash
+Copiar
+Editar
+xcrun simctl shutdown all && xcrun simctl erase all
+O que esse comando faz:
+xcrun simctl shutdown all: garante que todos os simuladores estejam desligados.
 
-![All pages](/preview.png)
+xcrun simctl erase all: reseta todos os simuladores, apagando apps instalados, dados, etc.
 
-![Preview](/foodly_thun.png)
+xcrun simctl list runtimes
+iOS 17.5 (17.5 - 21F79) - com.apple.CoreSimulator.SimRuntime.iOS-17-5
+xcrun simctl list devicetypes
+
+xcrun simctl create "iPhone2" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+
+
+
+xcrun simctl list devices
+
+open -a Simulator --args -CurrentDeviceUDID

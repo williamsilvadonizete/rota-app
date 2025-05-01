@@ -25,7 +25,11 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
 
   // Função para abrir o modal do gráfico utilizando o ChartModal
   void _openChartModal() {
-    ChartModal.show(context);  // Chama o método estático do ChartModal
+    ChartModal.show(
+        context,
+        totalSavings: 500,
+        totalExpected: 300,
+      );
   }
 
   @override

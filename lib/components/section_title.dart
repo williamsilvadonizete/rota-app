@@ -27,11 +27,11 @@ class SectionTitle extends StatelessWidget {
             style: isMainSection
                 ? Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(228, 245, 143, 26),
+                  color: primaryColor,
                 )
                 : Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(228, 245, 143, 26),
+                  color: primaryColor,
                 ),    
           ),
           // GestureDetector(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../constants.dart';
 
-import '../../../components/cards/big/restaurant_info_big_card.dart';
+import '../../../components/cards/big/restaurant_info_simple_card.dart';
 import '../../../components/scalton/big_card_scalton.dart';
 import '../../../demo_data.dart';
 
@@ -64,7 +64,7 @@ class _BodyState extends State<Body> {
                   padding: const EdgeInsets.only(bottom: defaultPadding),
                   child: _isLoading
                       ? const BigCardScalton()
-                      : RestaurantInfoBigCard(
+                      : RestaurantInfoSimpleCard(
                           // Images are List<String>
                           images: demoBigImages..shuffle(),
                           name: "McDonald's",

@@ -32,19 +32,20 @@ class _SignInFormState extends State<SignInForm> {
     setState(() => _isLoading = false);
 
     if (result != null && result['access_token'] != null) {
+    // if (true) {
       String token = result['access_token'];
       await _saveToken(token);
 
       // Use addPostFrameCallback para garantir que o Toast seja mostrado após a renderização
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        CustomToast.showSuccessToast("Login bem-sucedido!");
+        CustomToast.showSuccessToast(context, "Login bem-sucedido!");
       });
 
       _navigateToHome();
     } else {
       // Use addPostFrameCallback para garantir que o Toast seja mostrado após a renderização
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        CustomToast.showErrorToast("Usuário ou senha inválidos");
+        CustomToast.showErrorToast(context, "Usuário ou senha inválidos");
       });
     }
   }

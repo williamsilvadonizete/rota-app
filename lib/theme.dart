@@ -29,7 +29,7 @@ final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
   enabledBorder: kDefaultOutlineInputBorder,
   focusedBorder: kDefaultOutlineInputBorder.copyWith(
       borderSide: BorderSide(
-    color: const Color.fromARGB(255, 228, 145, 36).withOpacity(0.5),
+    color: primaryColor.withOpacity(0.5),
   )),
   errorBorder: kDefaultOutlineInputBorder.copyWith(
     borderSide: kErrorBorderSide,

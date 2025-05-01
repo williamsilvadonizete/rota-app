@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rota_app/components/cards/big/restaurant_info.dart';
 import 'package:rota_app/components/custom_status_bar.dart';
 import 'package:rota_app/components/cards/big/big_card_image_slide.dart';
-import 'package:rota_app/components/cards/big/restaurant_info_big_card.dart';
+import 'package:rota_app/components/cards/big/restaurant_info_simple_card.dart';
 import 'package:rota_app/components/section_title.dart';
 import 'package:rota_app/constants.dart';
 import 'package:rota_app/demo_data.dart';
@@ -117,21 +118,29 @@ class HomeScreen extends StatelessWidget {
                 (index) => Padding(
                   padding: const EdgeInsets.fromLTRB(
                       defaultPadding, 0, defaultPadding, defaultPadding),
-                  child: RestaurantInfoBigCard(
-                    images: demoBigImages..shuffle(),
-                    name: "McDonald's",
-                    rating: 4.3,
-                    numOfRating: 200,
-                    deliveryTime: 25,
-                    range: "30-80",
-                    foodType: const ["Chinese", "American", "Deshi food"],
-                    press: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DetailsScreen(),
-                      ),
-                    ),
-                  ),
+                  child: RestaurantCard(
+                          logoUrl: 'https://ciclogestaoderesiduos.com.br/wp-content/uploads/2018/10/kisspng-fast-food-mcdonald-s-logo-golden-arches-restaurant-mcdonalds-5ac3bf23df0da8.6342440115227778919136.jpg',
+                          name: 'Mac',
+                          foodType: 'Fast Food',
+                          distance: '20 km',
+                          weekAvailability: [
+                            DayAvailability(dayLetter: 'S', available: false),
+                            DayAvailability(dayLetter: 'T', available: false),
+                            DayAvailability(dayLetter: 'Q', available: true),
+                            DayAvailability(dayLetter: 'Q', available: true),
+                            DayAvailability(dayLetter: 'S', available: true),
+                            DayAvailability(dayLetter: 'S', available: true),
+                            DayAvailability(dayLetter: 'D', available: true),
+                          ],
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DetailsScreen(),
+                              ),
+                            );
+                          },
+                        ),
                 ),
               ),
             ],

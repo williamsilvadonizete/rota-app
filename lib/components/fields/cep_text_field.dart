@@ -5,6 +5,8 @@ import 'package:rota_app/constants.dart';
 class CepTextField extends StatelessWidget {
   final MaskedTextController _controller = MaskedTextController(mask: '00000-000');
 
+  CepTextField({super.key});
+
    @override
   Widget build(BuildContext context) {
     return Padding(

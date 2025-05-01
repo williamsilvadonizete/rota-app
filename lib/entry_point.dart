@@ -99,7 +99,7 @@ class _EntryPointState extends State<EntryPoint> {
                   onPressed: () {
                     QrScannerWidget();
                   },
-                  backgroundColor: Colors.orange,
+                  backgroundColor: primaryColor,
                   shape: const CircleBorder(),
                   child: const Icon(Icons.qr_code, size: 42, color: Colors.white),
                 ),
