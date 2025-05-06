@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rota_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../onboarding/onboarding_scrreen.dart'; // Importa a tela de Onboarding
 
 class SplashScreen extends StatefulWidget {
@@ -17,18 +18,21 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    
 
     // Inicializa o AnimationController para controlar a animação
     _controller = AnimationController(
       duration: const Duration(seconds: 1), // Duração da animação
       vsync: this,
     )
-      ..addStatusListener((status) {
+    ..addStatusListener((status) async {  // Adicionado async aqui
         if (status == AnimationStatus.completed) {
-          // Após a animação terminar, navega para a próxima tela
-          Navigator.pushReplacement(
+          final prefs = await SharedPreferences.getInstance();
+          final skipOnboarding = prefs.getBool('onboarding') ?? false;
+          
+         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const OnboardingScreen( navigateToSignIn: true,)),
+            MaterialPageRoute(builder: (context) =>  OnboardingScreen( navigateToSignIn: true, skipOnboarding: skipOnboarding)),
           );
         }
       });

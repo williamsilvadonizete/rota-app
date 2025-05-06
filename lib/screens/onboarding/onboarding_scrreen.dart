@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:rota_app/screens/home/home_screen.dart';
 import '../../constants.dart';
 import '../../components/dot_indicators.dart';
 import '../auth/sign_in_screen.dart';
 import 'components/onboard_content.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  final bool? navigateToSignIn; // Parâmetro opcional
+  final bool? navigateToSignIn;
+  final bool? skipOnboarding;
 
-  const OnboardingScreen({super.key, this.navigateToSignIn});
+  const OnboardingScreen({super.key, this.navigateToSignIn, this.skipOnboarding});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -16,9 +18,45 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int currentPage = 0;
   final PageController _pageController = PageController();
+  bool _isCheckingInitialNavigation = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInitialNavigation();
+  }
+
+  Future<void> _checkInitialNavigation() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    
+    if (mounted) {
+      setState(() {
+        _isCheckingInitialNavigation = false;
+      });
+
+      if (widget.skipOnboarding == true) {
+        if (widget.navigateToSignIn == true) {
+          _navigateToSignIn();
+        } else {
+          _navigateToHome();
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_isCheckingInitialNavigation) {
+      return Scaffold(
+        backgroundColor: primaryColorDark,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: primaryColorDark,
       body: SafeArea(
@@ -58,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             const Spacer(flex: 2),
-            if (widget.navigateToSignIn == true) // Exibe o botão apenas se NÃO estiver navegando automaticamente
+            if (widget.navigateToSignIn == true)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: ElevatedButton(
@@ -80,6 +118,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  void _navigateToHome() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -89,7 +134,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 
 
-// Demo data for our Onboarding screen
 List<Map<String, dynamic>> demoData = [
   {
     "illustration": "assets/Illustrations/Illustrations_1.png",

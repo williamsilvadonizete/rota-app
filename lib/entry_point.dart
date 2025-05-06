@@ -97,13 +97,17 @@ class _EntryPointState extends State<EntryPoint> {
               children: [
                 FloatingActionButton(
                   onPressed: () {
-                    QrScannerWidget();
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => const QrScannerWidget(),
+                    );
                   },
                   backgroundColor: primaryColor,
                   shape: const CircleBorder(),
                   child: const Icon(Icons.qr_code, size: 42, color: Colors.white),
                 ),
-                const SizedBox(height: 1), // Espaço entre o botão e o texto
+                const SizedBox(height: 1),
                 const Text(
                   "Escanear",
                   style: TextStyle(

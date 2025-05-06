@@ -43,23 +43,23 @@ const kErrorBorderSide = BorderSide(color: Colors.red, width: 1);
 
 // Validator
 final passwordValidator = MultiValidator([
-  RequiredValidator(errorText: 'Password is required'),
-  MinLengthValidator(8, errorText: 'Password must be at least 8 digits long'),
+  RequiredValidator(errorText: 'Senha é obrigatória'),
+  MinLengthValidator(8, errorText: 'A senha deve ter pelo menos 8 caracteres'),
   PatternValidator(r'(?=.*?[#?!@$%^&*-/])',
-      errorText: 'Passwords must have at least one special character')
+      errorText: 'A senha deve conter pelo menos um caractere especial')
 ]);
 
 final emailValidator = MultiValidator([
-  RequiredValidator(errorText: 'Email is required'),
-  EmailValidator(errorText: 'Enter a valid email address')
+  RequiredValidator(errorText: 'E-mail é obrigatório'),
+  EmailValidator(errorText: 'Digite um e-mail válido')
 ]);
 
 final requiredValidator =
-    RequiredValidator(errorText: 'This field is required');
-final matchValidator = MatchValidator(errorText: 'passwords do not match');
+    RequiredValidator(errorText: 'Este campo é obrigatório');
+final matchValidator = MatchValidator(errorText: 'As senhas não coincidem');
 
 final phoneNumberValidator = MinLengthValidator(10,
-    errorText: 'Phone Number must be at least 10 digits long');
+    errorText: 'O número de telefone deve ter pelo menos 10 dígitos');
 
 // Common Text
 final Center kOrText = Center(

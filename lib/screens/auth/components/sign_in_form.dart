@@ -53,6 +53,7 @@ class _SignInFormState extends State<SignInForm> {
   Future<void> _saveToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
+    await prefs.setBool('onboarding', true);
   }
 
   void _navigateToHome() {

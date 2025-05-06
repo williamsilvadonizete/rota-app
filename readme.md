@@ -23,3 +23,8 @@ xcrun simctl create "iPhone2" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" 
 xcrun simctl list devices
 
 open -a Simulator --args -CurrentDeviceUDID
+
+
+Info.list
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Este aplicativo precisa acessar sua localização para encontrar restaurantes próximos a você</string>
