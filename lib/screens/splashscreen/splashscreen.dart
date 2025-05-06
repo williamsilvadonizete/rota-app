@@ -14,39 +14,51 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeAnimations();
+    });
+  }
 
-    // Inicializa o AnimationController para controlar a animação
+  void _initializeAnimations() {
     _controller = AnimationController(
-      duration: const Duration(seconds: 1), // Duração da animação
+      duration: const Duration(seconds: 1),
       vsync: this,
-    )
-    ..addStatusListener((status) async {  // Adicionado async aqui
-        if (status == AnimationStatus.completed) {
-          final prefs = await SharedPreferences.getInstance();
-          final skipOnboarding = prefs.getBool('onboarding') ?? false;
-          
-         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) =>  OnboardingScreen( navigateToSignIn: true, skipOnboarding: skipOnboarding)),
-          );
-        }
-      });
+    )..addStatusListener(_handleAnimationStatus);
 
-    // Definir animações para opacidade e escala
     _opacityAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
+
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    // Iniciar a animação
+    setState(() => _initialized = true);
     _controller.forward();
+  }
+
+  void _handleAnimationStatus(AnimationStatus status) async {
+    if (status == AnimationStatus.completed) {
+      final prefs = await SharedPreferences.getInstance();
+      final skipOnboarding = prefs.getBool('onboarding') ?? false;
+      
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OnboardingScreen(
+              navigateToSignIn: true,
+              skipOnboarding: skipOnboarding,
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -57,27 +69,29 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    if (!_initialized) {
+      return Container(color: primaryColorDark);
+    }
+
     return Scaffold(
-      backgroundColor: primaryColorDark, // Cor de fundo da Splash
+      backgroundColor: primaryColorDark,
       body: Stack(
         children: [
-          // Imagem de fundo com um pouco de transparência
           Opacity(
-            opacity: 0.5, // Definindo o nível de transparência
+            opacity: 0.5,
             child: Image.asset(
-              "assets/images/background_splash.png", // Substitua pela imagem desejada
+              "assets/images/background_splash.png",
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
             ),
           ),
-          // Conteúdo da tela de splash com animações
           Center(
             child: FadeTransition(
-              opacity: _opacityAnimation, // Animação de opacidade
+              opacity: _opacityAnimation,
               child: ScaleTransition(
-                scale: _scaleAnimation, // Animação de escala
-                child: Image.asset("assets/images/Logo.png"), // Imagem do logo
+                scale: _scaleAnimation,
+                child: Image.asset("assets/images/Logo.png"),
               ),
             ),
           ),

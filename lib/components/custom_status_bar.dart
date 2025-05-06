@@ -40,15 +40,15 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
-      leading: widget.showBackButton
-          ? IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.arrow_back, color: primaryColorDark),
-            )
-          : IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.subject, color: primaryColorDark),
-            ),
+      // leading: widget.showBackButton
+      //     ? IconButton(
+      //         onPressed: () => Navigator.of(context).pop(),
+      //         icon: const Icon(Icons.arrow_back, color: primaryColorDark),
+      //       )
+      //     : IconButton(
+      //         onPressed: () {},
+      //         icon: const Icon(Icons.subject, color: primaryColorDark),
+      //       ),
       actions: [
         IconButton(
           onPressed: () {},
