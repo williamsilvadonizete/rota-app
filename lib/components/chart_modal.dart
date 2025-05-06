@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:rota_app/constants.dart'; // Ajuste conforme seu projeto
+import 'package:rota_app/constants.dart';
 
 class PerformanceChartModal {
   static void show({
     required BuildContext context,
-    required double totalSpent,    // Valor total gasto (pago)
-    required double totalSaved,    // Valor economizado
+    required double totalSpent,
+    required double totalSaved,
   }) {
     showModalBottomSheet(
       context: context,
@@ -14,7 +14,7 @@ class PerformanceChartModal {
         totalSpent: totalSpent,
         totalSaved: totalSaved,
       ),
-      backgroundColor: primaryColorDark, // Cor de fundo (ajuste conforme suas constantes)
+      backgroundColor: primaryColorDark,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -32,6 +32,8 @@ class _PerformanceChartContent extends StatelessWidget {
     required this.totalSaved,
   });
 
+  double get savedAmount => totalSpent - totalSaved;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -42,11 +44,11 @@ class _PerformanceChartContent extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              'Total Economizado',
+              'Análise de Economia',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white, // Cor ajustável
+                color: Colors.white,
               ),
             ),
             const SizedBox(height: 20),
@@ -73,22 +75,19 @@ class _PerformanceChartContent extends StatelessWidget {
             color: Colors.greenAccent,
             radius: 60,
             title: '',
-            titleStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87, // Cor do texto
-            ),
+          ),
+          PieChartSectionData(
+            value: savedAmount,
+            color: Colors.blueAccent,
+            radius: 60,
+            title: '',
           ),
           PieChartSectionData(
             value: totalSpent,
             color: Colors.grey,
             radius: 60,
             title: '',
-            titleStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+            showTitle: false,
           ),
         ],
       ),
@@ -96,43 +95,52 @@ class _PerformanceChartContent extends StatelessWidget {
   }
 
   Widget _buildLegends() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildLegend(
+         _buildLegend(
           color: Colors.greenAccent,
-          text: 'Economizado: R\$${totalSaved.toStringAsFixed(2)}',
+          text: 'Você economizou: R\$${savedAmount.toStringAsFixed(2)}',
         ),
-        const SizedBox(width: 16),
+         const SizedBox(height: 8),
+        _buildLegend(
+          color: Colors.blueAccent,
+          text: 'Total com desconto: R\$${totalSaved.toStringAsFixed(2)}',
+        ),
+        const SizedBox(height: 8),
         _buildLegend(
           color: Colors.grey,
-          text: 'Gasto: R\$${totalSpent.toStringAsFixed(2)}',
+          text: 'Total sem desconto: R\$${totalSpent.toStringAsFixed(2)}',
         ),
       ],
     );
   }
 
   Widget _buildLegend({required Color color, required String text}) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 16,
-          height: 16,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white, // Cor ajustável
-            fontSize: 14,
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

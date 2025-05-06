@@ -89,36 +89,36 @@ class _EntryPointState extends State<EntryPoint> {
               ),
             ),
           ),
-
-          // Botão QR Code e Texto abaixo dele
-          Positioned(
-            bottom: 33,
-            child: Column(
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) => const QrScannerWidget(),
-                    );
-                  },
-                  backgroundColor: primaryColor,
-                  shape: const CircleBorder(),
-                  child: const Icon(Icons.qr_code, size: 42, color: Colors.white),
-                ),
-                const SizedBox(height: 1),
-                const Text(
-                  "Escanear",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
+         Positioned(
+  bottom: 33,
+  child: Column(
+    children: [
+      FloatingActionButton(
+        onPressed: () => QrScannerModal.show(
+          context: context,
+          onScanCompleted: (value) {
+            // Ação quando um QR Code é lido
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Código lido: $value')),
+            );
+          },
+        ),
+        backgroundColor: primaryColor,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.qr_code, size: 42, color: Colors.white),
+      ),
+      const SizedBox(height: 1),
+      const Text(
+        "Escanear",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ],
+  ),
+)
         ],
       ),
     );

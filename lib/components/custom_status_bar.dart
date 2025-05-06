@@ -27,8 +27,8 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
   void _openChartModal() {
     PerformanceChartModal.show(
       context: context,
-      totalSpent: 300.00, // Valor gasto (pago)
-      totalSaved: 500.00, // Valor economizado
+      totalSpent: 500.00, // Valor gasto (pago)
+      totalSaved: 300.00, // Valor economizado
     );
   }
 
