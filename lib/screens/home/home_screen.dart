@@ -1,27 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:rota_app/components/cards/big/restaurant_info.dart';
 import 'package:rota_app/components/custom_status_bar.dart';
 import 'package:rota_app/components/cards/big/big_card_image_slide.dart';
-import 'package:rota_app/components/cards/big/restaurant_info_simple_card.dart';
 import 'package:rota_app/components/section_title.dart';
 import 'package:rota_app/constants.dart';
 import 'package:rota_app/demo_data.dart';
 import 'package:rota_app/screens/details/details_screen.dart';
 import 'package:rota_app/screens/featured/featurred_screen.dart';
 import 'package:rota_app/screens/home/components/medium_card_list.dart';
+import 'package:rota_app/services/restaurant_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final RestaurantService _restaurantService = RestaurantService();
+  final ScrollController _scrollController = ScrollController();
+  List<dynamic> _restaurants = [];
+  int _currentPage = 1;
+  bool _isLoading = false;
+  bool _hasMore = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRestaurants();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchRestaurants() async {
+    if (_isLoading || !_hasMore) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      Position position =  Position(
+                            latitude: -18.921079,
+                            longitude: -48.288413,
+                            timestamp: DateTime.now(), // Current timestamp
+                            accuracy: 0.0, // Default accuracy
+                            altitude: 0.0, // Default altitude
+                            heading: 0.0, // Default heading
+                            speed: 0.0, // Default speed
+                            altitudeAccuracy: 0.0,
+                            headingAccuracy: 0.0,
+                            speedAccuracy: 0.0, // Default speed accuracy
+                          );
+      if (permission == LocationPermission.whileInUse || 
+           permission == LocationPermission.always) {
+            position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.best,
+            );
+      }
+       
+      final response = await _restaurantService.getNearbyRestaurants(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        page: _currentPage,
+        pageSize: 20,
+      );
+
+      if (response != null && response['restaurants'] != null) {
+        setState(() {
+          _restaurants.addAll(response['restaurants']);
+          _hasMore = _restaurants.length < response['total'];
+          _currentPage++;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching restaurants: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        !_isLoading) {
+      _fetchRestaurants();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColorDark,
-      appBar: const CustomStatusAppBar(
-        showBackButton: true,
-      ),
+      appBar: const CustomStatusAppBar(showBackButton: true),
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -113,39 +193,65 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              ...List.generate(
-                3,
-                (index) => Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      defaultPadding, 0, defaultPadding, defaultPadding),
-                  child: RestaurantCard(
-                          logoUrl: 'https://ciclogestaoderesiduos.com.br/wp-content/uploads/2018/10/kisspng-fast-food-mcdonald-s-logo-golden-arches-restaurant-mcdonalds-5ac3bf23df0da8.6342440115227778919136.jpg',
-                          name: 'Mac',
-                          foodType: 'Fast Food',
-                          distance: '20 km',
-                          weekAvailability: [
-                            DayAvailability(dayLetter: 'S', available: false),
-                            DayAvailability(dayLetter: 'T', available: false),
-                            DayAvailability(dayLetter: 'Q', available: true),
-                            DayAvailability(dayLetter: 'Q', available: true),
-                            DayAvailability(dayLetter: 'S', available: true),
-                            DayAvailability(dayLetter: 'S', available: true),
-                            DayAvailability(dayLetter: 'D', available: true),
-                          ],
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DetailsScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                ),
-              ),
+              ..._buildRestaurantCards(),
+              if (_isLoading) _buildLoadingIndicator(),
+              if (!_hasMore && _restaurants.isNotEmpty) _buildEndOfList(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  List<Widget> _buildRestaurantCards() {
+    return _restaurants.map((restaurant) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(
+            defaultPadding, 0, defaultPadding, defaultPadding),
+        child: RestaurantCard(
+          logoUrl: restaurant['logoUrl'] ?? '',
+          name: restaurant['restaurantName'] ?? '',
+          foodType: restaurant['categories']?.join(', ') ?? '',
+          distance: '${restaurant['distanceKm']?.toStringAsFixed(1)} km',
+          weekAvailability: _mapWorkDays(restaurant['workDays']),
+          press: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DetailsScreen(),
+              ),
+            );
+          },
+        ),
+      );
+    }).toList();
+  }
+
+  List<DayAvailability> _mapWorkDays(List<dynamic>? workDays) {
+    if (workDays == null) return [];
+    
+    return workDays.map((day) {
+      return DayAvailability(
+        dayLetter: day['acronymDay'] ?? '',
+        available: day['available'] ?? false,
+      );
+    }).toList();
+  }
+
+  Widget _buildLoadingIndicator() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _buildEndOfList() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Center(
+        child: Text('Todos os restaurantes carregados'),
       ),
     );
   }

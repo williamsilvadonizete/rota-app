@@ -40,6 +40,7 @@ class RestaurantCard extends StatelessWidget {
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
+                  headers: {"Accept": "image/*"},
                   errorBuilder: (context, error, stackTrace) => Container(
                     width: 60,
                     height: 60,

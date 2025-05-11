@@ -49,6 +49,9 @@ dependencies:
   dio: ^5.4.2
   geolocator: ^10.0.0
   geocoding: ^2.1.1
+  cached_network_image: ^3.3.0  
+  # flutter_native_splash: ^2.3.1
+
 
 
 

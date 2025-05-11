@@ -251,26 +251,6 @@ class _FindRestaurantsScreenState extends State<FindRestaurantsScreen> {
               Form(
                 child: Column(
                   children: [
-                    TextFormField(
-                      onChanged: (value) => _location = value,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: titleColor),
-                      cursorColor: primaryColor,
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            "assets/icons/marker.svg",
-                            colorFilter: const ColorFilter.mode(
-                                bodyTextColor, BlendMode.srcIn),
-                          ),
-                        ),
-                        hintText: "Entre o endereço",
-                        contentPadding: kTextFieldPadding,
-                      ),
-                    ),
                     const SizedBox(height: defaultPadding),
                     Image.asset(
                       "assets/images/location.png",

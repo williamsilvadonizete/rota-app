@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:rota_app/components/custom_toast.dart';
+import 'package:rota_app/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rota_app/constants.dart';
 import '../../../services/auth_service.dart';
@@ -32,7 +34,7 @@ class _SignInFormState extends State<SignInForm> {
     setState(() => _isLoading = false);
 
     if (result != null && result['access_token'] != null) {
-    // if (true) {
+      // if (true) {
       String token = result['access_token'];
       await _saveToken(token);
 
@@ -56,11 +58,21 @@ class _SignInFormState extends State<SignInForm> {
     await prefs.setBool('onboarding', true);
   }
 
-  void _navigateToHome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const FindRestaurantsScreen()),
-    );
+  void _navigateToHome() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const FindRestaurantsScreen()),
+      );
+    }
   }
 
   @override
@@ -71,10 +83,10 @@ class _SignInFormState extends State<SignInForm> {
         children: [
           TextFormField(
             controller: _emailController,
-            keyboardType: TextInputType.emailAddress,            
-            validator: (value) =>
-                value!.isEmpty ? "Digite seu e-mail" : null,
-            decoration: const InputDecoration(labelText: "Email", labelStyle: TextStyle(color: primaryColor)),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) => value!.isEmpty ? "Digite seu e-mail" : null,
+            decoration: const InputDecoration(
+                labelText: "Email", labelStyle: TextStyle(color: primaryColor)),
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
@@ -84,9 +96,9 @@ class _SignInFormState extends State<SignInForm> {
           TextFormField(
             controller: _passwordController,
             obscureText: true,
-            validator: (value) =>
-                value!.isEmpty ? "Digite sua senha" : null,
-            decoration: const InputDecoration(labelText: "Senha", labelStyle: TextStyle(color: primaryColor)),
+            validator: (value) => value!.isEmpty ? "Digite sua senha" : null,
+            decoration: const InputDecoration(
+                labelText: "Senha", labelStyle: TextStyle(color: primaryColor)),
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!

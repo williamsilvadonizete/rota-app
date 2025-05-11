@@ -4,9 +4,7 @@ import 'package:rota_app/components/week_days_and_delivery.dart';
 
 import '../../../constants.dart';
 import '../../price_range_and_food_type.dart';
-import '../../rating_with_counter.dart';
 import '../../small_dot.dart';
-import 'big_card_image_slide.dart';
 
 class RestaurantInfoSimpleCard extends StatelessWidget {
   final List<String> images, foodType;
