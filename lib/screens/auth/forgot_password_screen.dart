@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/components/custom_bar.dart';
+import 'package:rota_gourmet/components/custom_bar.dart';
 import 'reset_email_sent_screen.dart';
 
 import '../../components/welcome_text.dart';

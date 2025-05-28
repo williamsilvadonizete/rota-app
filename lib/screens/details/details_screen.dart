@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/components/restaurant_bar.dart';
+import 'package:rota_gourmet/components/restaurant_bar.dart';
 
 import '../../constants.dart';
 import 'components/iteams.dart';

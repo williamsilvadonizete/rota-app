@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/screens/filter/components/activities.dart';
-import 'package:rota_app/screens/filter/components/days.dart';
+import 'package:rota_gourmet/screens/filter/components/activities.dart';
+import 'package:rota_gourmet/screens/filter/components/days.dart';
 
 import '../../constants.dart';
 import 'components/hour.dart';

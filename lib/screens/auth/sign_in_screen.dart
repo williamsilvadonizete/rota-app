@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:rota_app/components/custom_bar.dart';
+import 'package:rota_gourmet/components/custom_bar.dart';
 import '../../components/welcome_text.dart';
 import '../../constants.dart';
 import 'sign_up_screen.dart';
@@ -13,7 +13,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: primaryColorDark,
-    appBar: CustomAppBar(showBackButton: true),
+    appBar: CustomAppBar(showBackButton: false),
     body: SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: defaultPadding).copyWith(top: defaultPadding * 3), // Ajuste o valor do top padding
       child: Column(

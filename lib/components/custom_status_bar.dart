@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:rota_app/components/city_selection_modal.dart';
-import 'package:rota_app/components/notification_permission.dart';
-import 'package:rota_app/constants.dart';
-import 'package:rota_app/components/chart_modal.dart';  // Importa o ChartModal
+import 'package:rota_gourmet/components/city_selection_modal.dart';
+import 'package:rota_gourmet/components/notification_permission.dart';
+import 'package:rota_gourmet/constants.dart';
+import 'package:rota_gourmet/components/chart_modal.dart';  // Importa o ChartModal
 
 class CustomStatusAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override

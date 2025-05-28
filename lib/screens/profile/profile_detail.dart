@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/app_colors.dart';
-import 'package:rota_app/components/custom_status_bar.dart';
-import 'package:rota_app/components/dropdown/estado_drop_down.dart';
-import 'package:rota_app/components/fields/cep_text_field.dart';
-import 'package:rota_app/components/fields/cpf_text_field.dart';
-import 'package:rota_app/components/fields/telefone_text_field.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/components/app_colors.dart';
+import 'package:rota_gourmet/components/custom_status_bar.dart';
+import 'package:rota_gourmet/components/dropdown/estado_drop_down.dart';
+import 'package:rota_gourmet/components/fields/cep_text_field.dart';
+import 'package:rota_gourmet/components/fields/cpf_text_field.dart';
+import 'package:rota_gourmet/components/fields/telefone_text_field.dart';
+import 'package:rota_gourmet/constants.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../../components/buttons/secondery_button.dart';
 

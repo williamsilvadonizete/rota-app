@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/week_days_and_delivery.dart';
+import 'package:rota_gourmet/components/week_days_and_delivery.dart';
 
 import '../../../constants.dart';
 import '../../price_range_and_food_type.dart';

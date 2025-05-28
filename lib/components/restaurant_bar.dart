@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:rota_app/components/resturant_wave_bar.dart';
-import 'package:rota_app/constants.dart';
-import 'package:rota_app/screens/details/components/restaurant_logo.dart';
+import 'package:rota_gourmet/components/resturant_wave_bar.dart';
+import 'package:rota_gourmet/constants.dart';
+import 'package:rota_gourmet/screens/details/components/restaurant_logo.dart';
 
 class RestaurantBar extends StatelessWidget implements PreferredSizeWidget {
   @override

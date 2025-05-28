@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/screens/auth/sign_in_screen.dart';
-import 'package:rota_app/services/auth_service.dart';
-import 'package:rota_app/constants.dart';
-import 'package:rota_app/components/custom_toast.dart';
+import 'package:rota_gourmet/screens/auth/sign_in_screen.dart';
+import 'package:rota_gourmet/services/auth_service.dart';
+import 'package:rota_gourmet/constants.dart';
+import 'package:rota_gourmet/components/custom_toast.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});

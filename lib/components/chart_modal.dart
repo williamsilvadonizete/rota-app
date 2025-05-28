@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class PerformanceChartModal {
   static void show({

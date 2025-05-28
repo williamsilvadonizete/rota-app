@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class EstadoDropdown extends StatefulWidget {
   const EstadoDropdown({super.key});

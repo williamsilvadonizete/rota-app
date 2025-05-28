@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/components/buttons/secondery_button.dart';
+import 'package:rota_gourmet/components/buttons/secondery_button.dart';
 
 import '../../../components/section_title.dart';
 import '../../../constants.dart';

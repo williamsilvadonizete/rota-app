@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/qrscanner/qr_scanner_widget.dart';
-import 'package:rota_app/screens/onboarding/onboarding_scrreen.dart';
+import 'package:rota_gourmet/components/qrscanner/qr_scanner_widget.dart';
+import 'package:rota_gourmet/screens/onboarding/onboarding_scrreen.dart';
 
 import 'constants.dart';
 import 'screens/home/home_screen.dart';

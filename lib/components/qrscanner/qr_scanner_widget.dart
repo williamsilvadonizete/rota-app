@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class QrScannerModal {
   static void show({

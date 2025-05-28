@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:rota_app/components/custom_bar.dart';
+import 'package:rota_gourmet/components/custom_bar.dart';
 import 'sign_in_screen.dart';
 import '../../components/welcome_text.dart';
 import '../../constants.dart';

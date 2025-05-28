@@ -3,10 +3,10 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 
 class AuthService {
-  final String keycloakBaseUrl = "https://signin.flentra.com";
+  final String keycloakBaseUrl = "https://signin.hml.api.flentra.com";
   final String realm = "rota-gourmet"; 
-  final String clientId = "app-rota-gourmet";
-  final String cert = "AxQhg3MdRDsqaGpHEMX5uLtzifZRD4FL"; // Substitua pela senha do admin
+  final String clientId = "rota-gourmet-app";
+  final String cert = "JRtF4KKbYJ5YlL66wsDsPHd0gQEQqLPs"; 
   late final Dio _dio;
 
   AuthService() {

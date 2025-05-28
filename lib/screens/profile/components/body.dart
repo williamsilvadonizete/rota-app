@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/custom_status_bar.dart';
-import 'package:rota_app/screens/profile/profile_detail.dart';
+import 'package:rota_gourmet/components/custom_status_bar.dart';
+import 'package:rota_gourmet/screens/profile/profile_detail.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});

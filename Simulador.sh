@@ -2,8 +2,8 @@
 
 # Defina o nome do simulador e o tipo de dispositivo (iPhone 15, iPhone 14, etc)
 SIMULATOR_NAME="iPhone"
-DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-15"
-RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro"
+RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-18-5"
 
 # Cria o simulador (caso não exista)
 echo "Criando simulador $SIMULATOR_NAME..."

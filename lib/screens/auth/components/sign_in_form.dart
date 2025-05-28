@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:rota_app/components/custom_toast.dart';
-import 'package:rota_app/screens/home/home_screen.dart';
+import 'package:rota_gourmet/components/custom_toast.dart';
+import 'package:rota_gourmet/entry_point.dart';
+import 'package:rota_gourmet/screens/home/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/constants.dart';
 import '../../../services/auth_service.dart';
 import '../../findRestaurants/find_restaurants_screen.dart'; // Substitua pela tela correta
 
@@ -63,10 +64,12 @@ class _SignInFormState extends State<SignInForm> {
 
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EntryPoint(),
+            ),
+          );
     } else {
       Navigator.pushReplacement(
         context,

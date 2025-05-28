@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:rota_app/constants.dart'; // Certifique-se de que o seu arquivo constants.dart está importado aqui.
+import 'package:rota_gourmet/constants.dart'; // Certifique-se de que o seu arquivo constants.dart está importado aqui.
 
 class ChartWidget extends StatelessWidget {
   final double totalSavings;

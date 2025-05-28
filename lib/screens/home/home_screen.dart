@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:rota_app/components/cards/big/restaurant_info.dart';
-import 'package:rota_app/components/custom_status_bar.dart';
-import 'package:rota_app/components/cards/big/big_card_image_slide.dart';
-import 'package:rota_app/components/section_title.dart';
-import 'package:rota_app/constants.dart';
-import 'package:rota_app/demo_data.dart';
-import 'package:rota_app/screens/details/details_screen.dart';
-import 'package:rota_app/screens/featured/featurred_screen.dart';
-import 'package:rota_app/screens/home/components/medium_card_list.dart';
-import 'package:rota_app/services/restaurant_service.dart';
+import 'package:rota_gourmet/components/cards/big/restaurant_info.dart';
+import 'package:rota_gourmet/components/custom_status_bar.dart';
+import 'package:rota_gourmet/components/cards/big/big_card_image_slide.dart';
+import 'package:rota_gourmet/components/section_title.dart';
+import 'package:rota_gourmet/constants.dart';
+import 'package:rota_gourmet/demo_data.dart';
+import 'package:rota_gourmet/screens/details/details_screen.dart';
+import 'package:rota_gourmet/screens/featured/featurred_screen.dart';
+import 'package:rota_gourmet/screens/home/components/medium_card_list.dart';
+import 'package:rota_gourmet/services/restaurant_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final RestaurantService _restaurantService = RestaurantService();
   final ScrollController _scrollController = ScrollController();
-  List<dynamic> _restaurants = [];
+  final List<dynamic> _restaurants = [];
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;

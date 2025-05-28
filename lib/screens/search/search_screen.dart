@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/cards/big/restaurant_info.dart';
-import 'package:rota_app/screens/details/details_screen.dart';
-import 'package:rota_app/screens/filter/filter_screen.dart';
+import 'package:rota_gourmet/components/cards/big/restaurant_info.dart';
+import 'package:rota_gourmet/screens/details/details_screen.dart';
+import 'package:rota_gourmet/screens/filter/filter_screen.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
 

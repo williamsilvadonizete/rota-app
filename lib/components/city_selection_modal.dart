@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class CitySelectionModal {
   static void show(BuildContext context, {required Function(String) onCitySelected}) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class CpfTextField extends StatelessWidget {
   final MaskedTextController _controller = MaskedTextController(mask: '000.000.000-00');

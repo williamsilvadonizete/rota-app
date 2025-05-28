@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rota_app/components/wave_bar.dart';
-import 'package:rota_app/constants.dart';
+import 'package:rota_gourmet/components/wave_bar.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override

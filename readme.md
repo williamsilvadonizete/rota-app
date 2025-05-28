@@ -1,30 +1,23 @@
-Passos para resetar todos os simuladores:
-Abra o Terminal.
+# rota_gourmet
 
-Execute o seguinte comando:
+A new Flutter project.
 
-bash
-Copiar
-Editar
-xcrun simctl shutdown all && xcrun simctl erase all
-O que esse comando faz:
-xcrun simctl shutdown all: garante que todos os simuladores estejam desligados.
+## Getting Started
 
-xcrun simctl erase all: reseta todos os simuladores, apagando apps instalados, dados, etc.
+This project is a starting point for a Flutter application.
 
-xcrun simctl list runtimes
-iOS 17.5 (17.5 - 21F79) - com.apple.CoreSimulator.SimRuntime.iOS-17-5
-xcrun simctl list devicetypes
+A few resources to get you started if this is your first Flutter project:
 
-xcrun simctl create "iPhone2" "com.apple.CoreSimulator.SimDeviceType.iPhone-15" "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+flutter create --platforms=ios .
 
-
-xcrun simctl list devices
-
-open -a Simulator --args -CurrentDeviceUDID
-
-
-Info.list
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>Este aplicativo precisa acessar sua localização para encontrar restaurantes próximos a você</string>
+open ios/Runner.xcworkspace
+	<key>NSCameraUsageDescription</key>
+	<string>Este app precisa acessar sua câmera para permitir tirar fotos e vídeos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Este app precisa acessar sua localização para fornecer recursos baseados em localização.</string>

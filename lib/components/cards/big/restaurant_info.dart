@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
-import 'package:flutter/material.dart';
-import '../../../constants.dart';
 
 class RestaurantCard extends StatelessWidget {
   final String logoUrl;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rota_app/components/buttons/custom_selectable_button.dart';
+import 'package:rota_gourmet/components/buttons/custom_selectable_button.dart';
 import '../../../components/price_range_and_food_type.dart';
 import '../../../components/rating_with_counter.dart';
 import '../../../constants.dart';
