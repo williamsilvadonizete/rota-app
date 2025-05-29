@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 class CustomSelectableButton extends StatelessWidget {
   final String icon;
   final String title;
   final String subtitle;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final bool isDisabled;
 
   const CustomSelectableButton({
     super.key,
@@ -14,41 +16,49 @@ class CustomSelectableButton extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.isSelected,
-    required this.onTap,
+    this.onTap,
+    this.isDisabled = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: isSelected ? Theme.of(context).primaryColor : Colors.grey[800],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                icon,
-                height: 40,
-                width: 40,
-                colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+      onTap: isDisabled ? null : onTap,
+      child: Opacity(
+        opacity: isDisabled ? 0.5 : 1.0,
+        child: Column(
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: isSelected 
+                  ? ThemeProvider.primaryColor
+                  : isDisabled 
+                    ? Colors.grey[600]
+                    : Colors.grey[800],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  icon,
+                  height: 40,
+                  width: 40,
+                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          Text(
-            subtitle,
-            style: const TextStyle(fontSize: 12, color: Colors.white),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 12, color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }

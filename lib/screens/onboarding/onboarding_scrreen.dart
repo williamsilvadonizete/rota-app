@@ -55,24 +55,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     if (_isCheckingInitialNavigation) {
       return Scaffold(
-        backgroundColor: primaryColorDark,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Center(
           child: CircularProgressIndicator(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: primaryColorDark,
-      appBar: widget.isFromHelp == true ? AppBar(
-        backgroundColor: primaryColorDark,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ) : null,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: widget.isFromHelp == true
+          ? AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.close, color: Theme.of(context).iconTheme.color),
+                onPressed: () => Navigator.pop(context),
+              ),
+            )
+          : null,
       body: SafeArea(
         child: Column(
           children: [
@@ -114,7 +117,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: ElevatedButton(
                   onPressed: _navigateToSignIn,
-                  child: Text("Explorar".toUpperCase()),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  child: Text(
+                    "Explorar".toUpperCase(),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             const Spacer(),

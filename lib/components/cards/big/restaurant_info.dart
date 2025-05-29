@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 import '../../../constants.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -7,7 +9,7 @@ class RestaurantCard extends StatelessWidget {
   final String foodType;
   final String distance;
   final List<DayAvailability> weekAvailability;
-  final VoidCallback press; // <<<< Adicionado aqui!
+  final VoidCallback press;
 
   const RestaurantCard({
     super.key,
@@ -16,16 +18,19 @@ class RestaurantCard extends StatelessWidget {
     required this.foodType,
     required this.distance,
     required this.weekAvailability,
-    required this.press, // <<<< Adicionado aqui!
+    required this.press,
   });
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    
     return GestureDetector(
-      onTap: press, // <<<< Adicionado aqui!
+      onTap: press,
       child: Card(
         elevation: 2,
-        color: primaryColorDark,
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -42,8 +47,11 @@ class RestaurantCard extends StatelessWidget {
                   errorBuilder: (context, error, stackTrace) => Container(
                     width: 60,
                     height: 60,
-                    color: Colors.grey,
-                    child: Icon(Icons.image_not_supported, color: Colors.white),
+                    color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                    child: Icon(
+                      Icons.image_not_supported,
+                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                    ),
                   ),
                 ),
               ),
@@ -56,14 +64,14 @@ class RestaurantCard extends StatelessWidget {
                       name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: labelColor,
+                            color: isDarkMode ? Colors.white : const Color(0xFF333333),
                           ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       "$foodType • $distance",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: labelColor,
+                            color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                           ),
                     ),
                   ],
@@ -72,9 +80,17 @@ class RestaurantCard extends StatelessWidget {
               const SizedBox(width: 8),
               Column(
                 children: [
-                  Icon(Icons.delivery_dining, color: primaryColor, size: 20),
+                  Icon(
+                    Icons.delivery_dining,
+                    color: ThemeProvider.primaryColor,
+                    size: 20,
+                  ),
                   const SizedBox(height: 8),
-                  Icon(Icons.people_alt, color: primaryColor, size: 20),
+                  Icon(
+                    Icons.people_alt,
+                    color: ThemeProvider.primaryColor,
+                    size: 20,
+                  ),
                 ],
               ),
               const SizedBox(width: 12),
@@ -101,6 +117,9 @@ class WeekDaysStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    
     return Row(
       children: days.map((day) {
         return Padding(
@@ -110,7 +129,11 @@ class WeekDaysStatus extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: day.available ? primaryColor : Colors.grey.withOpacity(0.6),
+              color: day.available
+                  ? ThemeProvider.primaryColor
+                  : isDarkMode
+                      ? Colors.grey[400]
+                      : Colors.grey[600],
             ),
           ),
         );

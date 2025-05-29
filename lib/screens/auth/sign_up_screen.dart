@@ -57,9 +57,9 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: defaultPadding),
               Center(
                 child: Text(
-                  "Ao se inscrever, você concorda com nossos Termos \nCondições e Política de Privacidade.",
+                  "Ao se inscrever, você concorda com nossos Termos e Condições.",
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
             ],

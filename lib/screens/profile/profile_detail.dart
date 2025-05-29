@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 import 'package:rota_gourmet/components/app_colors.dart';
-import 'package:rota_gourmet/components/custom_status_bar.dart';
 import 'package:rota_gourmet/components/dropdown/estado_drop_down.dart';
 import 'package:rota_gourmet/components/fields/cep_text_field.dart';
 import 'package:rota_gourmet/components/fields/cpf_text_field.dart';
 import 'package:rota_gourmet/components/fields/telefone_text_field.dart';
-import 'package:rota_gourmet/constants.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../../components/buttons/secondery_button.dart';
 
@@ -30,7 +30,6 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
   bool useGlassMorphism = false;
   bool useBackgroundImage = false;
   bool useFloatingAnimation = true;
-  bool isLightTheme = false;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -48,16 +47,22 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: CustomStatusAppBar(showBackButton: true),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: const Text('Informações Pessoais'),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+      ),
       body: Column(
         children: [
           TabBar(
             controller: _tabController,
-            labelColor: primaryColor,
-            unselectedLabelColor: labelColor,
-            indicatorColor: primaryColor,
+            labelColor: ThemeProvider.primaryColor,
+            unselectedLabelColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+            indicatorColor: ThemeProvider.primaryColor,
             tabs: const [
               Tab(text: "Perfil"),
               Tab(text: "Endereço"),
@@ -95,12 +100,14 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             SvgPicture.asset(
               "assets/icons/profile.svg",
               height: 24,
-              colorFilter: const ColorFilter.mode(primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(ThemeProvider.primaryColor, BlendMode.srcIn),
             ),
             const SizedBox(width: 8),
             Text(
               "Salvar Dados",
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: primaryColor),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: ThemeProvider.primaryColor,
+              ),
             )
           ],
         ),
@@ -126,12 +133,14 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             SvgPicture.asset(
               "assets/icons/location.svg",
               height: 24,
-              colorFilter: const ColorFilter.mode(primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(ThemeProvider.primaryColor, BlendMode.srcIn),
             ),
             const SizedBox(width: 8),
             Text(
               "Salvar Endereço",
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: primaryColor),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: ThemeProvider.primaryColor,
+              ),
             )
           ],
         ),
@@ -140,9 +149,13 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
   }
 
   Widget _buildPaymentTab() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    
     SystemChrome.setSystemUIOverlayStyle(
-      isLightTheme ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
+      isDarkMode ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
     );
+    
     return _buildForm([
       _buildSectionTitle("Dados de Pagamento"),
       CreditCardWidget(
@@ -159,7 +172,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
         obscureCardNumber: true,
         obscureCardCvv: true,
         isHolderNameVisible: true,
-        cardBgColor: isLightTheme ? AppColors.cardBgLightColor : AppColors.cardBgColor,
+        cardBgColor: isDarkMode ? AppColors.cardBgColor : AppColors.cardBgLightColor,
         backgroundImage: useBackgroundImage ? 'assets/images/card_bg.png' : null,
         isSwipeGestureEnabled: true,
         onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
@@ -183,35 +196,35 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
         onCreditCardModelChange: onCreditCardModelChange,
         obscureCvv: true,
         obscureNumber: true,
-        inputConfiguration: const InputConfiguration(
-          cardHolderTextStyle: TextStyle(color: primaryColor),
-          cardNumberTextStyle: TextStyle(color: primaryColor),
-          cvvCodeTextStyle: TextStyle(color: primaryColor),
-          expiryDateTextStyle: TextStyle(color: primaryColor),
+        inputConfiguration: InputConfiguration(
+          cardHolderTextStyle: TextStyle(color: ThemeProvider.primaryColor),
+          cardNumberTextStyle: TextStyle(color: ThemeProvider.primaryColor),
+          cvvCodeTextStyle: TextStyle(color: ThemeProvider.primaryColor),
+          expiryDateTextStyle: TextStyle(color: ThemeProvider.primaryColor),
           cardNumberDecoration: InputDecoration(
             labelText: 'Número do Cartão',
             hintText: 'XXXX XXXX XXXX XXXX',
-            labelStyle: TextStyle(color: primaryColor),
-            hintStyle: TextStyle(color: primaryColor),
+            labelStyle: TextStyle(color: ThemeProvider.primaryColor),
+            hintStyle: TextStyle(color: ThemeProvider.primaryColor),
             filled: true,
-            fillColor: Colors.black54,
+            fillColor: Theme.of(context).cardColor,
           ),
           expiryDateDecoration: InputDecoration(
             labelText: 'Data de Validade',
-            labelStyle: TextStyle(color: primaryColor),
-            hintStyle: TextStyle(color: primaryColor),
+            labelStyle: TextStyle(color: ThemeProvider.primaryColor),
+            hintStyle: TextStyle(color: ThemeProvider.primaryColor),
             hintText: 'XX/XX',
           ),
           cvvCodeDecoration: InputDecoration(
             labelText: 'CVV',
-            labelStyle: TextStyle(color: primaryColor),
-            hintStyle: TextStyle(color: primaryColor),
+            labelStyle: TextStyle(color: ThemeProvider.primaryColor),
+            hintStyle: TextStyle(color: ThemeProvider.primaryColor),
             hintText: 'XXX',
           ),
           cardHolderDecoration: InputDecoration(
             labelText: 'Titular do Cartão',
-            focusColor: primaryColor,
-            fillColor: primaryColor,
+            focusColor: ThemeProvider.primaryColor,
+            fillColor: ThemeProvider.primaryColor,
           ),
         ),
       ),
@@ -224,12 +237,14 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             SvgPicture.asset(
               "assets/icons/delivery.svg",
               height: 24,
-              colorFilter: const ColorFilter.mode(primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(ThemeProvider.primaryColor, BlendMode.srcIn),
             ),
             const SizedBox(width: 8),
             Text(
               "Salvar Dados",
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: primaryColor),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: ThemeProvider.primaryColor,
+              ),
             )
           ],
         ),
@@ -257,9 +272,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       stops: const <double>[0.3, 0],
     );
 
-    return isLightTheme
-        ? Glassmorphism(blurX: 8.0, blurY: 16.0, gradient: gradient)
-        : Glassmorphism.defaultConfig();
+    return Glassmorphism(blurX: 8.0, blurY: 16.0, gradient: gradient);
   }
 
   void onCreditCardModelChange(CreditCardModel creditCardModel) {
@@ -278,12 +291,12 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       child: TextField(
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: primaryColor),
+          labelStyle: TextStyle(color: ThemeProvider.primaryColor),
           filled: true,
-          fillColor: Colors.black54,
+          fillColor: Theme.of(context).cardColor,
         ),
       ),
     );
@@ -306,9 +319,8 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Colors.white,
             ),
       ),
     );
@@ -320,12 +332,25 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).textTheme.bodySmall?.color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 4),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
-            child: Text(value, style: const TextStyle(color: Colors.grey)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              value,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ],
       ),

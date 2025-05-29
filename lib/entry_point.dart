@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:rota_gourmet/components/qrscanner/qr_scanner_widget.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 import 'package:rota_gourmet/screens/onboarding/onboarding_scrreen.dart';
 
 import 'constants.dart';
@@ -57,34 +59,37 @@ class _EntryPointState extends State<EntryPoint> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final backgroundColor = themeProvider.isDarkMode 
+        ? primaryColorDark 
+        : const Color(0xFFF5F5DC); // Cream color for light mode
+    
     return Scaffold(
-      backgroundColor: primaryColorDark,
+      backgroundColor: backgroundColor,
       body: _screens[_selectedIndex],
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            height: 110, // Aumenta a altura da BottomNavigationBar
+            height: 110,
             decoration: BoxDecoration(
-              color: primaryColorDark,
+              color: backgroundColor,
             ),
             child: CupertinoTabBar(
               onTap: _onItemTapped,
               currentIndex: _selectedIndex,
-              activeColor: primaryColor,
-              inactiveColor: bodyTextColor,
-              backgroundColor: Colors.transparent, // Mantemos a cor no Container
+              activeColor: ThemeProvider.primaryColor,
+              inactiveColor: themeProvider.isDarkMode ? bodyTextColor : const Color(0xFF666666),
+              backgroundColor: Colors.transparent,
               items: List.generate(
                 _navitems.length,
                 (index) {
                   if (index == 2) {
-                    // Botão QR Code
                     return const BottomNavigationBarItem(
                       icon: SizedBox.shrink(),
                       label: '',
                     );
                   } else if (index == 3) {
-                    // Botão de ajuda
                     return BottomNavigationBarItem(
                       icon: GestureDetector(
                         onTap: () {
@@ -106,7 +111,9 @@ class _EntryPointState extends State<EntryPoint> {
                             height: 30,
                             width: 30,
                             colorFilter: ColorFilter.mode(
-                              index == _selectedIndex ? primaryColor : bodyTextColor,
+                              index == _selectedIndex 
+                                  ? ThemeProvider.primaryColor 
+                                  : (themeProvider.isDarkMode ? bodyTextColor : const Color(0xFF666666)),
                               BlendMode.srcIn,
                             ),
                           ),
@@ -117,13 +124,15 @@ class _EntryPointState extends State<EntryPoint> {
                   } else {
                     return BottomNavigationBarItem(
                       icon: Padding(
-                        padding: const EdgeInsets.only(top: 10), // Centraliza os ícones na nova altura
+                        padding: const EdgeInsets.only(top: 10),
                         child: SvgPicture.asset(
                           _navitems[index]["icon"],
                           height: 30,
                           width: 30,
                           colorFilter: ColorFilter.mode(
-                            index == _selectedIndex ? primaryColor : bodyTextColor,
+                            index == _selectedIndex 
+                                ? ThemeProvider.primaryColor 
+                                : (themeProvider.isDarkMode ? bodyTextColor : const Color(0xFF666666)),
                             BlendMode.srcIn,
                           ),
                         ),
@@ -135,36 +144,35 @@ class _EntryPointState extends State<EntryPoint> {
               ),
             ),
           ),
-         Positioned(
-  bottom: 33,
-  child: Column(
-    children: [
-      FloatingActionButton(
-        onPressed: () => QrScannerModal.show(
-          context: context,
-          onScanCompleted: (value) {
-            // Ação quando um QR Code é lido
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Código lido: $value')),
-            );
-          },
-        ),
-        backgroundColor: primaryColor,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.qr_code, size: 42, color: Colors.white),
-      ),
-      const SizedBox(height: 1),
-      const Text(
-        "Escanear",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 11,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    ],
-  ),
-)
+          Positioned(
+            bottom: 33,
+            child: Column(
+              children: [
+                FloatingActionButton(
+                  onPressed: () => QrScannerModal.show(
+                    context: context,
+                    onScanCompleted: (value) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Código lido: $value')),
+                      );
+                    },
+                  ),
+                  backgroundColor: ThemeProvider.primaryColor,
+                  shape: const CircleBorder(),
+                  child: const Icon(Icons.qr_code, size: 42, color: Colors.white),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  "Escanear",
+                  style: TextStyle(
+                    color: themeProvider.isDarkMode ? Colors.white : const Color(0xFF333333),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

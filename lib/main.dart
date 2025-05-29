@@ -1,55 +1,38 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
-import 'screens/splashscreen/splashscreen.dart';
+import 'package:provider/provider.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
+import 'package:rota_gourmet/screens/splashscreen/splashscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final hasToken = prefs.getString('auth_token') != null;
+  
+  runApp(MyApp(hasToken: hasToken));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool hasToken;
   
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Rota Gourmet',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryColor,
-            foregroundColor: const Color.fromARGB(255, 32, 31, 31),
-            minimumSize: const Size(double.infinity, 40),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: bodyTextColor),
-          bodySmall: TextStyle(color: bodyTextColor),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          contentPadding: EdgeInsets.all(defaultPadding),
-          hintStyle: TextStyle(color: bodyTextColor),
-        ),
-      ),
-      home: SplashWrapper()
-    );
-  }
-}
-class SplashWrapper extends StatelessWidget {
-  const SplashWrapper({super.key});
+  const MyApp({super.key, required this.hasToken});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: primaryColorDark, // Mesma cor do seu splash
-      child: const SplashScreen(),
+    return ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: 'Rota Gourmet',
+            theme: ThemeProvider.lightTheme,
+            darkTheme: ThemeProvider.darkTheme,
+            themeMode: themeProvider.themeMode,
+            home: const SplashScreen(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
   }
 }

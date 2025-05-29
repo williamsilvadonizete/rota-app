@@ -21,9 +21,7 @@ class RestaurantWaveBar extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: backgroundImage.isNotEmpty
-              ? NetworkImage(backgroundImage)
-              : const AssetImage('assets/images/medium_3.png') as ImageProvider,
+          image: NetworkImage(backgroundImage),
           fit: BoxFit.cover,
         ),
       ),
@@ -48,7 +46,7 @@ class RestaurantWaveBar extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 20,
+            bottom: -(logoSize / 2),
             right: 20,
             child: Container(
               width: logoSize,
@@ -59,28 +57,9 @@ class RestaurantWaveBar extends StatelessWidget {
                   color: Colors.white,
                   width: 2,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: ClipOval(
-                child: Image.network(
-                  logoImage,
+                image: DecorationImage(
+                  image: NetworkImage(logoImage),
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Icon(
-                        Icons.restaurant,
-                        size: 40,
-                        color: Colors.grey,
-                      ),
-                    );
-                  },
                 ),
               ),
             ),
@@ -128,4 +107,4 @@ class RestaurantWaveBar extends StatelessWidget {
       ),
     );
   }
-}
+} 

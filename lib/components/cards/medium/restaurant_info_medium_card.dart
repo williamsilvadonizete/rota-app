@@ -1,80 +1,131 @@
 import 'package:flutter/material.dart';
-
-import '../../../constants.dart';
-import '../../rating.dart';
-import '../../small_dot.dart';
+import 'package:provider/provider.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class RestaurantInfoMediumCard extends StatelessWidget {
+  final String image, name;
+  final String location;
+  final int delivertTime;
+  final double rating;
+  final VoidCallback press;
+
   const RestaurantInfoMediumCard({
     super.key,
     required this.image,
     required this.name,
     required this.location,
-    required this.rating,
     required this.delivertTime,
+    required this.rating,
     required this.press,
   });
 
-  final String image, name, location;
-  final double rating;
-  final int delivertTime;
-  final VoidCallback press;
-
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    
+    return GestureDetector(
       onTap: press,
-      child: SizedBox(
+      child: Container(
         width: 200,
+        decoration: BoxDecoration(
+          color: isDarkMode ? const Color(0xFF1A1A1A) : Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 1.25,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                child: Image.asset(image, fit: BoxFit.cover),
+            Container(
+              width: double.infinity,
+              height: 120,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                image: DecorationImage(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            const SizedBox(height: defaultPadding / 2),
-            Text(
-              name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: titleColor),
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding / 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : const Color(0xFF333333),
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        size: 16,
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                              ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        size: 16,
+                        color: ThemeProvider.primaryColor,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        rating.toString(),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                            ),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.access_time,
+                        size: 16,
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "$delivertTime min",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: defaultPadding / 4),
-            Text(
-              location,
-              maxLines: 1,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: defaultPadding / 2),
-            rating != 0.0 ? Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Rating(rating: rating),
-                Text(
-                  "$delivertTime min",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge!
-                      .copyWith(color: titleColor.withOpacity(0.74)),
-                ),
-                const SmallDot(),
-                Text(
-                  "Entrega Gratis",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!
-                      .copyWith(color: titleColor.withOpacity(0.74)),
-                )
-              ],
-            ) : SizedBox(),
           ],
-
         ),
       ),
     );

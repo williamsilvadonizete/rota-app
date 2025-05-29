@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rota_gourmet/components/city_selection_modal.dart';
-import 'package:rota_gourmet/components/notification_permission.dart';
 import 'package:rota_gourmet/constants.dart';
 import 'package:rota_gourmet/components/chart_modal.dart';  // Importa o ChartModal
 import 'package:shared_preferences/shared_preferences.dart';
@@ -87,8 +86,9 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
             });
           }
         } else {
-          // If refresh failed, logout
+          // If refresh failed, logout and redirect to login
           await _handleLogout();
+          return;
         }
       } else {
         // Token is still valid, just update user info
@@ -104,6 +104,7 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
       }
     } catch (e) {
       print('Error validating token: $e');
+      // If any error occurs during validation, logout and redirect to login
       await _handleLogout();
     }
   }
@@ -114,32 +115,20 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
     try {
       final success = await _authService.logout();
       
-      if (success) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.remove('auth_token');
-        
-        if (mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const SignInScreen()),
-            (route) => false,
-          );
-        }
-      } else {
-        print('Erro ao fazer logout no Keycloak');
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.remove('auth_token');
-        
-        if (mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const SignInScreen()),
-            (route) => false,
-          );
-        }
+      // Remove token regardless of logout success
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('auth_token');
+      
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SignInScreen()),
+          (route) => false,
+        );
       }
     } catch (e) {
       print('Erro durante o processo de logout: $e');
+      // Even if logout fails, remove token and redirect to login
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('auth_token');
       
@@ -220,10 +209,6 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
             Icons.help_outline,
             color: primaryColorDark,
           ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: NotificationPermissionWidget(),
         ),
         IconButton(
           onPressed: _openChartModal, // Chama o método para abrir o modal

@@ -1,40 +1,76 @@
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class PriceRangeAndType extends StatelessWidget {
-  const PriceRangeAndType({
-    super.key,
-    this.priceRange = "\$\$",
-    required this.types,
-    required this.icons,
-  });
-
   final String priceRange;
   final List<String> types;
   final List<IconData> icons;
 
+  const PriceRangeAndType({
+    super.key,
+    required this.priceRange,
+    required this.types,
+    required this.icons,
+  });
+
   @override
   Widget build(BuildContext context) {
-    assert(types.length == icons.length, "Cada tipo deve ter um ícone correspondente");
-
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: defaultPadding,
-      runSpacing: defaultPadding,
-      children: [
-        Text(priceRange, style: Theme.of(context).textTheme.bodyMedium),
-        ...List.generate(types.length, (index) => buildTypeItem(context, icons[index], types[index])),
-      ],
-    );
-  }
-
-  Widget buildTypeItem(BuildContext context, IconData icon, String type) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16, color: Colors.white),
-        const SizedBox(width: 4),
-        Text(type, style: Theme.of(context).textTheme.bodyMedium),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            priceRange,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(width: defaultPadding),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                types.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (index < icons.length)
+                          Icon(
+                            icons[index],
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        if (index < icons.length)
+                          const SizedBox(width: 4),
+                        Text(
+                          types[index],
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

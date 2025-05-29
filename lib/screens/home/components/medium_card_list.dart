@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 import '../../../components/cards/medium/restaurant_info_medium_card.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
@@ -34,6 +36,8 @@ class _MediumCardListState extends State<MediumCardList> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -41,9 +45,9 @@ class _MediumCardListState extends State<MediumCardList> {
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
           child: Text(
             widget.title, // Usa o título passado como parâmetro
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: primaryColor,
+                  color: themeProvider.isDarkMode ? Colors.white : const Color(0xFF333333),
                 ),
           ),
         ),
@@ -51,7 +55,7 @@ class _MediumCardListState extends State<MediumCardList> {
         SizedBox(
           width: double.infinity,
           height: 254,
-          child: isLoading
+          child: widget.restaurants.isEmpty
               ? buildFeaturedPartnersLoadingIndicator()
               : ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -73,7 +77,17 @@ class _MediumCardListState extends State<MediumCardList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const DetailsScreen(),
+                            builder: (context) => DetailsScreen(
+                              restaurant: {
+                                'restaurantName': widget.restaurants[index]['name'],
+                                'categories': [widget.restaurants[index]['foodType'] ?? ''],
+                                'priceRange': '\$ 0-0',
+                                'rating': widget.restaurants[index]['rating'] ?? 0.0,
+                                'numOfRating': 0,
+                                'deliveryFee': 0,
+                                'deliveryTime': widget.restaurants[index]['deliveryTime'] ?? 0,
+                              },
+                            ),
                           ),
                         );
                       },

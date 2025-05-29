@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchRestaurants() async {
     if (_isLoading || !_hasMore) return;
 
+    if (!mounted) return;
     setState(() => _isLoading = true);
 
     try {
@@ -49,14 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
       Position position =  Position(
                             latitude: -18.921079,
                             longitude: -48.288413,
-                            timestamp: DateTime.now(), // Current timestamp
-                            accuracy: 0.0, // Default accuracy
-                            altitude: 0.0, // Default altitude
-                            heading: 0.0, // Default heading
-                            speed: 0.0, // Default speed
+                            timestamp: DateTime.now(),
+                            accuracy: 0.0,
+                            altitude: 0.0,
+                            heading: 0.0,
+                            speed: 0.0,
                             altitudeAccuracy: 0.0,
                             headingAccuracy: 0.0,
-                            speedAccuracy: 0.0, // Default speed accuracy
+                            speedAccuracy: 0.0,
                           );
       if (permission == LocationPermission.whileInUse || 
            permission == LocationPermission.always) {
@@ -72,6 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
         pageSize: 20,
       );
 
+      if (!mounted) return;
+
       if (response != null && response['restaurants'] != null) {
         setState(() {
           _restaurants.addAll(response['restaurants']);
@@ -82,7 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       debugPrint('Error fetching restaurants: $e');
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -97,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryColorDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const CustomStatusAppBar(showBackButton: true),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -218,7 +223,19 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const DetailsScreen(),
+                builder: (context) => DetailsScreen(
+                  restaurant: {
+                    'restaurantName': restaurant['restaurantName'] ?? '',
+                    'categories': restaurant['categories'] ?? [],
+                    'priceRange': restaurant['priceRange'] ?? '\$ 0-0',
+                    'rating': restaurant['rating'] ?? 0.0,
+                    'numOfRating': restaurant['numOfRating'] ?? 0,
+                    'deliveryFee': restaurant['deliveryFee'] ?? 0,
+                    'deliveryTime': restaurant['deliveryTime'] ?? 0,
+                    'logoUrl': restaurant['logoUrl'] ?? '',
+                    'backgroundImageUrl': restaurant['backgroundImageUrl'] ?? '',
+                  },
+                ),
               ),
             );
           },

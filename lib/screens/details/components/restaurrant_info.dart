@@ -6,7 +6,12 @@ import '../../../components/rating_with_counter.dart';
 import '../../../constants.dart';
 
 class RestaurantInfo extends StatefulWidget {
-  const RestaurantInfo({super.key});
+  final Map<String, dynamic> restaurant;
+
+  const RestaurantInfo({
+    super.key,
+    required this.restaurant,
+  });
 
   @override
   State<RestaurantInfo> createState() => _RestaurantInfoState();
@@ -17,11 +22,13 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
       child: Container(
         decoration: BoxDecoration(
-          color: primaryColorDark,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
@@ -31,73 +38,87 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
             children: [
               const SizedBox(height: defaultPadding + 10),
               Text(
-                "Mac Feliz",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: labelColor),
+                widget.restaurant['restaurantName'] ?? '',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: isDarkMode ? Colors.white : const Color(0xFF333333),
+                  fontWeight: FontWeight.bold,
+                ),
                 maxLines: 1,
               ),
               const SizedBox(height: defaultPadding / 2),
-              const PriceRangeAndType(
-                priceRange: "\$ 12-50",
-                types: ["Hamburguer", "Pizza", "Sushi"],
-                icons: [Icons.fastfood, Icons.local_pizza, Icons.rice_bowl],
+              PriceRangeAndType(
+                priceRange: widget.restaurant['priceRange'] ?? '\$ 0-0',
+                types: (widget.restaurant['categories'] as List<dynamic>?)?.cast<String>() ?? [],
+                icons: const [Icons.fastfood, Icons.local_pizza, Icons.rice_bowl],
               ),
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomSelectableButton(
-                    icon: "assets/icons/couple.svg",
-                    title: "Acompanhado",
-                    subtitle: "100% OFF NO 2º prato",
-                    isSelected: selectedIndex == 0,
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = 0;
-                      });
-                    },
+                  Expanded(
+                    child: CustomSelectableButton(
+                      icon: "assets/icons/couple.svg",
+                      title: "Acompanhado",
+                      subtitle: "100% OFF NO 2º prato",
+                      isSelected: selectedIndex == 0,
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = 0;
+                        });
+                      },
+                    ),
                   ),
-                  CustomSelectableButton(
-                    icon: "assets/icons/single.svg",
-                    title: "Individual",
-                    subtitle: "30% OFF",
-                    isSelected: selectedIndex == 1,
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = 1;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomSelectableButton(
-                    icon: "assets/icons/delivery_m.svg",
-                    title: "Delivery",
-                    subtitle: "20% OFF",
-                    isSelected: selectedIndex == 2,
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = 2;
-                      });
-                    },
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        CustomSelectableButton(
+                          icon: "assets/icons/single.svg",
+                          title: "Individual",
+                          subtitle: "30% OFF",
+                          isSelected: false,
+                          isDisabled: true,
+                        ),
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              "Em Breve",
+                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 30),
-              const RatingWithCounter(rating: 4.3, numOfRating: 200),
+              RatingWithCounter(
+                rating: (widget.restaurant['rating'] ?? 0.0).toDouble(),
+                numOfRating: widget.restaurant['numOfRating'] ?? 0,
+              ),
               const SizedBox(height: defaultPadding),
               Row(
                 children: [
-                  const DeliveryInfo(
+                  DeliveryInfo(
                     iconSrc: "assets/icons/delivery.svg",
-                    text: "Free",
+                    text: widget.restaurant['deliveryFee'] == 0 ? "Free" : "\$${widget.restaurant['deliveryFee']}",
                     subText: "Delivery",
                   ),
                   const SizedBox(width: defaultPadding),
-                  const DeliveryInfo(
+                  DeliveryInfo(
                     iconSrc: "assets/icons/clock.svg",
-                    text: "25",
+                    text: "${widget.restaurant['deliveryTime'] ?? 0}",
                     subText: "Minutes",
                   ),
                   const Spacer(),
@@ -123,6 +144,8 @@ class DeliveryInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -130,8 +153,8 @@ class DeliveryInfo extends StatelessWidget {
           iconSrc,
           height: 20,
           width: 20,
-          colorFilter: const ColorFilter.mode(
-            primaryColor,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).colorScheme.primary,
             BlendMode.srcIn,
           ),
         ),
@@ -139,17 +162,17 @@ class DeliveryInfo extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: "$text\n",
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge!
-                .copyWith(color: labelColor),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: isDarkMode ? Colors.white : const Color(0xFF333333),
+              fontWeight: FontWeight.bold,
+            ),
             children: [
               TextSpan(
                 text: subText,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(fontWeight: FontWeight.normal, color: labelColor),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: isDarkMode ? Colors.white70 : const Color(0xFF666666),
+                  fontWeight: FontWeight.normal,
+                ),
               )
             ],
           ),

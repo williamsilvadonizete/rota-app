@@ -5,13 +5,78 @@ import 'package:rota_gourmet/constants.dart';
 import 'package:rota_gourmet/screens/details/components/restaurant_logo.dart';
 
 class RestaurantBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  final Size preferredSize;
-
   final bool showBackButton;
+  final String title;
+  final String logoUrl;
+  final String backgroundImageUrl;
 
-  const RestaurantBar({super.key, this.showBackButton = true})
-      : preferredSize = const Size.fromHeight(230);
+  const RestaurantBar({
+    super.key,
+    this.showBackButton = false,
+    this.title = '',
+    this.logoUrl = '',
+    this.backgroundImageUrl = '',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        RestaurantWaveBar(
+          logoSize: 80,
+          logoImage: logoUrl,
+          backgroundImage: backgroundImageUrl,
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            height: kToolbarHeight + MediaQuery.of(context).padding.top,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.7),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: Row(
+              children: [
+                if (showBackButton)
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: showBackButton ? TextAlign.start : TextAlign.center,
+                  ),
+                ),
+                if (!showBackButton)
+                  const SizedBox(width: 48), // Espaço para manter o título centralizado
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(300);
 
   // Função para lançar URLs
   Future<void> _launchURL(String url) async {
@@ -20,71 +85,6 @@ class RestaurantBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       throw 'Não foi possível abrir o link: $url';
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      leading: showBackButton
-          ? IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: primaryColor,
-                size: 30,
-              ),
-              onPressed: () {
-                Navigator.pop(context); 
-              },
-            )
-          : const SizedBox(),
-      backgroundColor: primaryColorDark,
-      flexibleSpace: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // Componente de fundo
-          RestaurantBackgroundWave(
-            height: 250, // Tamanho do fundo
-            backgroundImage: "assets/images/medium_2.png", 
-          ),
-          RestaurantLogo(
-            logoSize: 80, 
-            logoImage: "assets/icons/maclogo.png",
-          ),
-          // Botões de localização, telefone e website na horizontal, no canto inferior esquerdo
-          Positioned(
-            left: 5,
-            bottom:  -50,
-            child: Row(
-              children: [
-                // Botão de localização
-                _buildIconButton(
-                  icon: Icons.location_on,
-                  onPressed: () {
-                    _launchURL("https://maps.google.com");
-                  },
-                ),
-                const SizedBox(width: 10), // Espaço entre os botões
-                // Botão de telefone
-                _buildIconButton(
-                  icon: Icons.phone,
-                  onPressed: () {
-                    _launchURL("tel:+1234567890");
-                  },
-                ),
-                const SizedBox(width: 10), // Espaço entre os botões
-                // Botão de website
-                _buildIconButton(
-                  icon: Icons.web,
-                  onPressed: () {
-                    _launchURL("https://www.example.com");
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   // Método para criar o botão com sombra (alto relevo)

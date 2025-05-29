@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-// clolors that we use in our app
-const titleColor = Color.fromARGB(255, 250, 251, 251);
-const labelColor = Color.fromARGB(255, 250, 251, 251);
-const primaryColor =Color.fromRGBO(245, 181, 0, 1);// Color.fromARGB(255, 245, 143, 26);
-// const primaryColorDark =  Color.fromARGB(255, 80, 79, 77);
-const primaryColorDark =  Color.fromARGB(255, 33, 32, 32);
-const accentColor = Color.fromRGBO(245, 181, 0, 1);// Color(0xFFEF9920);
-const bodyTextColor = Color.fromARGB(255, 240, 237, 237);
-const inputColor = Color.fromARGB(255, 240, 237, 237);
+const defaultPadding = 20.0;
+const defaultPaddingSmall = 10.0;
+const defaultPaddingLarge = 30.0;
 
-const double defaultPadding = 7;
+// Main colors
+const primaryColor = Color.fromRGBO(245, 181, 0, 1);
+const primaryColorDark = Color.fromARGB(255, 33, 32, 32);
+const bodyTextColor = Color(0xFF666666);
+const titleColor = Color(0xFF333333);
+const labelColor = Color(0xFFFAFBFB);
+const inputColor = Color(0xFFF0EDED);
+
+const kTextFieldPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 12);
+
+// clolors that we use in our app
+const accentColor = Color.fromRGBO(245, 181, 0, 1);// Color(0xFFEF9920);
+
 const Duration kDefaultDuration = Duration(milliseconds: 250);
 
 const TextStyle kButtonTextStyle = TextStyle(
   color: Colors.white,
   fontSize: 14,
   fontWeight: FontWeight.bold,
-);
-
-const EdgeInsets kTextFieldPadding = EdgeInsets.symmetric(
-  horizontal: defaultPadding,
-  vertical: defaultPadding,
 );
 
 // Text Field Decoration
@@ -54,8 +55,13 @@ final emailValidator = MultiValidator([
   EmailValidator(errorText: 'Digite um e-mail válido')
 ]);
 
-final requiredValidator =
-    RequiredValidator(errorText: 'Este campo é obrigatório');
+String? requiredValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Este campo é obrigatório';
+  }
+  return null;
+}
+
 final matchValidator = MatchValidator(errorText: 'As senhas não coincidem');
 
 final phoneNumberValidator = MinLengthValidator(10,

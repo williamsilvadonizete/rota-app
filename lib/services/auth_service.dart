@@ -48,6 +48,12 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
+        // Salvar tanto o access token quanto o refresh token
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', response.data['access_token']);
+        if (response.data['refresh_token'] != null) {
+          await prefs.setString('refresh_token', response.data['refresh_token']);
+        }
         return response.data;
       }
     } on DioException catch (e) {
@@ -197,7 +203,9 @@ class AuthService {
   Future<Map<String, dynamic>?> validateStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     final storedToken = prefs.getString('auth_token');
-    if (storedToken == null) return null;
+    final refreshToken = prefs.getString('refresh_token');
+    
+    if (storedToken == null || refreshToken == null) return null;
 
     final tokenUrl = "$keycloakBaseUrl/realms/$realm/protocol/openid-connect/token";
     try {
@@ -209,12 +217,17 @@ class AuthService {
         data: {
           'grant_type': 'refresh_token',
           'client_id': clientId,
-          'refresh_token': storedToken,
+          'refresh_token': refreshToken,
           'client_secret': cert,
         },
       );
 
       if (response.statusCode == 200) {
+        // Salvar tanto o novo access token quanto o novo refresh token
+        await prefs.setString('auth_token', response.data['access_token']);
+        if (response.data['refresh_token'] != null) {
+          await prefs.setString('refresh_token', response.data['refresh_token']);
+        }
         return response.data;
       }
     } on DioException catch (e) {
@@ -227,8 +240,9 @@ class AuthService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final storedToken = prefs.getString('auth_token');
+      final refreshToken = prefs.getString('refresh_token');
       
-      if (storedToken != null) {
+      if (storedToken != null && refreshToken != null) {
         final response = await _dio.post(
           "$keycloakBaseUrl/realms/$realm/protocol/openid-connect/logout",
           options: Options(
@@ -240,24 +254,19 @@ class AuthService {
           data: {
             'client_id': clientId,
             'client_secret': cert,
-            'refresh_token': storedToken,
+            'refresh_token': refreshToken,
           },
         );
 
-        // Apenas remove o token, mantém o flag de onboarding
+        // Remove tanto o access token quanto o refresh token
         await prefs.remove('auth_token');
+        await prefs.remove('refresh_token');
         
         return response.statusCode == 204 || response.statusCode == 200;
       }
       return false;
     } on DioException catch (e) {
-      print('Error during logout: ${e.response?.data ?? e.message}');
-      // Mesmo se a requisição falhar, ainda remove o token mas mantém o flag de onboarding
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('auth_token');
-      return true;
-    } catch (e) {
-      print('Error during logout: $e');
+      print("Erro durante o logout: ${e.response?.data ?? e.message}");
       return false;
     }
   }

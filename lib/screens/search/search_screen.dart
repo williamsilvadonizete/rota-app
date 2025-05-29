@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:rota_gourmet/components/cards/big/restaurant_info.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 import 'package:rota_gourmet/screens/details/details_screen.dart';
 import 'package:rota_gourmet/screens/filter/filter_screen.dart';
 import 'package:rota_gourmet/services/restaurant_service.dart';
@@ -90,109 +92,190 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final backgroundColor = themeProvider.isDarkMode 
+        ? primaryColorDark 
+        : const Color(0xFFF5F5DC);
+
     return Scaffold(
-      backgroundColor: primaryColorDark,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: primaryColorDark,
-        title: const Text(
+        backgroundColor: backgroundColor,
+        elevation: 0,
+        title: Text(
           "Encontre restaurantes",
           style: TextStyle(
-            color: primaryColor,
+            color: themeProvider.isDarkMode ? ThemeProvider.primaryColor : const Color(0xFF333333),
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
-            color: primaryColor,
+            icon: Icon(
+              Icons.filter_list,
+              color: themeProvider.isDarkMode ? ThemeProvider.primaryColor : const Color(0xFF333333),
+            ),
             onPressed: _showFilterModal,
           ),
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: defaultPadding),
-              const SearchForm(),
-              const SizedBox(height: defaultPadding),
-              Text(
-                "Categorias",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: titleColor,
-                    ),
-              ),
-              const SizedBox(height: defaultPadding),
-              SizedBox(
-                height: 40,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _categories.length,
-                  itemBuilder: (context, index) {
-                    final category = _categories[index];
-                    final isSelected = _selectedCategory == category['name'];
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: ChoiceChip(
-                        label: Text('${category['icon']} ${category['name']}'),
-                        selected: isSelected,
-                        onSelected: (selected) {
-                          setState(() {
-                            _selectedCategory = selected ? category['name']! : '';
-                          });
-                          if (selected) {
-                            _fetchRestaurants();
-                          }
-                        },
-                        backgroundColor: Colors.grey[800],
-                        selectedColor: primaryColor,
-                        labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : Colors.grey[300],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: const SearchForm(),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: themeProvider.isDarkMode ? const Color(0xFF1A1A1A) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Categorias",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: themeProvider.isDarkMode ? Colors.white : const Color(0xFF333333),
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  },
+                      const SizedBox(height: defaultPadding),
+                      SizedBox(
+                        height: 45,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _categories.length,
+                          itemBuilder: (context, index) {
+                            final category = _categories[index];
+                            final isSelected = _selectedCategory == category['name'];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ChoiceChip(
+                                label: Text(
+                                  '${category['icon']} ${category['name']}',
+                                  style: TextStyle(
+                                    color: isSelected ? Colors.white : (themeProvider.isDarkMode ? Colors.grey[300] : const Color(0xFF666666)),
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                ),
+                                selected: isSelected,
+                                onSelected: (selected) {
+                                  setState(() {
+                                    _selectedCategory = selected ? category['name']! : '';
+                                  });
+                                  if (selected) {
+                                    _fetchRestaurants();
+                                  }
+                                },
+                                backgroundColor: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                                selectedColor: ThemeProvider.primaryColor,
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: defaultPadding * 1.5),
+                      Text(
+                        _showSearchResult ? "Resultados" : "Top Restaurantes",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: themeProvider.isDarkMode ? Colors.white : const Color(0xFF333333),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: defaultPadding),
+                      Expanded(
+                        child: _isLoading
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      color: ThemeProvider.primaryColor,
+                                    ),
+                                    const SizedBox(height: defaultPadding),
+                                    Text(
+                                      'Carregando restaurantes...',
+                                      style: TextStyle(
+                                        color: themeProvider.isDarkMode ? Colors.white70 : const Color(0xFF666666),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : _restaurants.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.search_off_rounded,
+                                          size: 64,
+                                          color: themeProvider.isDarkMode ? Colors.white70 : const Color(0xFF666666),
+                                        ),
+                                        const SizedBox(height: defaultPadding),
+                                        Text(
+                                          'Nenhum restaurante encontrado',
+                                          style: TextStyle(
+                                            color: themeProvider.isDarkMode ? Colors.white70 : const Color(0xFF666666),
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: _restaurants.length,
+                                    itemBuilder: (context, index) {
+                                      final restaurant = _restaurants[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: defaultPadding),
+                                        child: RestaurantCard(
+                                          logoUrl: restaurant['logoUrl'] ?? '',
+                                          name: restaurant['restaurantName'] ?? '',
+                                          foodType: restaurant['categories']?.join(', ') ?? '',
+                                          distance: '${restaurant['distanceKm']?.toStringAsFixed(1)} km',
+                                          weekAvailability: _mapWorkDays(restaurant['workDays']),
+                                          press: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => DetailsScreen(
+                                                  restaurant: {
+                                                    'restaurantName': restaurant['restaurantName'] ?? '',
+                                                    'categories': restaurant['categories'] ?? [],
+                                                    'priceRange': restaurant['priceRange'] ?? '\$ 0-0',
+                                                    'rating': restaurant['rating'] ?? 0.0,
+                                                    'numOfRating': restaurant['numOfRating'] ?? 0,
+                                                    'deliveryFee': restaurant['deliveryFee'] ?? 0,
+                                                    'deliveryTime': restaurant['deliveryTime'] ?? 0,
+                                                    'logoUrl': restaurant['logoUrl'] ?? '',
+                                                    'backgroundImageUrl': restaurant['backgroundImageUrl'] ?? '',
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: defaultPadding),
-              Text(
-                _showSearchResult ? "Resultados" : "Top Restaurantes",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: titleColor,
-                    ),
-              ),
-              const SizedBox(height: defaultPadding),
-              Expanded(
-                child: _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        itemCount: _restaurants.length,
-                        itemBuilder: (context, index) {
-                          final restaurant = _restaurants[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: defaultPadding),
-                            child: RestaurantCard(
-                              logoUrl: restaurant['logoUrl'] ?? '',
-                              name: restaurant['restaurantName'] ?? '',
-                              foodType: restaurant['categories']?.join(', ') ?? '',
-                              distance: '${restaurant['distanceKm']?.toStringAsFixed(1)} km',
-                              weekAvailability: _mapWorkDays(restaurant['workDays']),
-                              press: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const DetailsScreen(),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -212,10 +295,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void _showFilterModal() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: primaryColorDark,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
         return FractionallySizedBox(
@@ -236,39 +316,71 @@ class SearchForm extends StatefulWidget {
 
 class _SearchFormState extends State<SearchForm> {
   final _formKey = GlobalKey<FormState>();
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
     return Form(
       key: _formKey,
-      child: TextFormField(
-        onChanged: (value) {
-          // Obter dados enquanto digita
-        },
-        onFieldSubmitted: (value) {
-          if (_formKey.currentState!.validate()) {
-            // Se os dados estiverem corretos, salve os dados
-            _formKey.currentState!.save();
-          } else {
-            // Caso haja erro na validação
-          }
-        },
-        validator: requiredValidator.call,
-        style: Theme.of(context).textTheme.labelLarge,
-        textInputAction: TextInputAction.search,
-        decoration: InputDecoration(
-          hintText: "Buscar Restaurantes",
-          contentPadding: kTextFieldPadding,
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset(
-              'assets/icons/search.svg',
-              colorFilter: const ColorFilter.mode(
-                bodyTextColor,
-                BlendMode.srcIn,
-              ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: themeProvider.isDarkMode ? const Color(0xFF1A1A1A) : Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
+          ],
+        ),
+        child: TextFormField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: 'Buscar restaurantes...',
+            prefixIcon: Icon(
+              Icons.search,
+              color: themeProvider.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+            ),
+            suffixIcon: _searchController.text.isNotEmpty
+                ? IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      color: themeProvider.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                    ),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() {});
+                    },
+                  )
+                : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: themeProvider.isDarkMode ? const Color(0xFF1A1A1A) : Colors.white,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           ),
+          style: TextStyle(
+            color: themeProvider.isDarkMode ? Colors.white : const Color(0xFF333333),
+          ),
+          onChanged: (value) {
+            setState(() {});
+          },
+          onFieldSubmitted: (value) {
+            if (_formKey.currentState!.validate()) {
+              // Implement search functionality
+            }
+          },
         ),
       ),
     );

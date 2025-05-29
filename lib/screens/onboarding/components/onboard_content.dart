@@ -28,17 +28,13 @@ class OnboardContent extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .titleLarge!
-              .copyWith(fontWeight: FontWeight.bold,
-              color: accentColor)
+              .copyWith(fontWeight: FontWeight.bold)
         ),
         const SizedBox(height: 8),
         Text(
           text!,
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                 color: labelColor, // Altere para a cor desejada
-          ),
+          style: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.center,
-          
         ),
       ],
     );

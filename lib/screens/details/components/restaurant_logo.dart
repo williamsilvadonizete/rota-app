@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:rota_gourmet/constants.dart';
 
 class RestaurantLogo extends StatelessWidget {
-  final double logoSize;
-  final String logoImage; // Caminho da logo
+  final String logoUrl;
 
   const RestaurantLogo({
     super.key,
-    required this.logoSize,
-    required this.logoImage,
+    required this.logoUrl,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: -(logoSize / 2),  // Logo sobrepondo 50% para fora da imagem
-      right: 20,  // Distância da borda direita
-      child: ClipOval(
-        child: Image.asset(
-          logoImage, // Caminho da logo
-          height: logoSize, // Tamanho da logo
-          width: logoSize, // Tamanho da logo
-          fit: BoxFit.cover,
+    return Container(
+      height: 100,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.3),
+      ),
+      child: Center(
+        child: Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+            image: DecorationImage(
+              image: NetworkImage(logoUrl),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
     );
