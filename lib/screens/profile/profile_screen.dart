@@ -62,8 +62,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Perfil'),
-        backgroundColor: ThemeProvider.primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: isDarkMode ? const Color(0xFF1A1D1F) : Colors.white,
+        foregroundColor: isDarkMode ? Colors.white : ThemeProvider.primaryColor,
       ),
       body: ListView(
         padding: const EdgeInsets.all(defaultPadding),

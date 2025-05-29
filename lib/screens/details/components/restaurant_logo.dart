@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rota_gourmet/constants.dart';
 
 class RestaurantLogo extends StatelessWidget {
   final String logoUrl;

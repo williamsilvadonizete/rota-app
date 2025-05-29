@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rota_gourmet/components/buttons/secondery_button.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 import '../../../components/section_title.dart';
 import '../../../constants.dart';
@@ -22,6 +23,8 @@ class _TimeSelectState extends State<TimeSelect> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -37,10 +40,10 @@ class _TimeSelectState extends State<TimeSelect> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // 2 colunas
-              crossAxisSpacing: 10, // Espaço entre colunas
-              mainAxisSpacing: 10, // Espaço entre linhas
-              childAspectRatio: 3.5, // Ajuste do tamanho do botão
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 3.5,
             ),
             itemCount: demoCategories.length,
             itemBuilder: (contxext, index) {
@@ -50,15 +53,23 @@ class _TimeSelectState extends State<TimeSelect> {
                     demoCategories[index]["isActive"] = !demoCategories[index]["isActive"];
                   });
                 },
-                backgroundColor:  demoCategories[index]["isActive"] ? primaryColor : primaryColorDark,
+                backgroundColor: demoCategories[index]["isActive"] 
+                  ? ThemeProvider.primaryColor 
+                  : isDarkMode 
+                    ? const Color(0xFF2A2D2F) 
+                    : const Color(0xFFF7F7F7),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
                       demoCategories[index]["icon"],
-                      height: 16, // Ícone um pouco maior para melhor visualização
+                      height: 16,
                       colorFilter: ColorFilter.mode(
-                        demoCategories[index]["isActive"] ? primaryColorDark : bodyTextColor,
+                        demoCategories[index]["isActive"] 
+                          ? Colors.white 
+                          : isDarkMode 
+                            ? Colors.white70 
+                            : const Color(0xFF6C757D),
                         BlendMode.srcIn,
                       ),
                     ),
@@ -66,8 +77,12 @@ class _TimeSelectState extends State<TimeSelect> {
                     Text(
                       demoCategories[index]["title"],
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: demoCategories[index]["isActive"] ? primaryColorDark : bodyTextColor,
-                            fontSize: 14, // Ajuste do tamanho da fonte
+                            color: demoCategories[index]["isActive"] 
+                              ? Colors.white 
+                              : isDarkMode 
+                                ? Colors.white70 
+                                : const Color(0xFF6C757D),
+                            fontSize: 14,
                           ),
                     )
                   ],

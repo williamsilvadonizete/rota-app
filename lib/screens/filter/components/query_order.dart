@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 import '../../../components/section_title.dart';
 import '../../../constants.dart';
@@ -28,6 +30,8 @@ class _QueryOrderState extends State<QueryOrder> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       mainAxisSize: MainAxisSize.min, 
       crossAxisAlignment: CrossAxisAlignment.center, 
@@ -78,6 +82,8 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       children: [
         SizedBox(
@@ -86,11 +92,11 @@ class RoundedButton extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.zero,
-              backgroundColor: isActive ? primaryColor : primaryColorDark,
+              backgroundColor: isActive ? ThemeProvider.primaryColor : isDarkMode ? const Color(0xFF2A2D2F) : const Color(0xFFF7F7F7),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
                 side: BorderSide(
-                  color: isActive ? primaryColor : bodyTextColor,
+                  color: isActive ? ThemeProvider.primaryColor : isDarkMode ? const Color(0xFF3A3D3F) : const Color(0xFFE5E5E5),
                 ),
               ),
             ),
@@ -100,7 +106,7 @@ class RoundedButton extends StatelessWidget {
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
-                isActive ? primaryColorDark : bodyTextColor,
+                isActive ? Colors.white : isDarkMode ? Colors.white70 : const Color(0xFF6C757D),
                 BlendMode.srcIn,
               ),
             ),
@@ -111,7 +117,7 @@ class RoundedButton extends StatelessWidget {
           text,
           style: TextStyle(
             fontWeight: FontWeight.normal,
-            color: isActive ? primaryColor : bodyTextColor,
+            color: isActive ? ThemeProvider.primaryColor : isDarkMode ? Colors.white70 : const Color(0xFF6C757D),
             fontSize: 14,
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-const defaultPadding = 20.0;
+const defaultPadding = 10.0;
 const defaultPaddingSmall = 10.0;
 const defaultPaddingLarge = 30.0;
 

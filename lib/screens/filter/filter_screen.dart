@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rota_gourmet/screens/filter/components/activities.dart';
 import 'package:rota_gourmet/screens/filter/components/days.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 import '../../constants.dart';
 import 'components/hour.dart';
@@ -11,14 +12,16 @@ class FilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
-      backgroundColor: primaryColorDark,
+      backgroundColor: isDarkMode ? const Color(0xFF1A1D1F) : Colors.white,
       appBar: AppBar(
-        backgroundColor: primaryColorDark,
-        title:  const Text(
+        backgroundColor: isDarkMode ? const Color(0xFF1A1D1F) : Colors.white,
+        title: Text(
           "Filtros",
           style: TextStyle(
-            color: primaryColor, // Cor do texto
+            color: isDarkMode ? Colors.white : ThemeProvider.primaryColor,
           ),
         ),
       ),
