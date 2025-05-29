@@ -46,11 +46,9 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
   }
 
   void _startTokenCheck() {
-    // Cancela o timer existente se houver
     _tokenCheckTimer?.cancel();
-    
-    // Cria um novo timer que executa a cada 10 segundos
-    _tokenCheckTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    // Check token every 5 minutes
+    _tokenCheckTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
       _validateToken();
     });
   }
@@ -65,23 +63,45 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
         return;
       }
 
-      // Verifica se o token está expirado
-      if (JwtDecoder.isExpired(token)) {
-        await _handleLogout();
-        return;
-      }
+      // Check if token will expire in the next 10 minutes
+      final expirationTime = JwtDecoder.getExpirationDate(token);
+      final now = DateTime.now();
+      final timeUntilExpiration = expirationTime.difference(now);
 
-      // Se chegou aqui, o token é válido
-      if (!mounted) return;
-      
-      // Atualiza o nome do usuário
-      final decodedToken = JwtDecoder.decode(token);
-      final firstName = decodedToken['given_name'] ?? '';
-      final lastName = decodedToken['family_name'] ?? '';
-      
-      setState(() {
-        _userName = '$firstName $lastName'.trim();
-      });
+      if (timeUntilExpiration.inMinutes <= 10) {
+        // Try to refresh the token
+        final newTokens = await _authService.validateStoredToken();
+        
+        if (newTokens != null && newTokens['access_token'] != null) {
+          // Save the new token
+          await prefs.setString('auth_token', newTokens['access_token']);
+          
+          // Update user info with new token
+          final decodedToken = JwtDecoder.decode(newTokens['access_token']);
+          final firstName = decodedToken['given_name'] ?? '';
+          final lastName = decodedToken['family_name'] ?? '';
+          
+          if (mounted) {
+            setState(() {
+              _userName = '$firstName $lastName'.trim();
+            });
+          }
+        } else {
+          // If refresh failed, logout
+          await _handleLogout();
+        }
+      } else {
+        // Token is still valid, just update user info
+        final decodedToken = JwtDecoder.decode(token);
+        final firstName = decodedToken['given_name'] ?? '';
+        final lastName = decodedToken['family_name'] ?? '';
+        
+        if (mounted) {
+          setState(() {
+            _userName = '$firstName $lastName'.trim();
+          });
+        }
+      }
     } catch (e) {
       print('Error validating token: $e');
       await _handleLogout();
@@ -92,15 +112,12 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
     if (!mounted) return;
 
     try {
-      // Primeiro, tenta fazer logout no Keycloak
       final success = await _authService.logout();
       
       if (success) {
-        // Limpa os dados locais
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('auth_token');
         
-        // Redireciona para a tela de login
         if (mounted) {
           Navigator.pushAndRemoveUntil(
             context,
@@ -110,7 +127,6 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
         }
       } else {
         print('Erro ao fazer logout no Keycloak');
-        // Mesmo com erro no Keycloak, limpa os dados locais e redireciona
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('auth_token');
         
@@ -124,7 +140,6 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
       }
     } catch (e) {
       print('Erro durante o processo de logout: $e');
-      // Em caso de erro, ainda tenta limpar os dados locais e redirecionar
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('auth_token');
       
