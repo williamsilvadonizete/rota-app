@@ -22,8 +22,10 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     TextStyle textStyle = Theme.of(context).textTheme.labelLarge!.copyWith(
-          color: titleColor.withOpacity(0.64),
+          color: isDarkMode ? Colors.white70 : titleColor.withOpacity(0.64),
           fontWeight: FontWeight.normal,
         );
     return InkWell(
@@ -57,11 +59,16 @@ class ItemCard extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!
-                          .copyWith(fontSize: 18),
+                          .copyWith(
+                            fontSize: 18,
+                            color: isDarkMode ? Colors.white : Colors.black87,
+                          ),
                     ),
                     Text(
                       description!,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isDarkMode ? Colors.white70 : Colors.black54,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -83,7 +90,10 @@ class ItemCard extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge!
-                              .copyWith(color: primaryColor),
+                              .copyWith(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                         )
                       ],
                     ),

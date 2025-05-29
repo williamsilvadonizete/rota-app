@@ -109,7 +109,38 @@ class AuthService {
       );
 
       if (response.statusCode == 201) {
-        return await _getUserDetails(adminToken, username);
+        // Obter o ID do usuário recém-criado
+        final userDetails = await _getUserDetails(adminToken, username);
+        if (userDetails != null) {
+          final userId = userDetails['id'];
+          
+          // Obter a role app_member
+          final rolesUrl = "$keycloakBaseUrl/admin/realms/$realm/roles";
+          final rolesResponse = await _dio.get(
+            rolesUrl,
+            options: Options(
+              headers: {'Authorization': 'Bearer $adminToken'},
+            ),
+          );
+          
+          final appMemberRole = rolesResponse.data.firstWhere(
+            (role) => role['name'] == 'app_member',
+            orElse: () => null,
+          );
+          
+          if (appMemberRole != null) {
+            // Adicionar a role ao usuário
+            await _dio.post(
+              "$keycloakBaseUrl/admin/realms/$realm/users/$userId/role-mappings/realm",
+              options: Options(
+                headers: {'Authorization': 'Bearer $adminToken'},
+                contentType: 'application/json',
+              ),
+              data: [appMemberRole],
+            );
+          }
+        }
+        return userDetails;
       }
     } on DioException catch (e) {
       print("Erro no registro: ${e.response?.data ?? e.message}");

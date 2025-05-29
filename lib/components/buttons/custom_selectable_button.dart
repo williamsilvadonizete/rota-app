@@ -22,6 +22,8 @@ class CustomSelectableButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
       child: Opacity(
@@ -35,8 +37,8 @@ class CustomSelectableButton extends StatelessWidget {
                 color: isSelected 
                   ? ThemeProvider.primaryColor
                   : isDisabled 
-                    ? Colors.grey[600]
-                    : Colors.grey[800],
+                    ? isDarkMode ? Colors.grey[700] : Colors.grey[300]
+                    : isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -51,11 +53,17 @@ class CustomSelectableButton extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               title,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                fontWeight: FontWeight.bold, 
+                color: isDarkMode ? Colors.white : Colors.black87
+              ),
             ),
             Text(
               subtitle,
-              style: const TextStyle(fontSize: 12, color: Colors.white),
+              style: TextStyle(
+                fontSize: 12, 
+                color: isDarkMode ? Colors.white70 : Colors.black54
+              ),
             ),
           ],
         ),
