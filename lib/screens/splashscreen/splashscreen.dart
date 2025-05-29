@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rota_gourmet/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../onboarding/onboarding_scrreen.dart'; // Importa a tela de Onboarding
+import '../auth/sign_in_screen.dart';
+import '../../entry_point.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,9 +21,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeAnimations();
-    });
+    _initializeAnimations();
   }
 
   void _initializeAnimations() {
@@ -42,22 +42,26 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller.forward();
   }
 
-  void _handleAnimationStatus(AnimationStatus status) async {
+  Future<void> _handleAnimationStatus(AnimationStatus status) async {
     if (status == AnimationStatus.completed) {
       final prefs = await SharedPreferences.getInstance();
       final skipOnboarding = prefs.getBool('onboarding') ?? false;
+      final storedToken = prefs.getString('auth_token');
       
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OnboardingScreen(
-              navigateToSignIn: true,
-              skipOnboarding: skipOnboarding,
-            ),
-          ),
-        );
-      }
+      if (!mounted) return;
+
+      final route = MaterialPageRoute(
+        builder: (context) => storedToken != null
+            ? const EntryPoint()
+            : skipOnboarding
+                ? const SignInScreen()
+                : const OnboardingScreen(
+                    navigateToSignIn: true,
+                    skipOnboarding: false,
+                  ),
+      );
+
+      Navigator.pushReplacement(context, route);
     }
   }
 
@@ -70,7 +74,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     if (!_initialized) {
-      return Container(color: primaryColorDark);
+      return const Scaffold(
+        backgroundColor: primaryColorDark,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      );
     }
 
     return Scaffold(
@@ -91,7 +102,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               opacity: _opacityAnimation,
               child: ScaleTransition(
                 scale: _scaleAnimation,
-                child: Image.asset("assets/images/Logo.png"),
+                child: Image.asset(
+                  "assets/images/Logo.png",
+                  width: 200,
+                  height: 200,
+                ),
               ),
             ),
           ),

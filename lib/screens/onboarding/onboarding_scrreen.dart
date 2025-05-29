@@ -4,12 +4,19 @@ import '../../constants.dart';
 import '../../components/dot_indicators.dart';
 import '../auth/sign_in_screen.dart';
 import 'components/onboard_content.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final bool? navigateToSignIn;
   final bool? skipOnboarding;
+  final bool? isFromHelp;
 
-  const OnboardingScreen({super.key, this.navigateToSignIn, this.skipOnboarding});
+  const OnboardingScreen({
+    super.key, 
+    this.navigateToSignIn, 
+    this.skipOnboarding,
+    this.isFromHelp,
+  });
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -59,6 +66,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       backgroundColor: primaryColorDark,
+      appBar: widget.isFromHelp == true ? AppBar(
+        backgroundColor: primaryColorDark,
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ) : null,
       body: SafeArea(
         child: Column(
           children: [
@@ -73,7 +87,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     currentPage = value;
                   });
 
-                  // Se for a última página e navigateToSignIn for true, navega automaticamente
                   if (widget.navigateToSignIn == true && value == demoData.length - 1) {
                     Future.delayed(const Duration(milliseconds: 500), () {
                       _navigateToSignIn();
@@ -111,18 +124,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  void _navigateToSignIn() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const SignInScreen()),
-    );
+  void _navigateToSignIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding', true);
+    
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const SignInScreen()),
+      );
+    }
   }
 
-  void _navigateToHome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
+  void _navigateToHome() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding', true);
+    
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    }
   }
 
   @override
@@ -132,49 +155,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-
-
-List<Map<String, dynamic>> demoData = [
+final List<Map<String, dynamic>> demoData = [
   {
     "illustration": "assets/Illustrations/Illustrations_1.png",
     "title": "Bem-Vindo ao Rota Gourmet!",
-    "text":
-        "Somos o melhor clube Gastronômico do Brasil, conosco você ganha até 100% de desconto no segundo prato, em qualquer um do nossos parceiros. Veja como é rápido e fácil.",
+    "text": "Somos o melhor clube Gastronômico do Brasil, conosco você ganha até 100% de desconto no segundo prato, em qualquer um do nossos parceiros. Veja como é rápido e fácil.",
   },
   {
     "illustration": "assets/Illustrations/Illustrations_2.png",
     "title": "Já escolheu seu restaurante?",
-    "text":
-        "Navegue pelo aplicativo e conheça os restaurantes, seus cardápios, e os dias dos benefícios. Você vai adorar, são muitas opções!",
+    "text": "Navegue pelo aplicativo e conheça os restaurantes, seus cardápios, e os dias dos benefícios. Você vai adorar, são muitas opções!",
   },
   {
     "illustration": "assets/Illustrations/Illustrations_3.png",
     "title": "Escolha como usar o seu Desconto",
-    "text":
-        "Se comer fora já era bom, imagina comer nos melhores restaurantes da cidade com descontos excelentes como esses! 100% em um prato se você for acompanhado, até 30% se for sozinho ou até 50% se pedir delivery ou balcão. Aproveite do seu jeito!",
+    "text": "Se comer fora já era bom, imagina comer nos melhores restaurantes da cidade com descontos excelentes como esses! 100% em um prato se você for acompanhado, até 30% se for sozinho ou até 50% se pedir delivery ou balcão. Aproveite do seu jeito!",
   },
   {
     "illustration": "assets/Illustrations/Illustrations_4.png",
     "title": "Você é VIP nos Restaurantes",
-    "text":
-        "Se já escolheu o restaurante do dia, decidiu se vai sozinho ou acompanhado e confirmou os dias de aceitação, agora basta ir. Chegando lá, aproveite a noite, você merece! Na hora da conta, informe que é associado Rota Gourmet.",
+    "text": "Se já escolheu o restaurante do dia, decidiu se vai sozinho ou acompanhado e confirmou os dias de aceitação, agora basta ir. Chegando lá, aproveite a noite, você merece! Na hora da conta, informe que é associado Rota Gourmet.",
   },
   {
     "illustration": "assets/Illustrations/Illustrations_5.png",
     "title": "Delivery Simples e Prático",
-    "text":
-        "Pedir o delivery é super simples. Veja o cardápio, escolha sua opção e faça o pedido no restaurante por whatsapp ou telefone. Os botões de contato estão na tela do restaurante aqui no app! Chegando o seu pedido, é só validar seu voucher com o entregador.",
+    "text": "Pedir o delivery é super simples. Veja o cardápio, escolha sua opção e faça o pedido no restaurante por whatsapp ou telefone. Os botões de contato estão na tela do restaurante aqui no app! Chegando o seu pedido, é só validar seu voucher com o entregador.",
   },
-    {
+  {
     "illustration": "assets/Illustrations/Illustrations_6.png",
-    "title": "Delivery Simples e Prático",
-    "text":
-        "Na hora da conta, seja no restaurante ou na entrega do delivery é sempre igual. Informe que é associado Rota Gourmet e clique em VALIDAR VOCHER na tela do restaurante escolhido. Escanei o código fornecido pelo restaurante, preencha os dados e PRONTO! Confira tudo navegando livremente pelo App e aproveite!",
+    "title": "Validação do Voucher",
+    "text": "Na hora da conta, seja no restaurante ou na entrega do delivery é sempre igual. Informe que é associado Rota Gourmet e clique em VALIDAR VOCHER na tela do restaurante escolhido. Escanei o código fornecido pelo restaurante, preencha os dados e PRONTO! Confira tudo navegando livremente pelo App e aproveite!",
   },
-    {
+  {
     "illustration": "assets/Illustrations/Illustrations_7.png",
     "title": "Viu como é fácil?",
-    "text":
-        "Só aqui você encontra os melhores restaurantes com descontos especiais. Você não vai mais parar em casa!",
+    "text": "Só aqui você encontra os melhores restaurantes com descontos especiais. Você não vai mais parar em casa!",
   },
 ];

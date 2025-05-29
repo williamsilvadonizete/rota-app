@@ -32,7 +32,6 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
   bool useFloatingAnimation = true;
   bool isLightTheme = false;
 
-  
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -82,7 +81,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
 
   Widget _buildProfileTab() {
     return _buildForm([
-      _buildSectionTitle("Informações Cadastrais"),
+      _buildSectionTitle("Informações Pessoais"),
       _buildReadOnlyField("Nome", "William Souza"),
       _buildReadOnlyField("E-mail", "william@email.com"),
       TelefoneTextField(),
@@ -147,42 +146,34 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
     return _buildForm([
       _buildSectionTitle("Dados de Pagamento"),
       CreditCardWidget(
-                      enableFloatingCard: useFloatingAnimation,
-                      glassmorphismConfig: _getGlassmorphismConfig(),
-                      cardNumber: cardNumber,
-                      expiryDate: expiryDate,
-                      cardHolderName: cardHolderName,
-                      cvvCode: cvvCode,
-                      bankName: 'Axis Bank',
-                      frontCardBorder: useGlassMorphism
-                          ? null
-                          : Border.all(color: Colors.grey),
-                      backCardBorder: useGlassMorphism
-                          ? null
-                          : Border.all(color: Colors.grey),
-                      showBackView: isCvvFocused,
-                      obscureCardNumber: true,
-                      obscureCardCvv: true,
-                      isHolderNameVisible: true,
-                      cardBgColor: isLightTheme
-                          ? AppColors.cardBgLightColor
-                          : AppColors.cardBgColor,
-                      backgroundImage:
-                          useBackgroundImage ? 'assets/images/card_bg.png' : null,
-                      isSwipeGestureEnabled: true,
-                      onCreditCardWidgetChange:
-                          (CreditCardBrand creditCardBrand) {},
-                      customCardTypeIcons: <CustomCardTypeIcon>[
-                        CustomCardTypeIcon(
-                          cardType: CardType.mastercard,
-                          cardImage: Image.asset(
-                            'assets/images/mastercard.png',
-                            height: 48,
-                            width: 48,
-                          ),
-                        ),
-                      ],
-                    ),
+        enableFloatingCard: useFloatingAnimation,
+        glassmorphismConfig: _getGlassmorphismConfig(),
+        cardNumber: cardNumber,
+        expiryDate: expiryDate,
+        cardHolderName: cardHolderName,
+        cvvCode: cvvCode,
+        bankName: 'Axis Bank',
+        frontCardBorder: useGlassMorphism ? null : Border.all(color: Colors.grey),
+        backCardBorder: useGlassMorphism ? null : Border.all(color: Colors.grey),
+        showBackView: isCvvFocused,
+        obscureCardNumber: true,
+        obscureCardCvv: true,
+        isHolderNameVisible: true,
+        cardBgColor: isLightTheme ? AppColors.cardBgLightColor : AppColors.cardBgColor,
+        backgroundImage: useBackgroundImage ? 'assets/images/card_bg.png' : null,
+        isSwipeGestureEnabled: true,
+        onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
+        customCardTypeIcons: <CustomCardTypeIcon>[
+          CustomCardTypeIcon(
+            cardType: CardType.mastercard,
+            cardImage: Image.asset(
+              'assets/images/mastercard.png',
+              height: 48,
+              width: 48,
+            ),
+          ),
+        ],
+      ),
       CreditCardForm(
         formKey: formKey,
         cardNumber: cardNumber,
@@ -203,16 +194,13 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             labelStyle: TextStyle(color: primaryColor),
             hintStyle: TextStyle(color: primaryColor),
             filled: true,
-            fillColor: Colors.black54,  // Cor de fundo
-             // Cor do texto digitado
-
+            fillColor: Colors.black54,
           ),
           expiryDateDecoration: InputDecoration(
             labelText: 'Data de Validade',
             labelStyle: TextStyle(color: primaryColor),
             hintStyle: TextStyle(color: primaryColor),
             hintText: 'XX/XX',
-            
           ),
           cvvCodeDecoration: InputDecoration(
             labelText: 'CVV',
@@ -223,7 +211,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
           cardHolderDecoration: InputDecoration(
             labelText: 'Titular do Cartão',
             focusColor: primaryColor,
-            fillColor: primaryColor
+            fillColor: primaryColor,
           ),
         ),
       ),
@@ -247,8 +235,8 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
         ),
       ),
     ]);
-    
   }
+
   void _onValidate() {
     if (formKey.currentState?.validate() ?? false) {
       print('valid!');
@@ -283,7 +271,6 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       isCvvFocused = creditCardModel.isCvvFocused;
     });
   }
-
 
   Widget _buildCustomTextField(String label, {bool obscureText = false, TextInputType? keyboardType}) {
     return Padding(
@@ -338,11 +325,6 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
-            // decoration: BoxDecoration(
-              // color: Colors.black54,
-              // borderRadius: BorderRadius.circular(12),
-              // border: Border.all(color: Colors.grey),
-            // ),
             child: Text(value, style: const TextStyle(color: Colors.grey)),
           ),
         ],

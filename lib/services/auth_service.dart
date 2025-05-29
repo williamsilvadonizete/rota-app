@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AuthService {
   final String keycloakBaseUrl = "https://signin.hml.api.flentra.com";
@@ -187,6 +189,75 @@ class AuthService {
       return true;
     } on DioException catch (e) {
       print("Erro ao enviar email: ${e.response?.data ?? e.message}");
+      return false;
+    }
+  }
+
+  /// Método para validar o token armazenado e fazer login automático
+  Future<Map<String, dynamic>?> validateStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('auth_token');
+    if (storedToken == null) return null;
+
+    final tokenUrl = "$keycloakBaseUrl/realms/$realm/protocol/openid-connect/token";
+    try {
+      final response = await _dio.post(
+        tokenUrl,
+        options: Options(
+          contentType: 'application/x-www-form-urlencoded',
+        ),
+        data: {
+          'grant_type': 'refresh_token',
+          'client_id': clientId,
+          'refresh_token': storedToken,
+          'client_secret': cert,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } on DioException catch (e) {
+      print("Erro ao validar token: ${e.response?.data ?? e.message}");
+    }
+    return null;
+  }
+
+  Future<bool> logout() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final storedToken = prefs.getString('auth_token');
+      
+      if (storedToken != null) {
+        final response = await _dio.post(
+          "$keycloakBaseUrl/realms/$realm/protocol/openid-connect/logout",
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $storedToken',
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          ),
+          data: {
+            'client_id': clientId,
+            'client_secret': cert,
+            'refresh_token': storedToken,
+          },
+        );
+
+        // Apenas remove o token, mantém o flag de onboarding
+        await prefs.remove('auth_token');
+        
+        return response.statusCode == 204 || response.statusCode == 200;
+      }
+      return false;
+    } on DioException catch (e) {
+      print('Error during logout: ${e.response?.data ?? e.message}');
+      // Mesmo se a requisição falhar, ainda remove o token mas mantém o flag de onboarding
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('auth_token');
+      return true;
+    } catch (e) {
+      print('Error during logout: $e');
       return false;
     }
   }

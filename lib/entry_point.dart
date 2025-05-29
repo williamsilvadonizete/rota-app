@@ -30,10 +30,30 @@ class _EntryPointState extends State<EntryPoint> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
-    const OnboardingScreen(navigateToSignIn: false),
-    const OnboardingScreen(navigateToSignIn: false),
+    const SizedBox(), // Placeholder for QR Code button
+    const SizedBox(), // Placeholder for How to Use
     const ProfileScreen(),
   ];
+
+  void _onItemTapped(int index) {
+    if (index == 3) {
+      // Botão de ajuda
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const OnboardingScreen(
+            navigateToSignIn: false,
+            skipOnboarding: false,
+            isFromHelp: true,
+          ),
+        ),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +69,7 @@ class _EntryPointState extends State<EntryPoint> {
               color: primaryColorDark,
             ),
             child: CupertinoTabBar(
-              onTap: (value) {
-                if (value != 2) { // Ignora o clique no espaço do botão
-                  setState(() {
-                    _selectedIndex = value;
-                  });
-                }
-              },
+              onTap: _onItemTapped,
               currentIndex: _selectedIndex,
               activeColor: primaryColor,
               inactiveColor: bodyTextColor,
@@ -63,28 +77,60 @@ class _EntryPointState extends State<EntryPoint> {
               items: List.generate(
                 _navitems.length,
                 (index) {
-                  if (_navitems[index]["icon"] == null) {
+                  if (index == 2) {
+                    // Botão QR Code
                     return const BottomNavigationBarItem(
                       icon: SizedBox.shrink(),
                       label: '',
                     );
-                  }
-
-                  return BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: const EdgeInsets.only(top: 10), // Centraliza os ícones na nova altura
-                      child: SvgPicture.asset(
-                        _navitems[index]["icon"],
-                        height: 30,
-                        width: 30,
-                        colorFilter: ColorFilter.mode(
-                          index == _selectedIndex ? primaryColor : bodyTextColor,
-                          BlendMode.srcIn,
+                  } else if (index == 3) {
+                    // Botão de ajuda
+                    return BottomNavigationBarItem(
+                      icon: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const OnboardingScreen(
+                                navigateToSignIn: false,
+                                skipOnboarding: false,
+                                isFromHelp: true,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: SvgPicture.asset(
+                            _navitems[index]["icon"]!,
+                            height: 30,
+                            width: 30,
+                            colorFilter: ColorFilter.mode(
+                              index == _selectedIndex ? primaryColor : bodyTextColor,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    label: _navitems[index]["title"],
-                  );
+                      label: _navitems[index]["title"],
+                    );
+                  } else {
+                    return BottomNavigationBarItem(
+                      icon: Padding(
+                        padding: const EdgeInsets.only(top: 10), // Centraliza os ícones na nova altura
+                        child: SvgPicture.asset(
+                          _navitems[index]["icon"],
+                          height: 30,
+                          width: 30,
+                          colorFilter: ColorFilter.mode(
+                            index == _selectedIndex ? primaryColor : bodyTextColor,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                      label: _navitems[index]["title"],
+                    );
+                  }
                 },
               ),
             ),

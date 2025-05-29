@@ -2,9 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rota_gourmet/components/custom_status_bar.dart';
 import 'package:rota_gourmet/screens/profile/profile_detail.dart';
+import 'package:rota_gourmet/components/custom_toast.dart';
+import 'package:rota_gourmet/constants.dart';
+import 'package:rota_gourmet/screens/auth/sign_in_screen.dart';
+import 'package:rota_gourmet/services/auth_service.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final authService = AuthService();
+    final success = await authService.logout();
+
+    if (success) {
+      if (context.mounted) {
+        CustomToast.showSuccessToast(context, "Logout realizado com sucesso!");
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SignInScreen()),
+          (route) => false,
+        );
+      }
+    } else {
+      if (context.mounted) {
+        CustomToast.showErrorToast(context, "Erro ao realizar logout");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +60,32 @@ class Body extends StatelessWidget {
                   print("Compartilhar acionado");
                 },
               ),
+              const SizedBox(height: 24),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ElevatedButton.icon(
+                  onPressed: () => _handleLogout(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor.withOpacity(0.9),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  icon: const Icon(Icons.logout_rounded, size: 24),
+                  label: const Text(
+                    "Sair",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
