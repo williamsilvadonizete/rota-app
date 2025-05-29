@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:rota_gourmet/components/cards/big/restaurant_info.dart';
 import 'package:rota_gourmet/screens/details/details_screen.dart';
 import 'package:rota_gourmet/screens/filter/filter_screen.dart';
+import 'package:rota_gourmet/services/restaurant_service.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
 
@@ -15,28 +17,75 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   bool _showSearchResult = false;
-  bool _isLoading = true;
+  bool _isLoading = false;
+  final RestaurantService _restaurantService = RestaurantService();
+  final List<dynamic> _restaurants = [];
+  String _selectedCategory = '';
+  
+  // Temporary fixed categories - will be fetched from API in the future
+  final List<Map<String, String>> _categories = [
+    {'name': 'Pizza', 'icon': '🍕'},
+    {'name': 'Hambúrguer', 'icon': '🍔'},
+    {'name': 'Sushi', 'icon': '🍣'},
+    {'name': 'Brasileira', 'icon': '🥘'},
+    {'name': 'Italiana', 'icon': '🍝'},
+    {'name': 'Japonesa', 'icon': '🍱'},
+    {'name': 'Chinesa', 'icon': '🥢'},
+    {'name': 'Mexicana', 'icon': '🌮'},
+  ];
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _fetchRestaurants();
   }
 
-  void showResult() {
-    setState(() {
-      _isLoading = true;
-    });
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _showSearchResult = true;
-        _isLoading = false;
-      });
-    });
+  Future<void> _fetchRestaurants() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      Position position = Position(
+        latitude: -18.921079,
+        longitude: -48.288413,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        altitudeAccuracy: 0.0,
+        headingAccuracy: 0.0,
+        speedAccuracy: 0.0,
+      );
+      
+      if (permission == LocationPermission.whileInUse || 
+          permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best,
+        );
+      }
+
+      final response = await _restaurantService.getNearbyRestaurants(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        page: 1,
+        pageSize: 20,
+      );
+
+      if (response != null && response['restaurants'] != null) {
+        setState(() {
+          _restaurants.clear();
+          _restaurants.addAll(response['restaurants']);
+          _showSearchResult = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching restaurants: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -44,19 +93,18 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       backgroundColor: primaryColorDark,
       appBar: AppBar(
-        backgroundColor: primaryColorDark, // Cor do fundo da AppBar
+        backgroundColor: primaryColorDark,
         title: const Text(
           "Encontre restaurantes",
           style: TextStyle(
-            color: primaryColor, // Cor do texto
+            color: primaryColor,
           ),
         ),
         actions: [
-          // Ícone de filtro
           IconButton(
             icon: const Icon(Icons.filter_list),
             color: primaryColor,
-            onPressed: _showFilterModal, // Exibe o filtro como um BottomSheet
+            onPressed: _showFilterModal,
           ),
         ],
       ),
@@ -70,44 +118,78 @@ class _SearchScreenState extends State<SearchScreen> {
               const SearchForm(),
               const SizedBox(height: defaultPadding),
               Text(
-                _showSearchResult ? "Search" : "Top Restaurantes",
+                "Categorias",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: titleColor,
+                    ),
+              ),
+              const SizedBox(height: defaultPadding),
+              SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _categories.length,
+                  itemBuilder: (context, index) {
+                    final category = _categories[index];
+                    final isSelected = _selectedCategory == category['name'];
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: ChoiceChip(
+                        label: Text('${category['icon']} ${category['name']}'),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedCategory = selected ? category['name']! : '';
+                          });
+                          if (selected) {
+                            _fetchRestaurants();
+                          }
+                        },
+                        backgroundColor: Colors.grey[800],
+                        selectedColor: primaryColor,
+                        labelStyle: TextStyle(
+                          color: isSelected ? Colors.white : Colors.grey[300],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+              Text(
+                _showSearchResult ? "Resultados" : "Top Restaurantes",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: titleColor,
                     ),
               ),
               const SizedBox(height: defaultPadding),
               Expanded(
-                child: ListView.builder(
-                  itemCount: _isLoading ? 2 : 5, // 5 é o número de itens de demonstração
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.only(bottom: defaultPadding),
-                    child: _isLoading
-                        ? const BigCardScalton()
-                        : RestaurantCard(
-                          logoUrl: 'https://ciclogestaoderesiduos.com.br/wp-content/uploads/2018/10/kisspng-fast-food-mcdonald-s-logo-golden-arches-restaurant-mcdonalds-5ac3bf23df0da8.6342440115227778919136.jpg',
-                          name: 'Mac',
-                          foodType: 'Fast Food',
-                          distance: '20 km',
-                          weekAvailability: [
-                            DayAvailability(dayLetter: 'S', available: false),
-                            DayAvailability(dayLetter: 'T', available: false),
-                            DayAvailability(dayLetter: 'Q', available: true),
-                            DayAvailability(dayLetter: 'Q', available: true),
-                            DayAvailability(dayLetter: 'S', available: true),
-                            DayAvailability(dayLetter: 'S', available: true),
-                            DayAvailability(dayLetter: 'D', available: true),
-                          ],
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DetailsScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                  ),
-                ),
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: _restaurants.length,
+                        itemBuilder: (context, index) {
+                          final restaurant = _restaurants[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: defaultPadding),
+                            child: RestaurantCard(
+                              logoUrl: restaurant['logoUrl'] ?? '',
+                              name: restaurant['restaurantName'] ?? '',
+                              foodType: restaurant['categories']?.join(', ') ?? '',
+                              distance: '${restaurant['distanceKm']?.toStringAsFixed(1)} km',
+                              weekAvailability: _mapWorkDays(restaurant['workDays']),
+                              press: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DetailsScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
@@ -116,7 +198,17 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Função que abre o modal de filtros usando showModalBottomSheet
+  List<DayAvailability> _mapWorkDays(List<dynamic>? workDays) {
+    if (workDays == null) return [];
+    
+    return workDays.map((day) {
+      return DayAvailability(
+        dayLetter: day['acronymDay'] ?? '',
+        available: day['available'] ?? false,
+      );
+    }).toList();
+  }
+
   void _showFilterModal() {
     showModalBottomSheet(
       context: context,
@@ -127,8 +219,8 @@ class _SearchScreenState extends State<SearchScreen> {
       isScrollControlled: true,
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: 0.8, // Faz com que o modal ocupe 80% da altura da tela
-          child: const FilterScreen(), // Utiliza a tela FilterScreen no BottomSheet
+          heightFactor: 0.8,
+          child: const FilterScreen(),
         );
       },
     );
