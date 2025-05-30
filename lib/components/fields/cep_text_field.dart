@@ -7,19 +7,40 @@ class CepTextField extends StatelessWidget {
 
   CepTextField({super.key});
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         controller: _controller,
         keyboardType: TextInputType.number,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
+          fontWeight: FontWeight.w500,
+        ),
         decoration: InputDecoration(
-          labelText: "Cep",
-          labelStyle: TextStyle(color: primaryColor),
+          labelText: "CEP",
+          labelStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+          prefixIcon: Icon(
+            Icons.location_on_outlined,
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: primaryColor,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
           filled: true,
-          fillColor: Colors.black54,
+          fillColor: Theme.of(context).cardColor,
         ),
       ),
     );

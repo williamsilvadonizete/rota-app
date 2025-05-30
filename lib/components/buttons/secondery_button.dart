@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
-
-import '../../constants.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 class SeconderyButton extends StatelessWidget {
+  final VoidCallback press;
+  final Widget child;
+
   const SeconderyButton({
     super.key,
-    required this.child,
     required this.press,
-    this.backgroundColor,
+    required this.child,
   });
-
-  final Widget child;
-  final VoidCallback press;
-  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
+    return Container(
       width: double.infinity,
-      child: OutlinedButton(
-        onPressed: press,
-        style: OutlinedButton.styleFrom(
-          backgroundColor: backgroundColor ?? primaryColorDark,
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding, vertical: 12),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          
-          side: BorderSide(
-          color: backgroundColor == primaryColor ? primaryColor : (backgroundColor == primaryColorDark ? labelColor : primaryColor),
-          width: 0.8,
+      height: 56,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isDarkMode 
+            ? ThemeProvider.primaryColor.withOpacity(0.5)
+            : Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: press,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: child,
           ),
         ),
-        child: child,
       ),
     );
   }

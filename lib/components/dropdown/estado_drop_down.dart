@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rota_gourmet/constants.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 class EstadoDropdown extends StatefulWidget {
   const EstadoDropdown({super.key});
@@ -20,13 +21,38 @@ class _EstadoDropdownState extends State<EstadoDropdown> {
       child: DropdownButtonFormField<String>(
         value: _estadoSelecionado,
         decoration: InputDecoration(
-          labelText: "Selecione o Estado",
-          labelStyle: TextStyle(color: primaryColor),
+          labelText: "Estado",
+          labelStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+          prefixIcon: Icon(
+            Icons.location_on_outlined,
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: ThemeProvider.primaryColor,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
           filled: true,
-          fillColor: Colors.black54,
+          fillColor: Theme.of(context).cardColor,
         ),
-        dropdownColor: Colors.black54,
-        style: TextStyle(color: Colors.white),
+        dropdownColor: Theme.of(context).cardColor,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
+          fontWeight: FontWeight.w500,
+        ),
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+        ),
         items: estados.map((String estado) {
           return DropdownMenuItem<String>(
             value: estado,

@@ -100,13 +100,17 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             SvgPicture.asset(
               "assets/icons/profile.svg",
               height: 24,
-              colorFilter: ColorFilter.mode(ThemeProvider.primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey,
+                BlendMode.srcIn,
+              ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Text(
               "Salvar Dados",
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: ThemeProvider.primaryColor,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+                fontWeight: FontWeight.w600,
               ),
             )
           ],
@@ -133,13 +137,17 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             SvgPicture.asset(
               "assets/icons/location.svg",
               height: 24,
-              colorFilter: ColorFilter.mode(ThemeProvider.primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey,
+                BlendMode.srcIn,
+              ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Text(
               "Salvar Endereço",
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: ThemeProvider.primaryColor,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+                fontWeight: FontWeight.w600,
               ),
             )
           ],
@@ -204,27 +212,110 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
           cardNumberDecoration: InputDecoration(
             labelText: 'Número do Cartão',
             hintText: 'XXXX XXXX XXXX XXXX',
-            labelStyle: TextStyle(color: ThemeProvider.primaryColor),
-            hintStyle: TextStyle(color: ThemeProvider.primaryColor),
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            hintStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+            ),
+            prefixIcon: Icon(
+              Icons.credit_card_outlined,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ThemeProvider.primaryColor,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
             filled: true,
             fillColor: Theme.of(context).cardColor,
           ),
           expiryDateDecoration: InputDecoration(
             labelText: 'Data de Validade',
-            labelStyle: TextStyle(color: ThemeProvider.primaryColor),
-            hintStyle: TextStyle(color: ThemeProvider.primaryColor),
             hintText: 'XX/XX',
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            hintStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+            ),
+            prefixIcon: Icon(
+              Icons.calendar_today_outlined,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ThemeProvider.primaryColor,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: Theme.of(context).cardColor,
           ),
           cvvCodeDecoration: InputDecoration(
             labelText: 'CVV',
-            labelStyle: TextStyle(color: ThemeProvider.primaryColor),
-            hintStyle: TextStyle(color: ThemeProvider.primaryColor),
             hintText: 'XXX',
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            hintStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+            ),
+            prefixIcon: Icon(
+              Icons.security_outlined,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ThemeProvider.primaryColor,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: Theme.of(context).cardColor,
           ),
           cardHolderDecoration: InputDecoration(
             labelText: 'Titular do Cartão',
-            focusColor: ThemeProvider.primaryColor,
-            fillColor: ThemeProvider.primaryColor,
+            labelStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            prefixIcon: Icon(
+              Icons.person_outline,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ThemeProvider.primaryColor,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: Theme.of(context).cardColor,
           ),
         ),
       ),
@@ -237,13 +328,17 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             SvgPicture.asset(
               "assets/icons/delivery.svg",
               height: 24,
-              colorFilter: ColorFilter.mode(ThemeProvider.primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey,
+                BlendMode.srcIn,
+              ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Text(
               "Salvar Dados",
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: ThemeProvider.primaryColor,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+                fontWeight: FontWeight.w600,
               ),
             )
           ],
@@ -291,15 +386,51 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       child: TextField(
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
+          fontWeight: FontWeight.w500,
+        ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: ThemeProvider.primaryColor),
+          labelStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+          prefixIcon: Icon(
+            _getIconForField(label),
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.24) ?? Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: ThemeProvider.primaryColor,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
           filled: true,
           fillColor: Theme.of(context).cardColor,
         ),
       ),
     );
+  }
+
+  IconData _getIconForField(String label) {
+    switch (label.toLowerCase()) {
+      case 'rua':
+        return Icons.streetview_outlined;
+      case 'número':
+        return Icons.numbers_outlined;
+      case 'bairro':
+        return Icons.location_city_outlined;
+      case 'cidade':
+        return Icons.location_city_outlined;
+      default:
+        return Icons.edit_outlined;
+    }
   }
 
   Widget _buildForm(List<Widget> children) {
