@@ -72,32 +72,4 @@ class RestaurantService {
     
     return null;
   }
-
-  /// Método genérico para requisições autenticadas
-  Future<Response?> _authenticatedRequest({
-    required String method,
-    required String endpoint,
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-  }) async {
-    final token = await _getAuthToken();
-    
-    try {
-      return await _dio.request(
-        "$baseUrl$endpoint",
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(
-          method: method,
-          headers: {
-            'accept': '*/*',
-            if (token != null) 'Authorization': 'Bearer $token',
-          },
-        ),
-      );
-    } on DioException catch (e) {
-      print("Erro na requisição autenticada: ${e.message}");
-      rethrow;
-    }
-  }
 }

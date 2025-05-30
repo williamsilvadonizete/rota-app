@@ -10,6 +10,7 @@ import 'package:rota_gourmet/screens/details/details_screen.dart';
 import 'package:rota_gourmet/screens/featured/featurred_screen.dart';
 import 'package:rota_gourmet/screens/home/components/medium_card_list.dart';
 import 'package:rota_gourmet/services/restaurant_service.dart';
+import 'package:rota_gourmet/providers/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;
+  static const int _pageSize = 20;
 
   @override
   void initState() {
@@ -47,30 +49,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       LocationPermission permission = await Geolocator.checkPermission();
-      Position position =  Position(
-                            latitude: -18.921079,
-                            longitude: -48.288413,
-                            timestamp: DateTime.now(),
-                            accuracy: 0.0,
-                            altitude: 0.0,
-                            heading: 0.0,
-                            speed: 0.0,
-                            altitudeAccuracy: 0.0,
-                            headingAccuracy: 0.0,
-                            speedAccuracy: 0.0,
-                          );
+      Position position = Position(
+        latitude: -18.921079,
+        longitude: -48.288413,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        altitudeAccuracy: 0.0,
+        headingAccuracy: 0.0,
+        speedAccuracy: 0.0,
+      );
+      
       if (permission == LocationPermission.whileInUse || 
-           permission == LocationPermission.always) {
-            position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.best,
-            );
+          permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best,
+        );
       }
        
       final response = await _restaurantService.getNearbyRestaurants(
         latitude: position.latitude,
         longitude: position.longitude,
         page: _currentPage,
-        pageSize: 20,
+        pageSize: _pageSize,
       );
 
       if (!mounted) return;
@@ -92,11 +95,48 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent &&
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8 &&
         !_isLoading) {
       _fetchRestaurants();
     }
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(defaultPadding),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(
+              color: ThemeProvider.primaryColor,
+            ),
+            const SizedBox(height: defaultPadding),
+            Text(
+              'Carregando mais restaurantes...',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEndOfList() {
+    return Padding(
+      padding: const EdgeInsets.all(defaultPadding),
+      child: Center(
+        child: Text(
+          'Não há mais restaurantes para carregar',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -104,48 +144,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const CustomStatusAppBar(showBackButton: true),
-      body: SafeArea(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            _restaurants.clear();
+            _currentPage = 1;
+            _hasMore = true;
+          });
+          await _fetchRestaurants();
+        },
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: BigCardImageSlide(images: demoBigImages),
-              ),
-              const SizedBox(height: defaultPadding * 2),
-              SectionTitle(
-                title: "Parceiros em Destaque",
-                press: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FeaturedScreen(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-              const MediumCardList(
-                title: "Categorias",
-                restaurants: [
-                  {
-                    "image": "assets/images/pizza.png",
-                    "name": "Pizza",
-                  },
-                  {
-                    "image": "assets/images/stack.png",
-                    "name": "Steakhouse",
-                  },
-                  {
-                    "image": "assets/images/internacional.png",
-                    "name": "Internacional",
-                  },
-                  {
-                    "image": "assets/images/hamburguer.png",
-                    "name": "Hamburguer",
-                  },
-                ],
               ),
               const SizedBox(height: 20),
               const MediumCardList(
@@ -253,23 +269,5 @@ class _HomeScreenState extends State<HomeScreen> {
         available: day['available'] ?? false,
       );
     }).toList();
-  }
-
-  Widget _buildLoadingIndicator() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  Widget _buildEndOfList() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: Center(
-        child: Text('Todos os restaurantes carregados'),
-      ),
-    );
   }
 }

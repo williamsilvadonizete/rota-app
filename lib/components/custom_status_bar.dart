@@ -255,32 +255,32 @@ class _CustomStatusAppBarState extends State<CustomStatusAppBar> {
                 color: primaryColorDark,
               ),
             ),
-            GestureDetector(
-              onTap: () => CitySelectionModal.show(
-                context,
-                onCitySelected: (city) {
-                  setState(() {
-                    selectedCity = city;  // Atualiza a cidade selecionada
-                  });
-                  print("Cidade selecionada: $city");
-                },
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    color: primaryColorDark,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 4),  // Espaço entre o ícone e o texto
-                  Text(
-                    selectedCity,
-                    style: const TextStyle(
-                        fontSize: 14, color: primaryColorDark, decoration: TextDecoration.underline),
-                  ),
-                ],
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () => CitySelectionModal.show(
+            //     context,
+            //     onCitySelected: (city) {
+            //       setState(() {
+            //         selectedCity = city;  // Atualiza a cidade selecionada
+            //       });
+            //       print("Cidade selecionada: $city");
+            //     },
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       const Icon(
+            //         Icons.location_on,
+            //         color: primaryColorDark,
+            //         size: 16,
+            //       ),
+            //       const SizedBox(width: 4),  // Espaço entre o ícone e o texto
+            //       Text(
+            //         selectedCity,
+            //         style: const TextStyle(
+            //             fontSize: 14, color: primaryColorDark, decoration: TextDecoration.underline),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ],
