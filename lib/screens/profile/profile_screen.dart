@@ -62,8 +62,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Perfil'),
-        backgroundColor: isDarkMode ? const Color(0xFF1A1D1F) : Colors.white,
-        foregroundColor: isDarkMode ? Colors.white : ThemeProvider.primaryColor,
+        backgroundColor: isDarkMode ? const Color(0xFF1A1D1F) : const Color(0xFFF5F5DC),
+        foregroundColor: isDarkMode ? Colors.white : const Color(0xFF666666),
       ),
       body: ListView(
         padding: const EdgeInsets.all(defaultPadding),
@@ -147,7 +147,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ProfileDetailScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => ProfileDetailScreen(
+                        userName: _userName,
+                        userEmail: _userEmail,
+                      ),
+                    ),
                   );
                 },
               ),

@@ -8,7 +8,10 @@ import 'package:rota_gourmet/screens/auth/sign_in_screen.dart';
 import 'package:rota_gourmet/services/auth_service.dart';
 
 class Body extends StatelessWidget {
-  const Body({super.key});
+  final String userName;
+  final String userEmail;
+
+  const Body({super.key, required this.userName, required this.userEmail});
 
   Future<void> _handleLogout(BuildContext context) async {
     final authService = AuthService();
@@ -47,7 +50,12 @@ class Body extends StatelessWidget {
                 press: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ProfileDetailScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => ProfileDetailScreen(
+                        userName: userName,
+                        userEmail: userEmail,
+                      ),
+                    ),
                   );
                 },
               ),

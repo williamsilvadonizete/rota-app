@@ -43,35 +43,21 @@ class _DaysSelectState extends State<DaysSelect> {
             children: List.generate(
               demoCategories.length,
               (index) => SizedBox(
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
                 child: SeconderyButton(
                   press: () {
                     setState(() {
                       demoCategories[index]["isActive"] = !demoCategories[index]["isActive"];
                     });
                   },
-                  backgroundColor: demoCategories[index]["isActive"] 
-                    ? ThemeProvider.primaryColor 
-                    : isDarkMode 
-                      ? const Color(0xFF2A2D2F) 
-                      : const Color(0xFFF7F7F7),
+                  isActive: demoCategories[index]["isActive"],
                   child: Container(
                     width: double.infinity,
                     height: double.infinity,
                     alignment: Alignment.center,
                     child: Text(
                       demoCategories[index]["title"],
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: demoCategories[index]["isActive"] 
-                              ? Colors.white 
-                              : isDarkMode 
-                                ? Colors.white70 
-                                : const Color(0xFF6C757D),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
-                          ),
                     ),
                   ),
                 ),

@@ -12,7 +12,10 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../../components/buttons/secondery_button.dart';
 
 class ProfileDetailScreen extends StatefulWidget {
-  const ProfileDetailScreen({super.key});
+  final String userName;
+  final String userEmail;
+
+  const ProfileDetailScreen({super.key, required this.userName, required this.userEmail});
 
   @override
   _ProfileDetailScreenState createState() => _ProfileDetailScreenState();
@@ -54,7 +57,8 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Informações Pessoais'),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: isDarkMode ? const Color(0xFF1A1D1F) : const Color(0xFFF5F5DC),
+        foregroundColor: isDarkMode ? Colors.white : const Color(0xFF666666),
       ),
       body: Column(
         children: [
@@ -87,13 +91,14 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
   Widget _buildProfileTab() {
     return _buildForm([
       _buildSectionTitle("Informações Pessoais"),
-      _buildReadOnlyField("Nome", "William Souza"),
-      _buildReadOnlyField("E-mail", "william@email.com"),
+      _buildReadOnlyField("Nome", widget.userName),
+      _buildReadOnlyField("E-mail", widget.userEmail),
       TelefoneTextField(),
       CpfTextField(),
       const SizedBox(height: 16),
       SeconderyButton(
         press: () {},
+        isPrimary: true,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -131,6 +136,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       const SizedBox(height: 16),
       SeconderyButton(
         press: () {},
+        isPrimary: true,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -322,6 +328,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
       const SizedBox(height: 16),
       SeconderyButton(
         press: () {},
+        isPrimary: true,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -466,7 +473,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
           Text(
             label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).textTheme.bodySmall?.color,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -480,7 +487,9 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with SingleTi
             ),
             child: Text(
               value,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
             ),
           ),
         ],

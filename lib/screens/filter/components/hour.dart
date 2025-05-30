@@ -46,44 +46,24 @@ class _TimeSelectState extends State<TimeSelect> {
               childAspectRatio: 3.5,
             ),
             itemCount: demoCategories.length,
-            itemBuilder: (contxext, index) {
+            itemBuilder: (context, index) {
               return SeconderyButton(
                 press: () {
                   setState(() {
                     demoCategories[index]["isActive"] = !demoCategories[index]["isActive"];
                   });
                 },
-                backgroundColor: demoCategories[index]["isActive"] 
-                  ? ThemeProvider.primaryColor 
-                  : isDarkMode 
-                    ? const Color(0xFF2A2D2F) 
-                    : const Color(0xFFF7F7F7),
+                isActive: demoCategories[index]["isActive"],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
                       demoCategories[index]["icon"],
                       height: 16,
-                      colorFilter: ColorFilter.mode(
-                        demoCategories[index]["isActive"] 
-                          ? Colors.white 
-                          : isDarkMode 
-                            ? Colors.white70 
-                            : const Color(0xFF6C757D),
-                        BlendMode.srcIn,
-                      ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       demoCategories[index]["title"],
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: demoCategories[index]["isActive"] 
-                              ? Colors.white 
-                              : isDarkMode 
-                                ? Colors.white70 
-                                : const Color(0xFF6C757D),
-                            fontSize: 14,
-                          ),
                     )
                   ],
                 ),
