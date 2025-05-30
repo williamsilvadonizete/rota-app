@@ -84,11 +84,26 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: requiredValidator.call,
             onSaved: (value) => _fullName = value ?? '',
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(hintText: "Nome Completo",  labelStyle: TextStyle(color: primaryColor)),
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(fontWeight: FontWeight.w600, color: primaryColor),
+            decoration: InputDecoration(
+              labelText: "Nome Completo",
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.person_outline, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              hintStyle: const TextStyle(color: Colors.white38),
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: defaultPadding),
 
@@ -98,11 +113,26 @@ class _SignUpFormState extends State<SignUpForm> {
             onSaved: (value) => _email = value ?? '',
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: "Email",  labelStyle: TextStyle(color: primaryColor)),
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(fontWeight: FontWeight.w600, color: primaryColor),
+            decoration: InputDecoration(
+              labelText: "Email",
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.email_outlined, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              hintStyle: const TextStyle(color: Colors.white38),
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: defaultPadding),
 
@@ -113,22 +143,31 @@ class _SignUpFormState extends State<SignUpForm> {
             textInputAction: TextInputAction.next,
             onChanged: (value) => _password = value,
             onSaved: (value) => _password = value ?? '',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(fontWeight: FontWeight.w600, color: primaryColor),
             decoration: InputDecoration(
-              hintText: "Senha",
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-                child: _obscureText
-                    ? const Icon(Icons.visibility_off, color: primaryColor)
-                    : const Icon(Icons.visibility, color: primaryColor),
+              labelText: "Senha",
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.white70,
+                ),
+                onPressed: () => setState(() => _obscureText = !_obscureText),
+              ),
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: defaultPadding),
@@ -138,10 +177,6 @@ class _SignUpFormState extends State<SignUpForm> {
             obscureText: _obscureText,
             onChanged: (value) => _confirmPassword = value,
             onSaved: (value) => _confirmPassword = value ?? '',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(fontWeight: FontWeight.w600, color: primaryColor),
             validator: (value) {
               if (value != _password) {
                 return 'As senhas não coincidem';
@@ -149,34 +184,75 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
             decoration: InputDecoration(
-              hintText: "Confirmar senha",
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-                child: _obscureText
-                    ? const Icon(Icons.visibility_off, color: primaryColor)
-                    : const Icon(Icons.visibility, color: primaryColor),
+              labelText: "Confirmar senha",
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.white70,
+                ),
+                onPressed: () => setState(() => _obscureText = !_obscureText),
+              ),
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: defaultPadding),
 
           // Sign Up Button
-          ElevatedButton(
-            onPressed: _isLoading ? null : _submitForm,
-            child: _isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: bodyTextColor,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _isLoading ? null : _submitForm,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: primaryColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  color: Color(0xB3000000),
+                ),
+              ),
+              child: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Color(0xB3000000),
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.person_add_rounded, size: 20, color: Color(0xB3000000)),
+                        SizedBox(width: 8),
+                        Text(
+                          "Cadastrar-se",
+                          style: TextStyle(color: Color(0xB3000000)),
+                        ),
+                      ],
                     ),
-                  )
-                : const Text("Cadastrar-se"),
+            ),
           ),
         ],
       ),

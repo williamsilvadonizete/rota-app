@@ -91,13 +91,25 @@ class _SignInFormState extends State<SignInForm> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             validator: (value) => value?.isEmpty ?? true ? "Digite seu e-mail" : null,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Email",
-              labelStyle: TextStyle(color: primaryColor),
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.email_outlined, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              hintStyle: const TextStyle(color: Colors.white38),
             ),
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontWeight: FontWeight.w600,
-              color: primaryColor,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: defaultPadding),
@@ -109,18 +121,29 @@ class _SignInFormState extends State<SignInForm> {
             validator: (value) => value?.isEmpty ?? true ? "Digite sua senha" : null,
             decoration: InputDecoration(
               labelText: "Senha",
-              labelStyle: const TextStyle(color: primaryColor),
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
               suffixIcon: IconButton(
                 icon: Icon(
                   _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                  color: primaryColor,
+                  color: Colors.white70,
                 ),
                 onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
               ),
             ),
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontWeight: FontWeight.w600,
-              color: primaryColor,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: defaultPadding),
@@ -130,6 +153,18 @@ class _SignInFormState extends State<SignInForm> {
               onPressed: _isLoading ? null : _handleLogin,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: primaryColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  color: Color(0xB3000000),
+                ),
               ),
               child: _isLoading
                   ? const SizedBox(
@@ -137,15 +172,19 @@ class _SignInFormState extends State<SignInForm> {
                       width: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.white,
+                        color: Color(0xB3000000),
                       ),
                     )
-                  : const Text(
-                      "Entrar",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.login_rounded, size: 20, color: Color(0xB3000000)),
+                        SizedBox(width: 8),
+                        Text(
+                          "Entrar",
+                          style: TextStyle(color: Color(0xB3000000)),
+                        ),
+                      ],
                     ),
             ),
           ),

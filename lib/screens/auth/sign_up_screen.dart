@@ -36,7 +36,10 @@ class SignUpScreen extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w500,),
+                        .copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white70,
+                        ),
                     text: "Você possui uma conta? ",
                     children: <TextSpan>[
                       TextSpan(
@@ -59,7 +62,9 @@ class SignUpScreen extends StatelessWidget {
                 child: Text(
                   "Ao se inscrever, você concorda com nossos Termos e Condições.",
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Colors.white70,
+                  ),
                 ),
               ),
             ],
