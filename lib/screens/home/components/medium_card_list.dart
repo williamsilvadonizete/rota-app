@@ -54,7 +54,7 @@ class _MediumCardListState extends State<MediumCardList> {
         const SizedBox(height: defaultPadding), // Espaço entre o título e a lista
         SizedBox(
           width: double.infinity,
-          height: 254,
+          height: 200,
           child: widget.restaurants.isEmpty
               ? buildFeaturedPartnersLoadingIndicator()
               : ListView.builder(
@@ -71,8 +71,8 @@ class _MediumCardListState extends State<MediumCardList> {
                       image: widget.restaurants[index]['image'],
                       name: widget.restaurants[index]['name'],
                       location: widget.restaurants[index]['location'] ?? '',
-                      delivertTime: widget.restaurants[index]['deliveryTime'] ?? 0,
-                      rating: widget.restaurants[index]['rating'] ?? 0.0,
+                      // delivertTime: widget.restaurants[index]['deliveryTime'] ?? 0,
+                      // rating: widget.restaurants[index]['rating'] ?? 0.0,
                       press: () {
                         Navigator.push(
                           context,

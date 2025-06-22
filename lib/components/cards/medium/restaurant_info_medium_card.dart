@@ -4,19 +4,20 @@ import 'package:rota_gourmet/providers/theme_provider.dart';
 import 'package:rota_gourmet/constants.dart';
 
 class RestaurantInfoMediumCard extends StatelessWidget {
-  final String image, name;
-  final String location;
-  final int delivertTime;
-  final double rating;
+  final String? image;
+  final String name;
+  final String? location;
+  final int? delivertTime;
+  final double? rating;
   final VoidCallback press;
 
   const RestaurantInfoMediumCard({
     super.key,
-    required this.image,
+    this.image,
     required this.name,
-    required this.location,
-    required this.delivertTime,
-    required this.rating,
+    this.location,
+    this.delivertTime,
+    this.rating,
     required this.press,
   });
 
@@ -24,7 +25,19 @@ class RestaurantInfoMediumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDarkMode = themeProvider.isDarkMode;
-    
+
+    ImageProvider<Object> getImage() {
+      if (image != null && image!.isNotEmpty) {
+        if (image!.startsWith('http')) {
+          return NetworkImage(image!);
+        } else {
+          return AssetImage(image!);
+        }
+      }
+      // Imagem padrão
+      return const AssetImage('assets/images/notfound.jpg');
+    }
+
     return GestureDetector(
       onTap: press,
       child: Container(
@@ -52,7 +65,7 @@ class RestaurantInfoMediumCard extends StatelessWidget {
                   topRight: Radius.circular(10),
                 ),
                 image: DecorationImage(
-                  image: AssetImage(image),
+                  image: getImage(),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -71,57 +84,65 @@ class RestaurantInfoMediumCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        size: 16,
-                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          location,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                              ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                  if (location != null && location!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 16,
+                          color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        size: 16,
-                        color: ThemeProvider.primaryColor,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        rating.toString(),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                            ),
-                      ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        Icons.access_time,
-                        size: 16,
-                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        "$delivertTime min",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                            ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            location!,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  if (rating != null || delivertTime != null) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        if (rating != null) ...[
+                          Icon(
+                            Icons.star,
+                            size: 16,
+                            color: ThemeProvider.primaryColor,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            rating.toString(),
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                                ),
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                        if (delivertTime != null) ...[
+                          Icon(
+                            Icons.access_time,
+                            size: 16,
+                            color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            "$delivertTime min",
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                                ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ]
                 ],
               ),
             ),

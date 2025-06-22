@@ -6,6 +6,7 @@ import 'package:rota_gourmet/components/cards/big/restaurant_info.dart';
 import 'package:rota_gourmet/providers/theme_provider.dart';
 import 'package:rota_gourmet/screens/details/details_screen.dart';
 import 'package:rota_gourmet/screens/filter/filter_screen.dart';
+import 'package:rota_gourmet/services/category_service.dart';
 import 'package:rota_gourmet/services/restaurant_service.dart';
 import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
@@ -21,25 +22,41 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _showSearchResult = false;
   bool _isLoading = false;
   final RestaurantService _restaurantService = RestaurantService();
+  final CategoryService _categoryService = CategoryService();
   final List<dynamic> _restaurants = [];
   String _selectedCategory = '';
+  List<dynamic> _categories = [];
   
   // Temporary fixed categories - will be fetched from API in the future
-  final List<Map<String, String>> _categories = [
-    {'name': 'Pizza', 'icon': '🍕'},
-    {'name': 'Hambúrguer', 'icon': '🍔'},
-    {'name': 'Sushi', 'icon': '🍣'},
-    {'name': 'Brasileira', 'icon': '🥘'},
-    {'name': 'Italiana', 'icon': '🍝'},
-    {'name': 'Japonesa', 'icon': '🍱'},
-    {'name': 'Chinesa', 'icon': '🥢'},
-    {'name': 'Mexicana', 'icon': '🌮'},
-  ];
+  // final List<Map<String, String>> _categories = [
+  //   {'name': 'Pizza', 'icon': '🍕'},
+  //   {'name': 'Hambúrguer', 'icon': '🍔'},
+  //   {'name': 'Sushi', 'icon': '🍣'},
+  //   {'name': 'Brasileira', 'icon': '🥘'},
+  //   {'name': 'Italiana', 'icon': '🍝'},
+  //   {'name': 'Japonesa', 'icon': '🍱'},
+  //   {'name': 'Chinesa', 'icon': '🥢'},
+  //   {'name': 'Mexicana', 'icon': '🌮'},
+  // ];
 
   @override
   void initState() {
     super.initState();
     _fetchRestaurants();
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    try {
+      final categories = await _categoryService.getActiveCategories();
+      if (categories != null && mounted) {
+        setState(() {
+          _categories = categories;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching categories: $e');
+    }
   }
 
   Future<void> _fetchRestaurants() async {
@@ -158,16 +175,23 @@ class _SearchScreenState extends State<SearchScreen> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: ChoiceChip(
                                 label: Text(
-                                  '${category['icon']} ${category['name']}',
+                                  category['name'],
                                   style: TextStyle(
-                                    color: isSelected ? Colors.white : (themeProvider.isDarkMode ? Colors.grey[300] : const Color(0xFF666666)),
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : (themeProvider.isDarkMode
+                                            ? Colors.grey[300]
+                                            : const Color(0xFF666666)),
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
                                   ),
                                 ),
                                 selected: isSelected,
                                 onSelected: (selected) {
                                   setState(() {
-                                    _selectedCategory = selected ? category['name']! : '';
+                                    _selectedCategory =
+                                        selected ? category['name']! : '';
                                   });
                                   if (selected) {
                                     _fetchRestaurants();

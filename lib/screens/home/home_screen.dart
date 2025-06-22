@@ -9,6 +9,7 @@ import 'package:rota_gourmet/demo_data.dart';
 import 'package:rota_gourmet/screens/details/details_screen.dart';
 import 'package:rota_gourmet/screens/featured/featurred_screen.dart';
 import 'package:rota_gourmet/screens/home/components/medium_card_list.dart';
+import 'package:rota_gourmet/services/category_service.dart';
 import 'package:rota_gourmet/services/restaurant_service.dart';
 import 'package:rota_gourmet/providers/theme_provider.dart';
 
@@ -21,8 +22,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final RestaurantService _restaurantService = RestaurantService();
+  final CategoryService _categoryService = CategoryService();
   final ScrollController _scrollController = ScrollController();
   final List<dynamic> _restaurants = [];
+  List<dynamic> _categories = [];
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;
@@ -32,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _fetchRestaurants();
+    _fetchCategories();
     _scrollController.addListener(_onScroll);
   }
 
@@ -39,6 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchCategories() async {
+    final categories = await _categoryService.getActiveCategories();
+    if (categories != null && mounted) {
+      setState(() {
+        _categories = categories;
+      });
+    }
   }
 
   Future<void> _fetchRestaurants() async {
@@ -68,22 +81,26 @@ class _HomeScreenState extends State<HomeScreen> {
           desiredAccuracy: LocationAccuracy.best,
         );
       }
-       
-      final response = await _restaurantService.getNearbyRestaurants(
-        latitude: position.latitude,
-        longitude: position.longitude,
-        page: _currentPage,
-        pageSize: _pageSize,
-      );
 
       if (!mounted) return;
 
-      if (response != null && response['restaurants'] != null) {
-        setState(() {
-          _restaurants.addAll(response['restaurants']);
-          _hasMore = _restaurants.length < response['total'];
-          _currentPage++;
-        });
+      if (position != null) {
+        final response = await _restaurantService.getNearbyRestaurants(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          page: _currentPage,
+          pageSize: _pageSize,
+        );
+
+        if (!mounted) return;
+
+        if (response != null && response['restaurants'] != null) {
+          setState(() {
+            _restaurants.addAll(response['restaurants']);
+            _hasMore = _restaurants.length < response['total'];
+            _currentPage++;
+          });
+        }
       }
     } catch (e) {
       debugPrint('Error fetching restaurants: $e');
@@ -164,6 +181,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: BigCardImageSlide(images: demoBigImages),
               ),
               const SizedBox(height: 20),
+              if (_categories.isNotEmpty) ...[
+                MediumCardList(
+                  title: "Categorias",
+                  restaurants: _categories.map((category) {
+                    return {
+                      'name': category['name'],
+                      'image': category['imageUrl'],
+                    };
+                  }).toList(),
+                ),
+                const SizedBox(height: 20),
+              ],
               const MediumCardList(
                 title: "Para comer agora",
                 restaurants: [
