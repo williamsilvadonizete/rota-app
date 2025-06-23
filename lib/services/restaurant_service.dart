@@ -154,4 +154,34 @@ class RestaurantService {
     
     return null;
   }
+
+  /// Método para buscar informações detalhadas de um restaurante
+  Future<Map<String, dynamic>?> getRestaurantInfo(int restaurantId) async {
+    final endpoint = "/api/mobile/restaurant/$restaurantId/info";
+    final token = await _getAuthToken();
+
+    try {
+      final response = await _dio.get(
+        "$baseUrl$endpoint",
+        options: Options(
+          headers: {
+            'accept': '*/*',
+            if (token != null) 'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print("Erro na requisição (info restaurante): \u001b[33m");
+        print(e.response?.data);
+      } else {
+        print("Erro na conexão (info restaurante): \u001b[33m");
+        print(e.message);
+      }
+    }
+    return null;
+  }
 }

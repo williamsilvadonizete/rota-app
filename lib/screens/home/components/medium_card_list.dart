@@ -78,15 +78,7 @@ class _MediumCardListState extends State<MediumCardList> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => DetailsScreen(
-                              restaurant: {
-                                'restaurantName': widget.restaurants[index]['name'],
-                                'categories': [widget.restaurants[index]['foodType'] ?? ''],
-                                'priceRange': '\$ 0-0',
-                                'rating': widget.restaurants[index]['rating'] ?? 0.0,
-                                'numOfRating': 0,
-                                'deliveryFee': 0,
-                                'deliveryTime': widget.restaurants[index]['deliveryTime'] ?? 0,
-                              },
+                              restaurantId: widget.restaurants[index]['id'],
                             ),
                           ),
                         );

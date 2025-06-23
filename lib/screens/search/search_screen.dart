@@ -289,17 +289,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => DetailsScreen(
-                                                  restaurant: {
-                                                    'restaurantName': restaurant['restaurantName'] ?? '',
-                                                    'categories': restaurant['categories'] ?? [],
-                                                    'priceRange': restaurant['priceRange'] ?? '\$ 0-0',
-                                                    'rating': restaurant['rating'] ?? 0.0,
-                                                    'numOfRating': restaurant['numOfRating'] ?? 0,
-                                                    'deliveryFee': restaurant['deliveryFee'] ?? 0,
-                                                    'deliveryTime': restaurant['deliveryTime'] ?? 0,
-                                                    'logoUrl': restaurant['logoUrl'] ?? '',
-                                                    'backgroundImageUrl': restaurant['backgroundImageUrl'] ?? '',
-                                                  },
+                                                  restaurantId: restaurant['id'],
                                                 ),
                                               ),
                                             );
