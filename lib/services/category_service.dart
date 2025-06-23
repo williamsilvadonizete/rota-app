@@ -9,6 +9,11 @@ class CategoryService {
   late final Dio _dio;
   final AuthService _authService = AuthService();
 
+  // Cache
+  static List<dynamic>? _cachedCategories;
+  static DateTime? _lastFetchTime;
+  final Duration _cacheDuration = const Duration(minutes: 30);
+
   CategoryService() {
     _dio = Dio();
 
@@ -82,6 +87,13 @@ class CategoryService {
   }
 
   Future<List<dynamic>?> getActiveCategories() async {
+    final now = DateTime.now();
+    if (_cachedCategories != null &&
+        _lastFetchTime != null &&
+        now.difference(_lastFetchTime!) < _cacheDuration) {
+      return _cachedCategories;
+    }
+
     const endpoint = "/api/mobile/category/active";
     final token = await _getAuthToken();
 
@@ -97,7 +109,9 @@ class CategoryService {
       );
 
       if (response.statusCode == 200) {
-        return response.data as List<dynamic>;
+        _cachedCategories = response.data as List<dynamic>;
+        _lastFetchTime = now;
+        return _cachedCategories;
       }
     } on DioException catch (e) {
       if (e.response != null) {

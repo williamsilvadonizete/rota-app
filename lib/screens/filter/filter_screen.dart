@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rota_gourmet/screens/filter/components/activities.dart';
 import 'package:rota_gourmet/screens/filter/components/days.dart';
 import 'package:rota_gourmet/providers/theme_provider.dart';
-
 import '../../constants.dart';
 import 'components/hour.dart';
 import 'components/query_order.dart';
@@ -31,15 +30,15 @@ class FilterScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min, 
             crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
-              SizedBox(height: defaultPadding),
-              QueryOrder(),
+              // SizedBox(height: defaultPadding),
+              // QueryOrder(),
               SizedBox(height: defaultPadding),
               DaysSelect(),
               SizedBox(height: defaultPadding),
               TimeSelect(),
               SizedBox(height: defaultPadding),
-              ActivitiesSelect(),
-              SizedBox(height: defaultPadding),
+              // ActivitiesSelect(),
+              // SizedBox(height: defaultPadding),
             ],
           ),
         ),

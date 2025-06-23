@@ -103,19 +103,34 @@ class RestaurantService {
     required double longitude,
     int page = 1,
     int pageSize = 20,
+    List<int>? workTimes,
+    List<int>? workDays,
+    List<int>? categoryIds,
   }) async {
-    final endpoint = "/api/restaurant/close";
+    final endpoint = "/api/mobile/restaurant/close";
     final token = await _getAuthToken();
+
+    final Map<String, dynamic> queryParameters = {
+      'Latitude': latitude,
+      'Longitude': longitude,
+      'Page': page,
+      'PageSize': pageSize,
+    };
+
+    if (workTimes != null && workTimes.isNotEmpty) {
+      queryParameters['WorkTimes'] = workTimes.map((e) => e.toString()).toList();
+    }
+    if (workDays != null && workDays.isNotEmpty) {
+      queryParameters['WorkDays'] = workDays.map((e) => e.toString()).toList();
+    }
+    if (categoryIds != null && categoryIds.isNotEmpty) {
+      queryParameters['CategoryId'] = categoryIds.map((e) => e.toString()).toList();
+    }
 
     try {
       final response = await _dio.get(
         "$baseUrl$endpoint",
-        queryParameters: {
-          'Latitude': latitude,
-          'Longitude': longitude,
-          'Page': page,
-          'PageSize': pageSize,
-        },
+        queryParameters: queryParameters,
         options: Options(
           headers: {
             'accept': '*/*',
@@ -129,9 +144,11 @@ class RestaurantService {
       }
     } on DioException catch (e) {
       if (e.response != null) {
-        print("Erro na requisição: ${e.response?.data}");
+        print("Erro na requisição: [33m");
+        print(e.response?.data);
       } else {
-        print("Erro na conexão: ${e.message}");
+        print("Erro na conexão: [33m");
+        print(e.message);
       }
     }
     

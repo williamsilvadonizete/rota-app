@@ -8,6 +8,7 @@ import 'package:rota_gourmet/constants.dart';
 import 'package:rota_gourmet/demo_data.dart';
 import 'package:rota_gourmet/screens/details/details_screen.dart';
 import 'package:rota_gourmet/screens/featured/featurred_screen.dart';
+import 'package:rota_gourmet/screens/home/components/category_medium_card_list.dart';
 import 'package:rota_gourmet/screens/home/components/medium_card_list.dart';
 import 'package:rota_gourmet/services/category_service.dart';
 import 'package:rota_gourmet/services/restaurant_service.dart';
@@ -182,10 +183,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               if (_categories.isNotEmpty) ...[
-                MediumCardList(
+                CategoryMediumCardList(
                   title: "Categorias",
                   restaurants: _categories.map((category) {
                     return {
+                      'id': category['id'],
                       'name': category['name'],
                       'image': category['imageUrl'],
                     };

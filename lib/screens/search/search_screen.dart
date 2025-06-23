@@ -12,7 +12,9 @@ import '../../components/scalton/big_card_scalton.dart';
 import '../../constants.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final String? initialCategory;
+  final int? initialCategoryId;
+  const SearchScreen({super.key, this.initialCategory, this.initialCategoryId});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -25,23 +27,19 @@ class _SearchScreenState extends State<SearchScreen> {
   final CategoryService _categoryService = CategoryService();
   final List<dynamic> _restaurants = [];
   String _selectedCategory = '';
+  int? _selectedCategoryId;
   List<dynamic> _categories = [];
   
-  // Temporary fixed categories - will be fetched from API in the future
-  // final List<Map<String, String>> _categories = [
-  //   {'name': 'Pizza', 'icon': '🍕'},
-  //   {'name': 'Hambúrguer', 'icon': '🍔'},
-  //   {'name': 'Sushi', 'icon': '🍣'},
-  //   {'name': 'Brasileira', 'icon': '🥘'},
-  //   {'name': 'Italiana', 'icon': '🍝'},
-  //   {'name': 'Japonesa', 'icon': '🍱'},
-  //   {'name': 'Chinesa', 'icon': '🥢'},
-  //   {'name': 'Mexicana', 'icon': '🌮'},
-  // ];
 
   @override
   void initState() {
     super.initState();
+    if (widget.initialCategory != null) {
+      _selectedCategory = widget.initialCategory!;
+    }
+    if (widget.initialCategoryId != null) {
+      _selectedCategoryId = widget.initialCategoryId;
+    }
     _fetchRestaurants();
     _fetchCategories();
   }
@@ -50,6 +48,17 @@ class _SearchScreenState extends State<SearchScreen> {
     try {
       final categories = await _categoryService.getActiveCategories();
       if (categories != null && mounted) {
+        // Reorder if an initial category is provided
+        if (widget.initialCategory != null) {
+          final selectedCategoryIndex =
+              categories.indexWhere((c) => c['name'] == widget.initialCategory);
+
+          if (selectedCategoryIndex != -1) {
+            final selectedCategory = categories.removeAt(selectedCategoryIndex);
+            categories.insert(0, selectedCategory);
+          }
+        }
+
         setState(() {
           _categories = categories;
         });
@@ -91,6 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
         longitude: position.longitude,
         page: 1,
         pageSize: 20,
+        categoryIds: _selectedCategoryId != null ? [_selectedCategoryId!] : null,
       );
 
       if (response != null && response['restaurants'] != null) {
@@ -178,7 +188,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   category['name'],
                                   style: TextStyle(
                                     color: isSelected
-                                        ? Colors.white
+                                        ? Colors.black54
                                         : (themeProvider.isDarkMode
                                             ? Colors.grey[300]
                                             : const Color(0xFF666666)),
@@ -190,8 +200,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                 selected: isSelected,
                                 onSelected: (selected) {
                                   setState(() {
-                                    _selectedCategory =
-                                        selected ? category['name']! : '';
+                                    if (selected) {
+                                      _selectedCategory = category['name']!;
+                                      _selectedCategoryId = category['id'];
+                                    } else {
+                                      _selectedCategory = '';
+                                      _selectedCategoryId = null;
+                                    }
                                   });
                                   if (selected) {
                                     _fetchRestaurants();

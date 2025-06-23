@@ -15,10 +15,10 @@ class TimeSelect extends StatefulWidget {
 
 class _TimeSelectState extends State<TimeSelect> {
   List<Map<String, dynamic>> demoCategories = [
-    {"title": "Manhã", "isActive": false, "icon": "assets/icons/nature.svg"},
-    {"title": "Tarde", "isActive": false, "icon": "assets/icons/miscellaneous.svg"},
-    {"title": "Almoço", "isActive": false,"icon": "assets/icons/sun.svg"},
-    {"title": "Jantar", "isActive": true, "icon": "assets/icons/moon.svg"},
+    {"id": "1", "title": "Manhã", "isActive": false, "icon": "assets/icons/nature.svg"},
+    {"id": "3", "title": "Tarde", "isActive": false, "icon": "assets/icons/miscellaneous.svg"},
+    {"id": "2", "title": "Almoço", "isActive": false,"icon": "assets/icons/sun.svg"},
+    {"id": "4", "title": "Jantar", "isActive": false, "icon": "assets/icons/moon.svg"},
   ];
 
   @override
