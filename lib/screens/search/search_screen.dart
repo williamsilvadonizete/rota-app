@@ -321,8 +321,8 @@ class _SearchScreenState extends State<SearchScreen> {
     }).toList();
   }
 
-  void _showFilterModal() {
-    showModalBottomSheet(
+  void _showFilterModal() async {
+    final filtrosSelecionados = await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -333,6 +333,55 @@ class _SearchScreenState extends State<SearchScreen> {
         );
       },
     );
+
+    if (filtrosSelecionados != null) {
+      await _aplicarFiltros(filtrosSelecionados);
+    }
+  }
+
+  Future<void> _aplicarFiltros(Map<String, dynamic> filtros) async {
+    setState(() => _isLoading = true);
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      Position position = Position(
+        latitude: -18.921079,
+        longitude: -48.288413,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        altitudeAccuracy: 0.0,
+        headingAccuracy: 0.0,
+        speedAccuracy: 0.0,
+      );
+      if (permission == LocationPermission.whileInUse || 
+          permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best,
+        );
+      }
+      final response = await _restaurantService.getNearbyRestaurants(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        page: 1,
+        pageSize: 20,
+        workDays: filtros['dias'] != null && (filtros['dias'] as List).isNotEmpty ? List<int>.from(filtros['dias']) : null,
+        workTimes: filtros['horarios'] != null && (filtros['horarios'] as List).isNotEmpty ? List<int>.from(filtros['horarios']) : null,
+        categoryIds: _selectedCategoryId != null ? [_selectedCategoryId!] : null,
+      );
+      if (response != null && response['restaurants'] != null) {
+        setState(() {
+          _restaurants.clear();
+          _restaurants.addAll(response['restaurants']);
+          _showSearchResult = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error applying filters: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 }
 

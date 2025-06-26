@@ -74,4 +74,12 @@ class _TimeSelectState extends State<TimeSelect> {
       ],
     );
   }
+
+  List<int> getSelectedTimes() {
+    return demoCategories
+        .where((d) => d['isActive'] == true)
+        .map((d) => int.tryParse(d['id'].toString()) ?? 0)
+        .where((id) => id != 0)
+        .toList();
+  }
 }

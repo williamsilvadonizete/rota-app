@@ -6,8 +6,16 @@ import '../../constants.dart';
 import 'components/hour.dart';
 import 'components/query_order.dart';
 
-class FilterScreen extends StatelessWidget {
+class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
+
+  @override
+  State<FilterScreen> createState() => _FilterScreenState();
+}
+
+class _FilterScreenState extends State<FilterScreen> {
+  final GlobalKey _daysKey = GlobalKey();
+  final GlobalKey _timeKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +32,36 @@ class FilterScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min, 
             crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
-              // SizedBox(height: defaultPadding),
-              // QueryOrder(),
               SizedBox(height: defaultPadding),
-              DaysSelect(),
+              DaysSelect(key: _daysKey),
               SizedBox(height: defaultPadding),
-              TimeSelect(),
+              TimeSelect(key: _timeKey),
               SizedBox(height: defaultPadding),
-              // ActivitiesSelect(),
-              // SizedBox(height: defaultPadding),
+              SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Coletar dias e horários selecionados
+                      final selectedDays = (_daysKey.currentState as dynamic)?.getSelectedDays() ?? [];
+                      final selectedTimes = (_timeKey.currentState as dynamic)?.getSelectedTimes() ?? [];
+                      Navigator.pop(context, {
+                        'dias': selectedDays,
+                        'horarios': selectedTimes,
+                      });
+                    },
+                    child: const Text('Aplicar Filtros'),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

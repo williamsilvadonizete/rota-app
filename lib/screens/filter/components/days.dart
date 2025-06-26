@@ -68,4 +68,12 @@ class _DaysSelectState extends State<DaysSelect> {
       ],
     );
   }
+
+  List<int> getSelectedDays() {
+    return demoCategories
+        .where((d) => d['isActive'] == true)
+        .map((d) => int.tryParse(d['id'].toString()) ?? 0)
+        .where((id) => id != 0)
+        .toList();
+  }
 }
