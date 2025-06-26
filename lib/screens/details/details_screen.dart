@@ -43,7 +43,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         showBackButton: true,
         title: _restaurantInfo?['fantasyName'] ?? '',
         logoUrl: _restaurantInfo?['logoUrl'] ?? '',
-        backgroundImageUrl: _restaurantInfo?['backgroundImageUrl'] ?? '',
+        backgroundImageUrl: _restaurantInfo?['wallpaperUrl'] ?? '',
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

@@ -32,11 +32,19 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _hasMore = true;
   static const int _pageSize = 20;
 
+  // Adicionando estado para restaurantes da noite
+  List<Map<String, dynamic>> _nightRestaurants = [];
+  List<Map<String, dynamic>> _nowRestaurants = [];
+
+  bool _isLoadingNight = false;
+
   @override
   void initState() {
     super.initState();
     _fetchRestaurants();
     _fetchCategories();
+    _fetchNightRestaurants();
+    _fetchNowRestaurants();
     _scrollController.addListener(_onScroll);
   }
 
@@ -109,6 +117,108 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() => _isLoading = false);
       }
+    }
+  }
+
+  // Novo método para buscar restaurantes para comer a noite
+  Future<void> _fetchNightRestaurants() async {
+    setState(() => _isLoadingNight = true);
+     
+    try {
+      // Localização fixa conforme exemplo
+      LocationPermission permission = await Geolocator.checkPermission();
+      Position position = Position(
+        latitude: -18.921079,
+        longitude: -48.288413,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        altitudeAccuracy: 0.0,
+        headingAccuracy: 0.0,
+        speedAccuracy: 0.0,
+      );
+
+      if (permission == LocationPermission.whileInUse || 
+          permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best,
+        );
+      }
+      
+      final response = await _restaurantService.getNearbyRestaurants(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        page: 1,
+        pageSize: 10,
+        workTimes: [4],
+      );
+      if (response != null && response['restaurants'] != null) {
+        setState(() {
+          _nightRestaurants = (response['restaurants'] as List).map<Map<String, dynamic>>((r) => {
+            'image': r['wallpaperUrl'] ?? '',
+            'name': r['restaurantName'] ?? '',
+            'location': r['address'] ?? '',
+            'deliveryTime': r['deliveryTime'] ?? 0,
+            'rating': r['rating'] ?? 0.0,
+            'id': r['id'],
+          }).toList();
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching night restaurants: $e');
+    } finally {
+      if (mounted) setState(() => _isLoadingNight = false);
+    }
+  }
+
+  Future<void> _fetchNowRestaurants() async {
+    setState(() => _isLoadingNight = true);
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      Position position = Position(
+        latitude: -18.921079,
+        longitude: -48.288413,
+        timestamp: DateTime.now(),
+        accuracy: 0.0,
+        altitude: 0.0,
+        heading: 0.0,
+        speed: 0.0,
+        altitudeAccuracy: 0.0,
+        headingAccuracy: 0.0,
+        speedAccuracy: 0.0,
+      );
+
+      if (permission == LocationPermission.whileInUse || 
+          permission == LocationPermission.always) {
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best,
+        );
+      }
+      
+      final response = await _restaurantService.getNearbyRestaurants(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        page: 1,
+        pageSize: 10,
+      );
+      if (response != null && response['restaurants'] != null) {
+        setState(() {
+          _nowRestaurants = (response['restaurants'] as List).map<Map<String, dynamic>>((r) => {
+            'image': r['wallpaperUrl'] ?? '',
+            'name': r['restaurantName'] ?? '',
+            'location': r['address'] ?? '',
+            'deliveryTime': r['deliveryTime'] ?? 0,
+            'rating': r['rating'] ?? 0.0,
+            'id': r['id'],
+          }).toList();
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching now restaurants: $e');
+    } finally {
+      if (mounted) setState(() => _isLoadingNight = false);
     }
   }
 
@@ -195,44 +305,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 20),
               ],
-              const MediumCardList(
+              MediumCardList(
                 title: "Para comer agora",
-                restaurants: [
-                  {
-                    "image": "assets/images/medium_3.png",
-                    "name": "Pizza do Chef",
-                    "location": "Av. Paulista, 123",
-                    "deliveryTime": 30,
-                    "rating": 4.8,
-                  },
-                  {
-                    "image": "assets/images/medium_4.png",
-                    "name": "Sushi House",
-                    "location": "Rua das Flores, 456",
-                    "deliveryTime": 20,
-                    "rating": 4.5,
-                  },
-                ],
+                restaurants: _nightRestaurants,
               ),
               const SizedBox(height: 20),
-              const MediumCardList(
+              // MediumCardList dinâmico para comer a noite
+              MediumCardList(
                 title: "Para comer a noite",
-                restaurants: [
-                  {
-                    "image": "assets/images/medium_1.png",
-                    "name": "Pizza do Chef",
-                    "location": "Av. Paulista, 123",
-                    "deliveryTime": 30,
-                    "rating": 4.8,
-                  },
-                  {
-                    "image": "assets/images/medium_2.png",
-                    "name": "Sushi House",
-                    "location": "Rua das Flores, 456",
-                    "deliveryTime": 20,
-                    "rating": 4.5,
-                  },
-                ],
+                restaurants: _nightRestaurants,
               ),
               const SizedBox(height: 20),
               SectionTitle(

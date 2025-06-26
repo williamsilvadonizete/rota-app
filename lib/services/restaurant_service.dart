@@ -25,15 +25,15 @@ class RestaurantService {
     // Adicionar interceptor para refresh token
     _dio.interceptors.add(InterceptorsWrapper(
       onError: (DioException error, ErrorInterceptorHandler handler) async {
-        // Se for um erro 401 (Unauthorized) e a requisição original não for a de refresh token
-        if (error.response?.statusCode == 401 &&
+        // Se for erro 401 ou 403 (Unauthorized ou Forbidden)
+        if ((error.response?.statusCode == 401 || error.response?.statusCode == 403) &&
             error.requestOptions.path != "/realms/rota-gourmet/protocol/openid-connect/token") {
           try {
             final prefs = await SharedPreferences.getInstance();
             final refreshToken = prefs.getString('refresh_token');
 
-            if (refreshToken != null) {
-              // Tentar refrescar o token
+            if (error.response?.statusCode == 401 && refreshToken != null) {
+              // Tentar refrescar o token apenas para 401
               final newTokens = await _authService.refreshToken(refreshToken);
 
               if (newTokens != null && newTokens['access_token'] != null) {
@@ -58,28 +58,19 @@ class RestaurantService {
                     queryParameters: error.requestOptions.queryParameters,
                   );
                 return handler.resolve(cloneReq); // Resolver com a nova resposta
-              } else {
-                // Se o refresh token falhou, deslogar
-                await _authService.logout();
-                // Redirecionar para a tela de login (implementar navegação aqui se necessário)
-                // Pode ser necessário passar um contexto ou usar um Navigator key global
-                return handler.reject(error); // Rejeitar o erro original
               }
-            } else {
-              // Não há refresh token, deslogar
-              await _authService.logout();
-              // Redirecionar para a tela de login
-              return handler.reject(error); // Rejeitar o erro original
             }
+            // Se for 403 ou refresh falhou, deslogar
+            await _authService.logout();
+            return handler.reject(error); // Rejeitar o erro original
           } catch (e) {
             // Erro durante o refresh token ou repetição da requisição, deslogar
             print("Erro no interceptor durante refresh/repetição: $e");
             await _authService.logout();
-            // Redirecionar para a tela de login
             return handler.reject(error); // Rejeitar o erro original
           }
         } else {
-          // Não é erro 401 ou já é a requisição de refresh, passar o erro adiante
+          // Não é erro 401/403 ou já é a requisição de refresh, passar o erro adiante
           return handler.next(error);
         }
       },
