@@ -6,7 +6,8 @@ import '../../../components/section_title.dart';
 import '../../../constants.dart';
 
 class DaysSelect extends StatefulWidget {
-  const DaysSelect({super.key});
+  final List<int>? initialSelected;
+  const DaysSelect({super.key, this.initialSelected});
 
   @override
   State<DaysSelect> createState() => _DaysSelectState();
@@ -22,6 +23,16 @@ class _DaysSelectState extends State<DaysSelect> {
     {"id": "5","title": "S", "isActive": false},
     {"id": "6","title": "S", "isActive": false},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialSelected != null) {
+      for (var d in demoCategories) {
+        d['isActive'] = widget.initialSelected!.contains(int.tryParse(d['id'].toString()));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

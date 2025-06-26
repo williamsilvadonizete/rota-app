@@ -7,7 +7,9 @@ import 'components/hour.dart';
 import 'components/query_order.dart';
 
 class FilterScreen extends StatefulWidget {
-  const FilterScreen({super.key});
+  final List<int>? initialDays;
+  final List<int>? initialTimes;
+  const FilterScreen({super.key, this.initialDays, this.initialTimes});
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
@@ -16,6 +18,12 @@ class FilterScreen extends StatefulWidget {
 class _FilterScreenState extends State<FilterScreen> {
   final GlobalKey _daysKey = GlobalKey();
   final GlobalKey _timeKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicialização dos filtros será feita nos widgets filhos via parâmetros
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +47,9 @@ class _FilterScreenState extends State<FilterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
               SizedBox(height: defaultPadding),
-              DaysSelect(key: _daysKey),
+              DaysSelect(key: _daysKey, initialSelected: widget.initialDays),
               SizedBox(height: defaultPadding),
-              TimeSelect(key: _timeKey),
+              TimeSelect(key: _timeKey, initialSelected: widget.initialTimes),
               SizedBox(height: defaultPadding),
               SizedBox(height: 24),
               Padding(

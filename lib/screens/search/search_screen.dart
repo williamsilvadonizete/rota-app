@@ -29,6 +29,8 @@ class _SearchScreenState extends State<SearchScreen> {
   String _selectedCategory = '';
   int? _selectedCategoryId;
   List<dynamic> _categories = [];
+  List<int> _selectedDays = [];
+  List<int> _selectedTimes = [];
   
 
   @override
@@ -329,7 +331,10 @@ class _SearchScreenState extends State<SearchScreen> {
       builder: (context) {
         return FractionallySizedBox(
           heightFactor: 0.8,
-          child: const FilterScreen(),
+          child: FilterScreen(
+            initialDays: _selectedDays,
+            initialTimes: _selectedTimes,
+          ),
         );
       },
     );
@@ -340,6 +345,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _aplicarFiltros(Map<String, dynamic> filtros) async {
+    _selectedDays = filtros['dias'] != null ? List<int>.from(filtros['dias']) : [];
+    _selectedTimes = filtros['horarios'] != null ? List<int>.from(filtros['horarios']) : [];
     setState(() => _isLoading = true);
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -382,6 +389,13 @@ class _SearchScreenState extends State<SearchScreen> {
     } finally {
       setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    _selectedDays = [];
+    _selectedTimes = [];
+    super.dispose();
   }
 }
 

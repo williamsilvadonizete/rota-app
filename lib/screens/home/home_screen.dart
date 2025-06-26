@@ -37,15 +37,44 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> _nowRestaurants = [];
 
   bool _isLoadingNight = false;
+  bool _isLoadingNow = false;
+  Position? _currentPosition;
 
   @override
   void initState() {
     super.initState();
-    _fetchRestaurants();
-    _fetchCategories();
-    _fetchNightRestaurants();
-    _fetchNowRestaurants();
+    _loadInitialData();
     _scrollController.addListener(_onScroll);
+  }
+
+  Future<void> _loadInitialData() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
+        _currentPosition =
+            await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      }
+    } catch (e) {
+      debugPrint("Error getting location: $e");
+    } finally {
+      _currentPosition ??= Position(
+          latitude: -18.921079,
+          longitude: -48.288413,
+          timestamp: DateTime.now(),
+          accuracy: 0.0,
+          altitude: 0.0,
+          heading: 0.0,
+          speed: 0.0,
+          speedAccuracy: 0.0,
+          altitudeAccuracy: 0.0,
+          headingAccuracy: 0.0);
+      
+      _fetchRestaurants();
+      _fetchCategories();
+      _fetchNightRestaurants();
+      _fetchNowRestaurants();
+    }
   }
 
   @override
@@ -64,52 +93,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchRestaurants() async {
-    if (_isLoading || !_hasMore) return;
+    if (_isLoading || !_hasMore || _currentPosition == null) return;
 
     if (!mounted) return;
     setState(() => _isLoading = true);
 
     try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      Position position = Position(
-        latitude: -18.921079,
-        longitude: -48.288413,
-        timestamp: DateTime.now(),
-        accuracy: 0.0,
-        altitude: 0.0,
-        heading: 0.0,
-        speed: 0.0,
-        altitudeAccuracy: 0.0,
-        headingAccuracy: 0.0,
-        speedAccuracy: 0.0,
+      final response = await _restaurantService.getNearbyRestaurants(
+        latitude: _currentPosition!.latitude,
+        longitude: _currentPosition!.longitude,
+        page: _currentPage,
+        pageSize: _pageSize,
       );
-      
-      if (permission == LocationPermission.whileInUse || 
-          permission == LocationPermission.always) {
-        position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best,
-        );
-      }
 
       if (!mounted) return;
 
-      if (position != null) {
-        final response = await _restaurantService.getNearbyRestaurants(
-          latitude: position.latitude,
-          longitude: position.longitude,
-          page: _currentPage,
-          pageSize: _pageSize,
-        );
-
-        if (!mounted) return;
-
-        if (response != null && response['restaurants'] != null) {
-          setState(() {
-            _restaurants.addAll(response['restaurants']);
-            _hasMore = _restaurants.length < response['total'];
-            _currentPage++;
-          });
-        }
+      if (response != null && response['restaurants'] != null) {
+        setState(() {
+          _restaurants.addAll(response['restaurants']);
+          _hasMore = _restaurants.length < response['total'];
+          _currentPage++;
+        });
       }
     } catch (e) {
       debugPrint('Error fetching restaurants: $e');
@@ -122,47 +126,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Novo método para buscar restaurantes para comer a noite
   Future<void> _fetchNightRestaurants() async {
+    if (_currentPosition == null) return;
     setState(() => _isLoadingNight = true);
-     
-    try {
-      // Localização fixa conforme exemplo
-      LocationPermission permission = await Geolocator.checkPermission();
-      Position position = Position(
-        latitude: -18.921079,
-        longitude: -48.288413,
-        timestamp: DateTime.now(),
-        accuracy: 0.0,
-        altitude: 0.0,
-        heading: 0.0,
-        speed: 0.0,
-        altitudeAccuracy: 0.0,
-        headingAccuracy: 0.0,
-        speedAccuracy: 0.0,
-      );
 
-      if (permission == LocationPermission.whileInUse || 
-          permission == LocationPermission.always) {
-        position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best,
-        );
-      }
-      
+    try {
       final response = await _restaurantService.getNearbyRestaurants(
-        latitude: position.latitude,
-        longitude: position.longitude,
+        latitude: _currentPosition!.latitude,
+        longitude: _currentPosition!.longitude,
         page: 1,
         pageSize: 10,
         workTimes: [4],
       );
       if (response != null && response['restaurants'] != null) {
         setState(() {
-          _nightRestaurants = (response['restaurants'] as List).map<Map<String, dynamic>>((r) => {
-            'image': r['wallpaperUrl'] ?? '',
-            'name': r['restaurantName'] ?? '',
-            'location': r['address'] ?? '',
-            'deliveryTime': r['deliveryTime'] ?? 0,
-            'rating': r['rating'] ?? 0.0,
-            'id': r['id'],
+          _nightRestaurants =
+              (response['restaurants'] as List).map<Map<String, dynamic>>((r) {
+            return {
+              'image': r['wallpaperUrl'] ?? '',
+              'name': r['restaurantName'] ?? '',
+              'location': r['address'] ?? '',
+              'deliveryTime': r['deliveryTime'] ?? 0,
+              'rating': r['rating'] ?? 0.0,
+              'id': r['id'],
+            };
           }).toList();
         });
       }
@@ -174,51 +160,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchNowRestaurants() async {
-    setState(() => _isLoadingNight = true);
+    if (_currentPosition == null) return;
+    setState(() => _isLoadingNow = true);
     try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      Position position = Position(
-        latitude: -18.921079,
-        longitude: -48.288413,
-        timestamp: DateTime.now(),
-        accuracy: 0.0,
-        altitude: 0.0,
-        heading: 0.0,
-        speed: 0.0,
-        altitudeAccuracy: 0.0,
-        headingAccuracy: 0.0,
-        speedAccuracy: 0.0,
-      );
-
-      if (permission == LocationPermission.whileInUse || 
-          permission == LocationPermission.always) {
-        position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best,
-        );
-      }
-      
       final response = await _restaurantService.getNearbyRestaurants(
-        latitude: position.latitude,
-        longitude: position.longitude,
+        latitude: _currentPosition!.latitude,
+        longitude: _currentPosition!.longitude,
         page: 1,
         pageSize: 10,
       );
       if (response != null && response['restaurants'] != null) {
         setState(() {
-          _nowRestaurants = (response['restaurants'] as List).map<Map<String, dynamic>>((r) => {
-            'image': r['wallpaperUrl'] ?? '',
-            'name': r['restaurantName'] ?? '',
-            'location': r['address'] ?? '',
-            'deliveryTime': r['deliveryTime'] ?? 0,
-            'rating': r['rating'] ?? 0.0,
-            'id': r['id'],
+          _nowRestaurants =
+              (response['restaurants'] as List).map<Map<String, dynamic>>((r) {
+            return {
+              'image': r['wallpaperUrl'] ?? '',
+              'name': r['restaurantName'] ?? '',
+              'location': r['address'] ?? '',
+              'deliveryTime': r['deliveryTime'] ?? 0,
+              'rating': r['rating'] ?? 0.0,
+              'id': r['id'],
+            };
           }).toList();
         });
       }
     } catch (e) {
       debugPrint('Error fetching now restaurants: $e');
     } finally {
-      if (mounted) setState(() => _isLoadingNight = false);
+      if (mounted) setState(() => _isLoadingNow = false);
     }
   }
 
@@ -279,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentPage = 1;
             _hasMore = true;
           });
-          await _fetchRestaurants();
+          await _loadInitialData();
         },
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -307,13 +276,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
               MediumCardList(
                 title: "Para comer agora",
-                restaurants: _nightRestaurants,
+                restaurants: _nowRestaurants,
+                isLoading: _isLoadingNow,
               ),
               const SizedBox(height: 20),
               // MediumCardList dinâmico para comer a noite
               MediumCardList(
                 title: "Para comer a noite",
                 restaurants: _nightRestaurants,
+                isLoading: _isLoadingNight,
               ),
               const SizedBox(height: 20),
               SectionTitle(

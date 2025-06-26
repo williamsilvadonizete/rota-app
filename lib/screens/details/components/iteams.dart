@@ -22,7 +22,7 @@ class _ItemsState extends State<Items> {
     final rulesCount = rules?.length ?? 0;
     
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -85,6 +85,52 @@ class _ItemsState extends State<Items> {
     );
   }
 
+  Widget _buildInfoCard({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required Widget content,
+  }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isDarkMode ? Colors.grey[800]! : Colors.grey[200]!,
+          width: 1,
+        ),
+      ),
+      color: isDarkMode ? const Color(0xFF1E1E1E).withOpacity(0.5) : Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 20, color: Theme.of(context).primaryColor),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(left: 32),
+              child: content,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildInfoTab(BuildContext context, Map<String, dynamic> info) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
@@ -98,111 +144,128 @@ class _ItemsState extends State<Items> {
               ),
         ),
         const SizedBox(height: 12),
-        if (info['categories'] != null)
+        if (info['categories'] != null && (info['categories'] as List).isNotEmpty)
           Wrap(
             spacing: 8,
             children: (info['categories'] as List<dynamic>?)?.map((c) {
-              final name = c is Map && c['name'] != null ? c['name'].toString() : c.toString();
-              return Chip(
-                label: Text(name),
-                backgroundColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
-              );
-            }).toList() ?? [],
+                  final name = c is Map && c['name'] != null ? c['name'].toString() : c.toString();
+                  return Chip(
+                    label: Text(name),
+                    backgroundColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                  );
+                }).toList() ??
+                [],
           ),
-        if (info['address'] != null) ...[
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              const Icon(Icons.location_on, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  '${info['address']['street'] ?? ''}, ${info['address']['number'] ?? ''} - ${info['address']['neighborhood'] ?? ''}\n${info['address']['cityName'] ?? ''} - ${info['address']['stateName'] ?? ''}\nCEP: ${info['address']['zipCode'] ?? ''}',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: isDarkMode ? Colors.white70 : Colors.black54,
-                      ),
-                ),
-              ),
-            ],
+        const SizedBox(height: 16),
+
+        // Address Card
+        if (info['address'] != null)
+          _buildInfoCard(
+            context: context,
+            icon: Icons.location_on_outlined,
+            title: "Endereço",
+            content: Text(
+              '${info['address']['street'] ?? ''}, ${info['address']['number'] ?? ''} - ${info['address']['neighborhood'] ?? ''}\n${info['address']['cityName'] ?? ''} - ${info['address']['stateName'] ?? ''}\nCEP: ${info['address']['zipCode'] ?? ''}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
-        ],
-        if (info['phone'] != null || info['website'] != null || info['instagram'] != null) ...[
-          const SizedBox(height: 16),
-          if (info['phone'] != null) ...[
-            Row(
-              children: [
-                const Icon(Icons.phone, size: 20),
-                const SizedBox(width: 8),
-                Flexible(child: Text(info['phone'].toString())),
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
-          if (info['website'] != null) ...[
-            Row(
-              children: [
-                const Icon(Icons.language, size: 20),
-                const SizedBox(width: 8),
-                Flexible(child: Text(info['website'].toString(), overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
-          if (info['instagram'] != null) ...[
-            Row(
-              children: [
-                const Icon(Icons.camera_alt, size: 20),
-                const SizedBox(width: 8),
-                Flexible(child: Text('@${info['instagram']}', overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          ],
-        ],
-        if (info['tags'] != null && (info['tags'] as List).isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            children: (info['tags'] as List).map((tag) {
-              final name = tag['name'] ?? '';
-              final icon = tag['icon'] ?? null;
-              return Chip(
-                avatar: icon != null ? Icon(Icons.circle, size: 16) : null,
-                label: Text(name),
-                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.grey[100],
-              );
-            }).toList(),
-          ),
-        ],
-        if (info['works'] != null && (info['works'] as List).isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text('Horários de Funcionamento:', style: Theme.of(context).textTheme.titleMedium),
-          ...((info['works'] as List).map((work) {
-            final dayId = work['dayId'];
-            final enabled = work['enabled'] == true;
-            final periods = work['periods'] as List?;
-            final dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
-            final dayName = (dayId is int && dayId >= 1 && dayId <= 7) ? dayNames[dayId - 1] : 'Dia';
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Row(
+
+        // Contact Card
+        if (info['phone'] != null || info['website'] != null || info['instagram'] != null)
+          _buildInfoCard(
+              context: context,
+              icon: Icons.contact_phone_outlined,
+              title: "Contato",
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$dayName:', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 8),
-                  if (!enabled) Text('Fechado', style: TextStyle(color: Colors.red)),
-                  if (enabled && periods != null)
-                    ...periods.where((p) => p['enabled'] == true).map((p) {
-                      final start = p['start']?.toString().padLeft(2, '0') ?? '--';
-                      final end = p['end']?.toString().padLeft(2, '0') ?? '--';
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Text('$start:00 às $end:00'),
-                      );
-                    }),
+                  if (info['phone'] != null) ...[
+                    Row(children: [
+                      Icon(Icons.phone, size: 18, color: Colors.grey[600]),
+                      const SizedBox(width: 8),
+                      Flexible(child: Text(info['phone'].toString()))
+                    ]),
+                    const SizedBox(height: 8),
+                  ],
+                  if (info['website'] != null) ...[
+                    Row(children: [
+                      Icon(Icons.language, size: 18, color: Colors.grey[600]),
+                      const SizedBox(width: 8),
+                      Flexible(child: Text(info['website'].toString(), overflow: TextOverflow.ellipsis))
+                    ]),
+                    const SizedBox(height: 8),
+                  ],
+                  if (info['instagram'] != null)
+                    Row(children: [
+                      Icon(Icons.camera_alt_outlined, size: 18, color: Colors.grey[600]),
+                      const SizedBox(width: 8),
+                      Flexible(child: Text('@${info['instagram']}', overflow: TextOverflow.ellipsis))
+                    ]),
                 ],
-              ),
-            );
-          })),
-        ],
+              )),
+
+        // Opening Hours Card
+        if (info['works'] != null && (info['works'] as List).isNotEmpty)
+          _buildInfoCard(
+            context: context,
+            icon: Icons.schedule_outlined,
+            title: "Horário de Funcionamento",
+            content: Column(
+              children: ((info['works'] as List).map((work) {
+                final dayId = work['dayId'];
+                final enabled = work['enabled'] == true;
+                final periods = work['periods'] as List?;
+                final dayNames = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
+                final dayName = (dayId is int && dayId >= 1 && dayId <= 7) ? dayNames[dayId - 1] : 'Dia';
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 40, child: Text('$dayName:', style: const TextStyle(fontWeight: FontWeight.bold))),
+                      const SizedBox(width: 8),
+                      if (!enabled)
+                        const Text('Fechado', style: TextStyle(color: Colors.red))
+                      else if (periods != null)
+                        Expanded(
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: periods.where((p) => p['enabled'] == true).map((p) {
+                              final start = p['start']?.toString().padLeft(2, '0') ?? '--';
+                              final end = p['end']?.toString().padLeft(2, '0') ?? '--';
+                              return Text('$start:00 às $end:00');
+                            }).toList(),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              })).toList(),
+            ),
+          ),
+
+        // Tags Card
+        if (info['tags'] != null && (info['tags'] as List).isNotEmpty)
+          _buildInfoCard(
+            context: context,
+            icon: Icons.sell_outlined,
+            title: "Tags",
+            content: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: (info['tags'] as List).map((tag) {
+                final name = tag['name'] ?? '';
+                return Chip(
+                  label: Text(name),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  backgroundColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                );
+              }).toList(),
+            ),
+          ),
+
+        // Espaço extra no final para melhorar a rolagem
+        const SizedBox(height: 150),
       ],
     );
   }

@@ -111,35 +111,35 @@ class RestaurantInfoMediumCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        if (rating != null) ...[
-                          Icon(
-                            Icons.star,
-                            size: 16,
-                            color: ThemeProvider.primaryColor,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            rating.toString(),
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                                ),
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                        if (delivertTime != null) ...[
-                          Icon(
-                            Icons.access_time,
-                            size: 16,
-                            color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "$delivertTime min",
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                                ),
-                          ),
-                        ],
+                        // if (rating != null) ...[
+                        //   Icon(
+                        //     Icons.star,
+                        //     size: 16,
+                        //     color: ThemeProvider.primaryColor,
+                        //   ),
+                        //   const SizedBox(width: 4),
+                        //   Text(
+                        //     rating.toString(),
+                        //     style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        //           color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        //         ),
+                        //   ),
+                        //   const SizedBox(width: 8),
+                        // ],
+                        // if (delivertTime != null) ...[
+                        //   Icon(
+                        //     Icons.access_time,
+                        //     size: 16,
+                        //     color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        //   ),
+                        //   const SizedBox(width: 4),
+                        //   Text(
+                        //     "$delivertTime min",
+                        //     style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        //           color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        //         ),
+                        //   ),
+                        // ],
                       ],
                     ),
                   ]

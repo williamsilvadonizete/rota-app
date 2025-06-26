@@ -7,7 +7,8 @@ import '../../../components/section_title.dart';
 import '../../../constants.dart';
 
 class TimeSelect extends StatefulWidget {
-  const TimeSelect({super.key});
+  final List<int>? initialSelected;
+  const TimeSelect({super.key, this.initialSelected});
 
   @override
   State<TimeSelect> createState() => _TimeSelectState();
@@ -20,6 +21,16 @@ class _TimeSelectState extends State<TimeSelect> {
     {"id": "2", "title": "Almoço", "isActive": false,"icon": "assets/icons/sun.svg"},
     {"id": "4", "title": "Jantar", "isActive": false, "icon": "assets/icons/moon.svg"},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialSelected != null) {
+      for (var d in demoCategories) {
+        d['isActive'] = widget.initialSelected!.contains(int.tryParse(d['id'].toString()));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
