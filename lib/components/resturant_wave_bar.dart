@@ -19,16 +19,25 @@ class RestaurantWaveBar extends StatelessWidget {
     return Container(
       height: 300,
       width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: backgroundImage.isNotEmpty
-              ? NetworkImage(backgroundImage)
-              : const AssetImage('assets/images/medium_3.png') as ImageProvider,
-          fit: BoxFit.cover,
-        ),
-      ),
+      color: Colors.black,
       child: Stack(
+        fit: StackFit.expand,
         children: [
+          if (backgroundImage.isNotEmpty)
+            Image.network(
+              backgroundImage,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  color: Colors.black,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) => Container(color: Colors.black),
+            ),
           Positioned(
             bottom: 0,
             left: 0,

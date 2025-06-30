@@ -130,12 +130,17 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _isLoadingNight = true);
 
     try {
+      // Dia da semana atual (1=Domingo, 2=Segunda, ..., 7=Sábado)
+      final now = DateTime.now();
+      final int today = now.weekday == 7 ? 1 : now.weekday; // API: 1=Domingo
+
       final response = await _restaurantService.getNearbyRestaurants(
         latitude: _currentPosition!.latitude,
         longitude: _currentPosition!.longitude,
         page: 1,
         pageSize: 10,
         workTimes: [4],
+        workDays: [today],
       );
       if (response != null && response['restaurants'] != null) {
         setState(() {
@@ -163,11 +168,30 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_currentPosition == null) return;
     setState(() => _isLoadingNow = true);
     try {
+      // Dia da semana atual (1=Domingo, 2=Segunda, ..., 7=Sábado)
+      final now = DateTime.now();
+      final int today = now.weekday == 7 ? 1 : now.weekday; // API: 1=Domingo
+
+      // Determinar período do dia para o filtro workTimes
+      int hour = now.hour;
+      int? workTime;
+      if (hour >= 6 && hour < 12) {
+        workTime = 1; // Manhã
+      } else if (hour >= 12 && hour < 15) {
+        workTime = 2; // Almoço
+      } else if (hour >= 15 && hour < 18) {
+        workTime = 3; // Tarde
+      } else if (hour >= 18 && hour < 24) {
+        workTime = 4; // Jantar
+      }
+
       final response = await _restaurantService.getNearbyRestaurants(
         latitude: _currentPosition!.latitude,
         longitude: _currentPosition!.longitude,
         page: 1,
         pageSize: 10,
+        workDays: [today],
+        workTimes: workTime != null ? [workTime] : null,
       );
       if (response != null && response['restaurants'] != null) {
         setState(() {

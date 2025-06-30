@@ -8,6 +8,7 @@ import 'package:rota_gourmet/screens/profile/profile_detail.dart';
 import 'package:rota_gourmet/services/auth_service.dart';
 import 'package:rota_gourmet/screens/auth/sign_in_screen.dart';
 import 'package:rota_gourmet/screens/help/help_screen.dart';
+import 'package:rota_gourmet/screens/profile/benefit_history_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -174,6 +175,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HelpScreen()),
+                  );
+                },
+              ),
+              const Divider(height: 1),
+              _buildSettingsItem(
+                context,
+                icon: Icons.history,
+                title: 'Histórico de Benefícios',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BenefitHistoryScreen()),
                   );
                 },
               ),

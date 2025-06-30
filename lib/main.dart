@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rota_gourmet/providers/theme_provider.dart';
 import 'package:rota_gourmet/screens/splashscreen/splashscreen.dart';
+import 'package:rota_gourmet/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         final isDark = themeProvider.isDarkMode;
         
         return MaterialApp(
+          navigatorKey: AuthService.navigatorKey,
           title: 'Rota App',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
