@@ -2,24 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:rota_gourmet/constants.dart';
 
-
 class TelefoneTextField extends StatelessWidget {
   final MaskedTextController _controller = MaskedTextController(mask: '(00) 00000-0000');
+  final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
+  final TextInputAction? textInputAction;
+  final InputDecoration? decoration;
+  final TextStyle? style;
 
-  TelefoneTextField({super.key});
+  TelefoneTextField({
+    super.key,
+    this.validator,
+    this.onSaved,
+    this.textInputAction,
+    this.decoration,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextField(
+      child: TextFormField(
         controller: _controller,
+        validator: validator ?? telefoneValidator,
+        onSaved: onSaved,
+        textInputAction: textInputAction ?? TextInputAction.next,
         keyboardType: TextInputType.phone,
-        style: TextStyle(
+        style: style ?? TextStyle(
           color: Theme.of(context).textTheme.bodyMedium?.color,
           fontWeight: FontWeight.w500,
         ),
-        decoration: InputDecoration(
+        decoration: decoration ?? InputDecoration(
           labelText: "Telefone",
           labelStyle: TextStyle(
             color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),

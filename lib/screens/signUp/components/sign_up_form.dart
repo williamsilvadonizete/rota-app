@@ -3,6 +3,8 @@ import 'package:rota_gourmet/screens/auth/sign_in_screen.dart';
 import 'package:rota_gourmet/services/auth_service.dart';
 import 'package:rota_gourmet/constants.dart';
 import 'package:rota_gourmet/components/custom_toast.dart';
+import 'package:rota_gourmet/components/fields/cpf_text_field.dart';
+import 'package:rota_gourmet/components/fields/telefone_text_field.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -21,6 +23,8 @@ class _SignUpFormState extends State<SignUpForm> {
   String _email = '';
   String _password = '';
   String _confirmPassword = '';
+  String _cpf = '';
+  String _telefone = '';
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
@@ -46,6 +50,8 @@ class _SignUpFormState extends State<SignUpForm> {
         firstName: firstName,
         lastName: lastName,
         password: _password,
+        cpf: _cpf,
+        telefone: _telefone,
       );
 
       if (result != null) {
@@ -105,7 +111,7 @@ class _SignUpFormState extends State<SignUpForm> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: defaultPadding),
+          const SizedBox(height: 16.0),
 
           // Email Field
           TextFormField(
@@ -134,7 +140,59 @@ class _SignUpFormState extends State<SignUpForm> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: defaultPadding),
+          const SizedBox(height: 16.0),
+
+          // CPF Field
+          CpfTextField(
+            onSaved: (value) => _cpf = value ?? '',
+            decoration: InputDecoration(
+              labelText: "CPF",
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.credit_card, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              hintStyle: const TextStyle(color: Colors.white38),
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 16.0),
+
+          // Telefone Field
+          TelefoneTextField(
+            onSaved: (value) => _telefone = value ?? '',
+            decoration: InputDecoration(
+              labelText: "Telefone",
+              labelStyle: const TextStyle(color: Colors.white70),
+              prefixIcon: const Icon(Icons.phone, color: Colors.white70),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white24),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: primaryColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white.withOpacity(0.05),
+              hintStyle: const TextStyle(color: Colors.white38),
+            ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 16.0),
 
           // Password Field
           TextFormField(
@@ -170,7 +228,7 @@ class _SignUpFormState extends State<SignUpForm> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: defaultPadding),
+          const SizedBox(height: 16.0),
 
           // Confirm Password Field
           TextFormField(
@@ -210,7 +268,7 @@ class _SignUpFormState extends State<SignUpForm> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: defaultPadding),
+          const SizedBox(height: 16.0),
 
           // Sign Up Button
           SizedBox(

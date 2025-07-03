@@ -4,21 +4,36 @@ import 'package:rota_gourmet/constants.dart';
 
 class CpfTextField extends StatelessWidget {
   final MaskedTextController _controller = MaskedTextController(mask: '000.000.000-00');
+  final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
+  final TextInputAction? textInputAction;
+  final InputDecoration? decoration;
+  final TextStyle? style;
 
-  CpfTextField({super.key});
+  CpfTextField({
+    super.key,
+    this.validator,
+    this.onSaved,
+    this.textInputAction,
+    this.decoration,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextField(
+      child: TextFormField(
         controller: _controller,
+        validator: validator ?? cpfValidator,
+        onSaved: onSaved,
+        textInputAction: textInputAction ?? TextInputAction.next,
         keyboardType: TextInputType.number,
-        style: TextStyle(
+        style: style ?? TextStyle(
           color: Theme.of(context).textTheme.bodyMedium?.color,
           fontWeight: FontWeight.w500,
         ),
-        decoration: InputDecoration(
+        decoration: decoration ?? InputDecoration(
           labelText: "CPF",
           labelStyle: TextStyle(
             color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),

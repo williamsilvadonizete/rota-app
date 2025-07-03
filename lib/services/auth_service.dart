@@ -128,6 +128,8 @@ class AuthService {
     required String firstName,
     required String lastName,
     required String password,
+    required String cpf,
+    required String telefone,
     bool emailVerified = true,
     bool enabled = true,
   }) async {
@@ -152,6 +154,10 @@ class AuthService {
           "lastName": lastName,
           "enabled": enabled,
           "emailVerified": emailVerified,
+          "attributes": {
+            "cpfNumber": [cpf.replaceAll(RegExp(r'[^\d]'), '')],
+            "phoneNumber": [telefone.replaceAll(RegExp(r'[^\d]'), '')]
+          },
           "credentials": [
             {
               "type": "password",
@@ -193,6 +199,16 @@ class AuthService {
               data: [appMemberRole],
             );
           }
+
+          // Chamada assíncrona para o backend da API
+          _sendUserDataToBackend(
+            userId: userId,
+            firstName: firstName,
+            lastName: lastName,
+            cpf: cpf,
+            telefone: telefone,
+            email: email,
+          );
         }
         return userDetails;
       }
@@ -200,6 +216,61 @@ class AuthService {
       print("Erro no registro: ${e.response?.data ?? e.message}");
     }
     return null;
+  }
+
+  /// Método para enviar dados do usuário para o backend da API
+  Future<void> _sendUserDataToBackend({
+    required String userId,
+    required String firstName,
+    required String lastName,
+    required String cpf,
+    required String telefone,
+    required String email,
+  }) async {
+    try {
+      // Obter token de admin para a API
+      final adminToken = await _getAdminToken();
+      if (adminToken == null) {
+        print("Erro: Não foi possível obter token de admin para enviar dados ao backend");
+        return;
+      }
+      
+      // URL da API backend
+      final apiUrl = 'https://rotagourmet.hml.api.flentra.com/api/mobile/user/$userId';
+      
+      // Data de nascimento padrão (pode ser ajustada conforme necessário)
+      final birthDate = DateTime(1985, 8, 4).toIso8601String();
+      
+      // Enviar dados para o backend
+      final response = await _dio.post(
+        apiUrl,
+        options: Options(
+          headers: {
+            'accept': '*/*',
+            'Authorization': 'Bearer $adminToken',
+            'Content-Type': 'application/json-patch+json',
+          },
+        ),
+        data: {
+          "firstName": firstName,
+          "secondName": lastName,
+          "cpfNumber": cpf.replaceAll(RegExp(r'[^\d]'), ''),
+          "phoneNumber": telefone.replaceAll(RegExp(r'[^\d]'), ''),
+          "email": email,
+          "birthDate": birthDate,
+        },
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Dados enviados com sucesso para o backend da API");
+      } else {
+        print("Resposta inesperada do backend: ${response.statusCode}");
+      }
+    } on DioException catch (e) {
+      print("Erro ao enviar dados para o backend: ${e.response?.data ?? e.message}");
+    } catch (e) {
+      print("Erro inesperado ao enviar dados para o backend: $e");
+    }
   }
 
   /// Método auxiliar para obter token de administração
